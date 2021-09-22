@@ -1,0 +1,56 @@
+ECE473 Lab1:
+
+Purpose: 
+  *Set up Linux development environment 
+  *See if your AVR tools are working
+  *Get acquainted with AVR-GCC tools.
+  *Make sure your AVR board is still working.
+  *Get the uC board mounted on the protoboard.
+  *Review C programming/compiling.
+  *Get acquainted with using a Makefile. 
+
+Task:
+  *Set up your laptop with Linux and AVR tools. 
+  *The AVR tools install directions are at: 
+   http://web.engr.oregonstate.edu/~traylor/ece473/webpages/ubuntu_install.html
+  *Mount your uC board onto the protoboard using the tall standoffs. The protoboard
+   physically protects your mega128 board, and provides the low impedance ground plane 
+   required for later integration of low-level analog circuitry. That is all you should 
+   do for now mechanically.
+  *Attach the programmer to your AVR board and USB port.
+  *Download lab1_code.c and Makefile with "wget" into a working directory. 
+    wget http://web.engr.oregonstate.edu/~traylor/ece473/labs/20_labs/lab1/lab1_code.c
+    wget http://web.engr.oregonstate.edu/~traylor/ece473/labs/20_labs/lab1/Makefile  
+  *Open Makefile with "view" (vim in read only mode) and make sure that the avrdude line 
+   uses the usbasp programmer as in;
+      sudo avrdude -c usbasp -p m128 -e -U flash:w:$(PRG).hex  -v
+   Go up,down,left or right with the k,j,h,l keys respectively. Close file with ":q!"  
+   Makefile contains the instructions to properly compile, link and program your board.
+   It can also clean up produced files by typing "make clean".
+  *Compile lab1_code.c by typing "make all". If the compiler is working, you should
+   see no errors and a number of files will be created, especially the file to 
+   program the board with: lab1_code.hex
+  *Program your mega128 board with the command "make program". This will make this 
+   uses the "program" keyword to execute avrdude with the given parameters. 
+  *See that the original code works. This code counts the number of "S1" button 
+   pushes by using the on-board LEDs as a binary display. Get familiar with the 
+   code and understand what is going on there.
+  *Now...modify the code so that the S1 push button increments the count by one and
+   S2 decrements the count by one. The count will "roll over after 0xFF to 0x00 and
+   will roll under to 0xFF from 0x00. When S1 and S0 are pushed simultaneously, the
+   count will not change.
+  *Test the behavior of your code. Be tough on it. Is it as you would expect?  You may 
+   not be able to make this work exactly as you expect, that is OK. Explain you are 
+   seeing in a comment block at the bottom of your code. 
+
+What to show for your work:
+  *At your your next lab time show that you have correctly modified the code by 
+   demonstration. This may be done in person.
+  *Show that your uC is mounted onto the protoboard.
+  *Submit your modified lab1_code.c via COE TEACH.  
+
+Grading
+  -code functioning mostly right       75%
+  -code well commented                 25%
+  -uC board not mounted on protoboard -25%
+  -lab weighting = 0.05
