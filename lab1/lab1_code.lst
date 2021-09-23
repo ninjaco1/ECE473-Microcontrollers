@@ -3,27 +3,31 @@ lab1_code.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00000126  000001ba  2**0
+  0 .data         00000000  00800100  00000166  000001fa  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000126  00000000  00000000  00000094  2**1
+  1 .text         00000166  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000002  00800100  00800100  000001ba  2**0
+  2 .bss          00000010  00800100  00800100  000001fa  2**0
                   ALLOC
-  3 .stab         00000588  00000000  00000000  000001bc  2**2
-                  CONTENTS, READONLY, DEBUGGING
-  4 .stabstr      00000cd4  00000000  00000000  00000744  2**0
-                  CONTENTS, READONLY, DEBUGGING
-  5 .comment      00000011  00000000  00000000  00001418  2**0
+  3 .comment      00000030  00000000  00000000  000001fa  2**0
                   CONTENTS, READONLY
-  6 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000142c  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000022c  2**2
                   CONTENTS, READONLY
-  7 .debug_info   00000780  00000000  00000000  00001468  2**0
+  5 .debug_aranges 00000028  00000000  00000000  00000268  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 00000718  00000000  00000000  00001be8  2**0
+  6 .debug_info   0000096d  00000000  00000000  00000290  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   0000001a  00000000  00000000  00002300  2**0
+  7 .debug_abbrev 00000837  00000000  00000000  00000bfd  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000027d  00000000  00000000  0000231a  2**0
+  8 .debug_line   00000120  00000000  00000000  00001434  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000034  00000000  00000000  00001554  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    000003c0  00000000  00000000  00001588  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    00000050  00000000  00000000  00001948  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000018  00000000  00000000  00001998  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -83,102 +87,160 @@ Disassembly of section .text:
   a0:	1d 92       	st	X+, r1
 
 000000a2 <.do_clear_bss_start>:
-  a2:	a2 30       	cpi	r26, 0x02	; 2
+  a2:	a0 31       	cpi	r26, 0x10	; 16
   a4:	b2 07       	cpc	r27, r18
   a6:	e1 f7       	brne	.-8      	; 0xa0 <.do_clear_bss_loop>
-  a8:	0e 94 71 00 	call	0xe2	; 0xe2 <main>
-  ac:	0c 94 91 00 	jmp	0x122	; 0x122 <_exit>
+  a8:	0e 94 79 00 	call	0xf2	; 0xf2 <main>
+  ac:	0c 94 b1 00 	jmp	0x162	; 0x162 <_exit>
 
 000000b0 <__bad_interrupt>:
   b0:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 000000b4 <debounce_switch>:
-// function can be implemented at the same time.  Expects active low pushbutton on 
-// Port D bit zero.  Debounce time is determined by external loop delay times 12. 
+// Checks the state of pushbutton S0 It shifts in ones till the button is pushed.
+// Function returns a 1 only once per debounced button push so a debounce and toggle
+// function can be implemented at the same time.  Expects active low pushbutton on
+// Port D bit zero.  Debounce time is determined by external loop delay times 12.
 //*******************************************************************************
-int8_t debounce_switch() {
-  static uint16_t state = 0; //holds present state
-  state = (state << 1) | (! bit_is_clear(PIND, 0)) | 0xE000;
-  b4:	40 b3       	in	r20, 0x10	; 16
-  b6:	20 91 00 01 	lds	r18, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
-  ba:	30 91 01 01 	lds	r19, 0x0101	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
-  be:	22 0f       	add	r18, r18
-  c0:	33 1f       	adc	r19, r19
-  c2:	30 6e       	ori	r19, 0xE0	; 224
-  c4:	84 2f       	mov	r24, r20
-  c6:	81 70       	andi	r24, 0x01	; 1
-  c8:	90 e0       	ldi	r25, 0x00	; 0
-  ca:	28 2b       	or	r18, r24
-  cc:	39 2b       	or	r19, r25
-  ce:	30 93 01 01 	sts	0x0101, r19	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
-  d2:	20 93 00 01 	sts	0x0100, r18	; 0x800100 <__DATA_REGION_ORIGIN__>
-  d6:	81 e0       	ldi	r24, 0x01	; 1
-  d8:	21 15       	cp	r18, r1
-  da:	30 4f       	sbci	r19, 0xF0	; 240
-  dc:	09 f0       	breq	.+2      	; 0xe0 <debounce_switch+0x2c>
-  de:	80 e0       	ldi	r24, 0x00	; 0
-  if (state == 0xF000) return 1;
+int8_t debounce_switch(int button) {
+  b4:	ac 01       	movw	r20, r24
+  
+  // bit_is_clear: test whether but but in IO register sfr is clear. This will return non zero
+  // if the but is clear, and 0 if the bit is set
+  // handling multiple inputs
+  // https://www.avrfreaks.net/sites/default/files/debouncing.pdf
+  state[button] = (state[button] << 1) | (!bit_is_clear(PIND, button)) | 0xE000; // when the second button is pressed
+  b6:	90 b3       	in	r25, 0x10	; 16
+  b8:	fa 01       	movw	r30, r20
+  ba:	ee 0f       	add	r30, r30
+  bc:	ff 1f       	adc	r31, r31
+  be:	e0 50       	subi	r30, 0x00	; 0
+  c0:	ff 4f       	sbci	r31, 0xFF	; 255
+  c2:	20 81       	ld	r18, Z
+  c4:	31 81       	ldd	r19, Z+1	; 0x01
+  c6:	22 0f       	add	r18, r18
+  c8:	33 1f       	adc	r19, r19
+  ca:	30 6e       	ori	r19, 0xE0	; 224
+  cc:	89 2f       	mov	r24, r25
+  ce:	90 e0       	ldi	r25, 0x00	; 0
+  d0:	02 c0       	rjmp	.+4      	; 0xd6 <debounce_switch+0x22>
+  d2:	95 95       	asr	r25
+  d4:	87 95       	ror	r24
+  d6:	4a 95       	dec	r20
+  d8:	e2 f7       	brpl	.-8      	; 0xd2 <debounce_switch+0x1e>
+  da:	81 70       	andi	r24, 0x01	; 1
+  dc:	99 27       	eor	r25, r25
+  de:	28 2b       	or	r18, r24
+  e0:	39 2b       	or	r19, r25
+  e2:	31 83       	std	Z+1, r19	; 0x01
+  e4:	20 83       	st	Z, r18
+  e6:	81 e0       	ldi	r24, 0x01	; 1
+  e8:	21 15       	cp	r18, r1
+  ea:	30 4f       	sbci	r19, 0xF0	; 240
+  ec:	09 f0       	breq	.+2      	; 0xf0 <debounce_switch+0x3c>
+  ee:	80 e0       	ldi	r24, 0x00	; 0
+    return 1;
+
+  
+
   return 0;
 }
-  e0:	08 95       	ret
+  f0:	08 95       	ret
 
-000000e2 <main>:
+000000f2 <main>:
+//*******************************************************************************
 // Check switch S0.  When found low for 12 passes of "debounce_switch(), increment
-// PORTB.  This will make an incrementing count on the port B LEDS. 
+// PORTB.  This will make an incrementing count on the port B LEDS.
 //*******************************************************************************
-int main()
-{
-DDRB = 0xFF;  //set port B to all outputs
-  e2:	8f ef       	ldi	r24, 0xFF	; 255
-  e4:	87 bb       	out	0x17, r24	; 23
-// function can be implemented at the same time.  Expects active low pushbutton on 
-// Port D bit zero.  Debounce time is determined by external loop delay times 12. 
-//*******************************************************************************
-int8_t debounce_switch() {
-  static uint16_t state = 0; //holds present state
-  state = (state << 1) | (! bit_is_clear(PIND, 0)) | 0xE000;
-  e6:	40 b3       	in	r20, 0x10	; 16
-  e8:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
-  ec:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
-  f0:	88 0f       	add	r24, r24
-  f2:	99 1f       	adc	r25, r25
-  f4:	90 6e       	ori	r25, 0xE0	; 224
-  f6:	24 2f       	mov	r18, r20
-  f8:	21 70       	andi	r18, 0x01	; 1
-  fa:	30 e0       	ldi	r19, 0x00	; 0
-  fc:	82 2b       	or	r24, r18
-  fe:	93 2b       	or	r25, r19
- 100:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
- 104:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
-  if (state == 0xF000) return 1;
- 108:	81 15       	cp	r24, r1
- 10a:	90 4f       	sbci	r25, 0xF0	; 240
- 10c:	19 f4       	brne	.+6      	; 0x114 <main+0x32>
-//*******************************************************************************
-int main()
-{
-DDRB = 0xFF;  //set port B to all outputs
-while(1){     //do forever
- if(debounce_switch()) {PORTB++;}  //if switch true for 12 passes, increment port B
- 10e:	88 b3       	in	r24, 0x18	; 24
- 110:	8f 5f       	subi	r24, 0xFF	; 255
- 112:	88 bb       	out	0x18, r24	; 24
+int main() {
+  DDRB = 0xFF; //set port B to all outputs
+  f2:	8f ef       	ldi	r24, 0xFF	; 255
+  f4:	87 bb       	out	0x17, r24	; 23
+  
+  // bit_is_clear: test whether but but in IO register sfr is clear. This will return non zero
+  // if the but is clear, and 0 if the bit is set
+  // handling multiple inputs
+  // https://www.avrfreaks.net/sites/default/files/debouncing.pdf
+  state[button] = (state[button] << 1) | (!bit_is_clear(PIND, button)) | 0xE000; // when the second button is pressed
+  f6:	60 b3       	in	r22, 0x10	; 16
+  f8:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
+  fc:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+ 100:	88 0f       	add	r24, r24
+ 102:	99 1f       	adc	r25, r25
+ 104:	90 6e       	ori	r25, 0xE0	; 224
+ 106:	26 2f       	mov	r18, r22
+ 108:	21 70       	andi	r18, 0x01	; 1
+ 10a:	30 e0       	ldi	r19, 0x00	; 0
+ 10c:	82 2b       	or	r24, r18
+ 10e:	93 2b       	or	r25, r19
+ 110:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+ 114:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+  // PORTB = state[button];
+  // _delay_ms(1000);
+  if (state[button] == 0xF000)
+ 118:	81 15       	cp	r24, r1
+ 11a:	90 4f       	sbci	r25, 0xF0	; 240
+ 11c:	19 f4       	brne	.+6      	; 0x124 <main+0x32>
+    //   PORTB++;
+    // if (!bit_is_clear(PIND, 1))
+    //   PORTB--;
+
+    if(debounce_switch(0)){
+      PORTB++;
+ 11e:	88 b3       	in	r24, 0x18	; 24
+ 120:	8f 5f       	subi	r24, 0xFF	; 255
+ 122:	88 bb       	out	0x18, r24	; 24
+  
+  // bit_is_clear: test whether but but in IO register sfr is clear. This will return non zero
+  // if the but is clear, and 0 if the bit is set
+  // handling multiple inputs
+  // https://www.avrfreaks.net/sites/default/files/debouncing.pdf
+  state[button] = (state[button] << 1) | (!bit_is_clear(PIND, button)) | 0xE000; // when the second button is pressed
+ 124:	60 b3       	in	r22, 0x10	; 16
+ 126:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <__DATA_REGION_ORIGIN__+0x2>
+ 12a:	90 91 03 01 	lds	r25, 0x0103	; 0x800103 <__DATA_REGION_ORIGIN__+0x3>
+ 12e:	88 0f       	add	r24, r24
+ 130:	99 1f       	adc	r25, r25
+ 132:	90 6e       	ori	r25, 0xE0	; 224
+ 134:	61 fb       	bst	r22, 1
+ 136:	44 27       	eor	r20, r20
+ 138:	40 f9       	bld	r20, 0
+ 13a:	50 e0       	ldi	r21, 0x00	; 0
+ 13c:	84 2b       	or	r24, r20
+ 13e:	95 2b       	or	r25, r21
+ 140:	90 93 03 01 	sts	0x0103, r25	; 0x800103 <__DATA_REGION_ORIGIN__+0x3>
+ 144:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <__DATA_REGION_ORIGIN__+0x2>
+  // PORTB = state[button];
+  // _delay_ms(1000);
+  if (state[button] == 0xF000)
+ 148:	81 15       	cp	r24, r1
+ 14a:	90 4f       	sbci	r25, 0xF0	; 240
+ 14c:	19 f4       	brne	.+6      	; 0x154 <main+0x62>
+
+    if(debounce_switch(0)){
+      PORTB++;
+    }
+    if (debounce_switch(1)){
+      PORTB--;
+ 14e:	88 b3       	in	r24, 0x18	; 24
+ 150:	81 50       	subi	r24, 0x01	; 1
+ 152:	88 bb       	out	0x18, r24	; 24
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 114:	8f e3       	ldi	r24, 0x3F	; 63
- 116:	9f e1       	ldi	r25, 0x1F	; 31
- 118:	01 97       	sbiw	r24, 0x01	; 1
- 11a:	f1 f7       	brne	.-4      	; 0x118 <main+0x36>
- 11c:	00 c0       	rjmp	.+0      	; 0x11e <main+0x3c>
- 11e:	00 00       	nop
- 120:	e2 cf       	rjmp	.-60     	; 0xe6 <main+0x4>
+ 154:	8f e3       	ldi	r24, 0x3F	; 63
+ 156:	9f e1       	ldi	r25, 0x1F	; 31
+ 158:	01 97       	sbiw	r24, 0x01	; 1
+ 15a:	f1 f7       	brne	.-4      	; 0x158 <main+0x66>
+ 15c:	00 c0       	rjmp	.+0      	; 0x15e <main+0x6c>
+ 15e:	00 00       	nop
+ 160:	ca cf       	rjmp	.-108    	; 0xf6 <main+0x4>
 
-00000122 <_exit>:
- 122:	f8 94       	cli
+00000162 <_exit>:
+ 162:	f8 94       	cli
 
-00000124 <__stop_program>:
- 124:	ff cf       	rjmp	.-2      	; 0x124 <__stop_program>
+00000164 <__stop_program>:
+ 164:	ff cf       	rjmp	.-2      	; 0x164 <__stop_program>
