@@ -72,3 +72,26 @@ int main(){
   }               //while
 
 } //main
+
+
+/*
+Obversation:
+If I didn't understand what deboucing was so I decided to put it on PORTB to see the 
+behavior of it. I noticed that once a switch was pressed the bit turns low then I see 
+that a tiny delay (I set mine to 1000ms) and after that delay the bits over to the left by 
+one. Since state was had a size of 8 the behavior of the debounce was easy to observe. 
+
+After that I had to figure what switch was being pressed so I added a parameter button into 
+the debounce fucntion. Since state is a static variable it holds it value even if it goes 
+out of scope. 
+
+When pressing S1 it increments the bits on PORTB. When pressing S2 it decrement bits on PORTB.
+
+
+Is it as you would expect?
+
+This what I excepted when seeing the results on the board. 
+
+
+
+*/
