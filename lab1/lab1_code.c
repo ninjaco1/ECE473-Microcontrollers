@@ -24,10 +24,21 @@ int8_t debounce_switch(int button)
 {
   static uint16_t state[MAX_BYTE_DEBOUNCE]; //holds present state
 
+
+
+
   // bit_is_clear: test whether but but in IO register sfr is clear. This will return non zero
   // if the but is clear, and 0 if the bit is set
   // handling multiple inputs
-  // https://www.avrfreaks.net/sites/default/files/debouncing.pdf
+  // https://www.avrfreaks.net/sites/default/files/debouncing.pdf'
+
+  // if ((button == 0) && bit_is_clear(PIND, button) && bit_is_clear(PIND,1))
+  //   return 0;
+  // if ((button == 1) && bit_is_clear(PIND, button) && bit_is_clear(PIND,0))
+  //   return 0;
+
+  
+  
   state[button] = (state[button] << 1) | (!bit_is_clear(PIND, button)) | 0xE000; // when the second button is pressed
 
   // debuging to see how state debouncing works
@@ -35,6 +46,8 @@ int8_t debounce_switch(int button)
   // _delay_ms(1000);
 
   // once the certain switch reaches the value it will return 1
+  // if (state[button] == 0xF800)
+  //   return 0;
   if (state[button] == 0xF000)
     return 1;
 
@@ -67,6 +80,8 @@ int main(){
     if (debounce_switch(1))
       PORTB--; // if it was pressed then decrease value
     
+
+    // when two buttons are pressed nothing happens
 
     _delay_ms(2); //keep in loop to debounce 24ms
   }               //while
