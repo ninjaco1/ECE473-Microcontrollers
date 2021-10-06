@@ -95,6 +95,12 @@ void segsum(uint16_t sum)
 //***********************************************************************************
 
 //***********************************************************************************
+
+
+
+void setDigit(int);
+
+
 uint8_t main() {
   DDRB = 0xE0; //set port B bits 4-7 B as outputs
   PORTB = 0xE0; // set port 
@@ -103,14 +109,29 @@ uint8_t main() {
 
   while (1)
   {
+	
+	  
+    int i;
     //insert loop delay for debounce
 
     //make PORTA an input port with pullups
     DDRA = 0x00; // set port A as inputs
     PORTA = 0xFF; // set port A as pull ups
+	
 
+    // for loop for each phase of the digit
+	for (i = 0; i < 6; i++){
+	    if(i == 6){ 
+		    // for Y7 part of the decoder
+			// turn on tristate buffer
+			continue;
+		}
+
+        // turn on each digit
+	}
+    
     //enable tristate buffer for pushbutton switches
-
+	
     //now check each button and increment the count as needed
 
     //disable tristate buffer for pushbutton switches
@@ -135,3 +156,45 @@ uint8_t main() {
 
   } //while
 } //main
+
+
+
+
+
+/***************************************************************
+* setDigit function
+* it will choose its given digit and set that number for it
+*
+*
+*
+***************************************************************/
+
+
+void setDigit(int digit){
+    
+    switch(digit){
+
+        case 0:
+            PORTB &= ~((1<<PB6) | (1<<PB5) & (1<<PB4)); // turning on digit 4, clearing all its bits 
+
+            break;
+        case 1:
+
+
+            break;
+        case 2: 
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        case 5:
+            break;
+        default:
+            break;
+    }
+
+
+
+}
+
