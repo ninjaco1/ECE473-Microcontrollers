@@ -30,11 +30,12 @@
 #define BLANK 0x00
 #define COLON 0b00000011   // A, B
 // Port B decoder, remember to not all the digits
-#define DIGIT1 PORTB  & ((1 << PB6) & (0 << PB5) & (0 << PB4))
-#define DIGIT2 (0 << PB6) | (1 << PB5) | (0 << PB4)
-#define DIGIT3 (0 << PB6) | (0 << PB5) | (1 << PB4)
-#define DIGIT4 (0 << PB6) | (0 << PB5) | (0 << PB4)
-#define TRI_BUFFER (1 << PB6) | (1 << PB5) | (1 << PB4)
+#define DIGIT1 ((1 << PB6) | (0 << PB5) | (0 << PB4))
+#define DIGIT2 ((0 << PB6) | (1 << PB5) | (0 << PB4))
+#define DIGIT3 ((0 << PB6) | (0 << PB5) | (1 << PB4))
+#define DIGIT4 ((0 << PB6) | (0 << PB5) | (0 << PB4))
+#define DIS_COLON ((0 << PB6) | (1 << PB5) | (0 << PB4))
+#define TRI_BUFFER ((1 << PB6) | (1 << PB5) | (1 << PB4))
 
 
 //holds data to be sent to the segments. logic zero turns segment on
@@ -55,9 +56,18 @@ dec_to_7seg[9] = ~NINE;
 dec_to_7seg[10] = ~COLON;
 dec_to_7seg[11] = ~BLANK;
 
+// Decoder 3 to 8
+uint8_t decoder[8]
+decoder[0] = DIGIT4;
+decoder[1] = DIGIT3;
+decoder[2] = DIS_COLON;
+decoder[3] = DIGIT2;
+decoder[4] = DIGIT1;
+decoder[7] = TRI_BUFFER; 
+
 uint8_t chk_buttons(uint8_t button); // check what button is being pressed
 void segsum(uint16_t sum);
-void setDigit(int);
+void setDigit();
 void clearDecoder();
 
 uint8_t main()
@@ -81,33 +91,43 @@ uint8_t main()
         int i,j, inc;
         //insert loop delay for debounce
 
-        //make PORTA an input port with pullups
-        DDRA = 0x00;  // set port A as inputs
-        PORTA = 0xFF; // set port A as pull ups
+        
 
         // for loop for each phase of the digit
         for (j = 0; j < 12; j++){ // for the debounce
             for (i = 0; i < 8; i++){
+                // make PORTA an input port with pullups
+                DDRA = 0x00;  // set port A as inputs
+                PORTA = 0xFF; // set port A as pull ups
                 // checking what button is being pressed
                 inc = 0; // increment initalize to 0 first
+
+                //enable tristate buffer for pushbutton switches
+                clearDecoder();
+                PORTB |= TRI_BUFFER;
                 if(chk_button(i)){
+                    //disable tristate buffer for pushbutton switches
+                    clearDecoder();
                     inc = 1 << i; 
-                    //
+                    current_num = current + inc;
+                    segsum(current_num); // set each digit
+                    DDRA = 0xFF;
+                    PORTA = 0x00;
+                    setDigit();
 
 
                 }
-                // turn on each digit
+                
             }
-
 
         }
         
 
-        //enable tristate buffer for pushbutton switches
+        
 
         //now check each button and increment the count as needed
 
-        //disable tristate buffer for pushbutton switches
+        
 
         //bound the count to 0 - 1023
 
@@ -117,7 +137,7 @@ uint8_t main()
 
         //make PORTA an output, 7 segment
 
-        DDRA = 0xFF;
+        
 
         //send 7 segment code to LED segment
 
@@ -170,7 +190,7 @@ uint8_t chk_buttons(uint8_t button){
 //BCD segment code in the array segment_data for display.
 //array is loaded at exit as:  |digit3|digit2|colon|digit1|digit0|
 void segsum(uint16_t sum)
-{   
+{    
     // sum is the total count, place each digit into segment_data[5]
     // determine how many digits there are
     //break up decimal sum into 4 digit-segments
@@ -189,8 +209,6 @@ void segsum(uint16_t sum)
         sum = remainder;
         mod /= 10; // divide the mod to 10
     }
-
-
 
 } //segment_sum
 
@@ -213,27 +231,42 @@ void clearDecoder(){
 //
 /***************************************************************/
 
-void setDigit(int digit){
+void setDigit(){
+    int i;
+    for(i = 0; i < 5; i++) {
+        switch (segment_data[i])
+        {
 
-    switch (digit)
-    {
-
-        case 0:
-            
-
-            break;
-        case 1:
+            case 0:
+                
 
                 break;
-        case 2:
-            break;
-        case 3:
-            break;
-        case 4:
-            break;
-        case 5:
-            break;
-        default:
-            break;
+            case 1:
+
+                    break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+            case 4:
+
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            default:
+                break;
+        }
+
     }
+    
 }
