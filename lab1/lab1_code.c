@@ -39,7 +39,7 @@ int8_t debounce_switch(int button)
 
   
   
-  state[button] = (state[button] << 1) | (!bit_is_clear(PIND, button)) | 0xE000; // when the second button is pressed
+  state[button] = (state[button] << 1) | (!bit_is_clear(PINA, button)) | 0xE000; // when the second button is pressed
 
   // debuging to see how state debouncing works
   // PORTB = state[button];
@@ -60,6 +60,10 @@ int8_t debounce_switch(int button)
 //*******************************************************************************
 int main(){
   DDRB = 0xFF; //set port B to all outputs
+  DDRA = 0x00; // set port A to inputs
+  PORTA = 0xFF;
+  PORTB = 0b01110000;
+  // SFIOR = 1 << PUD;
   while (1){ //do forever
     // int result = debounce_switch();
     // if (result == 1) {
