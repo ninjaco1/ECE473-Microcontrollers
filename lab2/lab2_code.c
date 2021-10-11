@@ -17,26 +17,25 @@
 #define MAX_BIT_DEBOUNCE 8 // numbers of bytes for the debounce
 
 // segs to turn on for LED, negate everything
-#define ZERO  0b00111111   // A, B, C, D, E, F
-#define ONE   0b00000110   // B, C
-#define TWO   0b01011011   // A, B, D, E, G
-#define THREE 0b01001111   // A, B, C, D, G
-#define FOUR  0b01100110   // B, C, F, G
-#define FIVE  0b01101101   // A, C, D, F, G
-#define SIX   0b01111101   // A, C, D, E, F, G
-#define SEVEN 0b00000111   // A, B, C
-#define EIGHT 0b01111111   // A, B, C, D, E, F, G
-#define NINE  0b01100111   // A, B, C, F, G
+#define ZERO 0b00111111  // A, B, C, D, E, F
+#define ONE 0b00000110   // B, C
+#define TWO 0b01011011   // A, B, D, E, G
+#define THREE 0b01001111 // A, B, C, D, G
+#define FOUR 0b01100110  // B, C, F, G
+#define FIVE 0b01101101  // A, C, D, F, G
+#define SIX 0b01111101   // A, C, D, E, F, G
+#define SEVEN 0b00000111 // A, B, C
+#define EIGHT 0b01111111 // A, B, C, D, E, F, G
+#define NINE 0b01100111  // A, B, C, F, G
 #define BLANK 0x00
-#define COLON 0b00000011   // A, B
+#define COLON 0b00000011 // A, B
 // Port B decoder, remember to not all the digits
-#define DIGIT1 0x40//((1 << PB6) | (0 << PB5) | (0 << PB4))
-#define DIGIT2 0x30//((0 << PB6) | (1 << PB5) | (0 << PB4))
-#define DIGIT3 0x10//((0 << PB6) | (0 << PB5) | (1 << PB4))
-#define DIGIT4 0x00 //((0 << PB6) | (0 << PB5) | (0 << PB4))
-#define DIS_COLON 0x20//((0 << PB6) | (1 << PB5) | (0 << PB4))
-#define TRI_BUFFER 0x70//((1 << PB6) | (1 << PB5) | (1 << PB4))
-
+#define DIGIT1 0x40     //((1 << PB6) | (0 << PB5) | (0 << PB4))
+#define DIGIT2 0x30     //((0 << PB6) | (1 << PB5) | (0 << PB4))
+#define DIGIT3 0x10     //((0 << PB6) | (0 << PB5) | (1 << PB4))
+#define DIGIT4 0x00     //((0 << PB6) | (0 << PB5) | (0 << PB4))
+#define DIS_COLON 0x20  //((0 << PB6) | (1 << PB5) | (0 << PB4))
+#define TRI_BUFFER 0x70 //((1 << PB6) | (1 << PB5) | (1 << PB4))
 
 //holds data to be sent to the segments. logic zero turns segment on
 uint8_t segment_data[5];
@@ -44,10 +43,8 @@ uint8_t segment_data[5];
 //decimal to 7-segment LED display encodings, logic "0" turns on segment
 uint8_t dec_to_7seg[12];
 
-
 // Decoder 3 to 8
 uint8_t decoder[8];
-
 
 int8_t chk_buttons(int button); // check what button is being pressed
 void segsum(uint16_t sum);
@@ -58,11 +55,11 @@ void set_decoder();
 
 int main()
 {
-    DDRB = 0xF0;         //set port B bits 4-7 B as outputs
-   
-    int current_num = 0; // the number that will be on the display
-    set_dec_to_7seg();
-    set_decoder();
+    DDRB = 0xF0; //set port B bits 4-7 B as outputs
+
+    uint16_t current_num = 0; // the number that will be on the display
+    set_dec_to_7seg(); // set values for dec_to_7seg array
+    set_decoder(); // set values for the decoder array
 
     // initially display all 0s on the display
     // Steps in what happens
@@ -71,65 +68,61 @@ int main()
     // which what is current digits on the display, variable
     // determine what digit needs to go where
     // use the decoder to send the number to the right digit, PORT B
-    // switch PORTA(pull down) to an output, turn on the right segments 
+    // switch PORTA(pull down) to an output, turn on the right segments
 
+    while (1)
+    {
 
-    while (1) {
-
-        int i, j, inc;
+        uint16_t i, j, inc;
         //insert loop demake lay for debounce
 
-        // clearDecoder();
         // for loop for each phase of the digit
 
-        
 
-        for (j = 0; j < 12; j++){ // for the debounce
-            for (i = 0; i < 8; i++){
-                    // make PORTA an input port with pullups
-                    DDRA = 0x00;  // set port A as inputs
-                    PORTA = 0xFF; // set port A as pull ups
-                    // checking what button is being pressed
-                    inc = 0; // increment initalize to 0 first
+        // make PORTA an input port with pullups
+        // DDRA = 0x00;  // set port A as inputs
+        // PORTA = 0xFF; // set port A as pull ups
+        //enable tristate buffer for pushbutton switches
+        PORTB = TRI_BUFFER;
 
-                    //enable tristate buffer for pushbutton switches
-                    
-                    PORTB = TRI_BUFFER;
-                    // _delay_ms(2);
-                    if(chk_buttons(i)){
-                        
-                        //disable tristate buffer for pushbutton switches
-                        // clearDecoder(); // no tristate buffer
+        for (j = 0; j < 12; j++)
+        { // for the debounce
+            for (i = 0; i < 8; i++)
+            {
+                //make PORTA an input port with pullups
+                DDRA = 0x00;  // set port A as inputs
+                PORTA = 0xFF; // set port A as pull ups
+                
+                inc = 0; // increment initalize to 0 first
 
-                        inc = 1 << i; 
-                        current_num += inc;
 
-                        if(current_num > 1023)
-                            current_num -= 1023;
-                        
-                    }
-                    
+                // checking what button is being pressed
+                if (chk_buttons(i))
+                {
+                    inc = 1 << i;
+                    current_num = current_num + inc;
+                }
             }
-            
         }
+
+        if (current_num > 1023)
+            current_num -= 1023;
+
         segsum(current_num); // set each digit
-        setDigit();
+        setDigit();         // setting the digit on display
 
         // _delay_ms(2);
 
         //now check each button and increment the count as needed
 
-        
-
         //bound the count to 0 - 1023
+        //disable tristate buffer for pushbutton switches
 
         //break up the disp_value to 4, BCD digits in the array: call (segsum)
 
         //bound a counter (0-4) to keep track of digit to display
 
         //make PORTA an output, 7 segment
-
-        
 
         //send 7 segment code to LED segment
 
@@ -141,12 +134,13 @@ int main()
     return 0;
 } //main
 
-
 /******************************************************************************/
 //                              set_dec_to_7seg
-// 
+// setting the dec_to_7seg array for which segment to turn off in order to see
+// the digit on the LED display. 
 /******************************************************************************/
-void set_dec_to_7seg(){
+void set_dec_to_7seg()
+{
     dec_to_7seg[0] = ~(ZERO);
     dec_to_7seg[1] = ~(ONE);
     dec_to_7seg[2] = ~(TWO);
@@ -161,22 +155,20 @@ void set_dec_to_7seg(){
     dec_to_7seg[11] = ~(BLANK);
 }
 
-
 /******************************************************************************/
 //                              set_decoder
-// 
+// This function sets the right value for decoder so that it display the right 
+// digit. The index value of the decoder represents the Yx output of the decoder.
 /******************************************************************************/
-void set_decoder(){
+void set_decoder()
+{
     decoder[0] = DIGIT4;
     decoder[1] = DIGIT3;
     decoder[2] = DIS_COLON;
     decoder[3] = DIGIT2;
     decoder[4] = DIGIT1;
-    decoder[7] = TRI_BUFFER; 
-
-
+    decoder[7] = TRI_BUFFER;
 }
-
 
 //******************************************************************************
 //                            chk_buttons
@@ -187,7 +179,8 @@ void set_decoder(){
 //Expects active low pushbuttons on PINA port.  Debounce time is determined by
 //external loop delay times 12.
 //
-int8_t chk_buttons(int button){
+int8_t chk_buttons(int button)
+{
 
     static uint16_t state[MAX_BIT_DEBOUNCE]; //holds present state
 
@@ -214,86 +207,51 @@ int8_t chk_buttons(int button){
 //BCD segment code in the array segment_data for display.
 //array is loaded at exit as:  |digit3|digit2|colon|digit1|digit0|
 void segsum(uint16_t sum)
-{    
+{
     // sum is the total count, place each digit into segment_data[5]
     // determine how many digits there are
     //break up decimal sum into 4 digit-segments
     //blank out leading zero digits
     //now move data to right place for misplaced colon position
+    int i, leading_zero;
 
-    
     segment_data[0] = sum % 10;
     segment_data[1] = (sum % 100) / 10;
-    segment_data[2] = 11;// doesn't turn on the colon, blank
+    segment_data[2] = 11; // doesn't turn on the colon, blank
     segment_data[3] = (sum % 1000) / 100;
     segment_data[4] = sum / 1000;
-    // int i, remainder, mod, digit;
-    // mod = 1000;
-    // for (i = 4; i >= 0; i--){
-    //     if(i == 2)
-    //         continue;
-    //     digit = sum / mod;
-    //     remainder = sum % mod;
-    //     segment_data[4-i] = digit;
-    //     sum = remainder;
-    //     mod /= 10; // divide the mod to 10
-    // }
+
+    // remove the leading zeros
+    leading_zero = 1;
+    for(i = 4; i >0; i--){
+        if(i == 2)
+            continue;
+        if(segment_data[i] == 0)
+            segment_data[i] = 11; // replace it with a blank
+        
+        else
+            break;
+        
+    }
 
 } //segment_sum
 
-
-
-
-/*************************************************************************************/
-//                                  clearDecoder
-// Clears the bits for the decoder. Since the decoder usings bits 4-6, they will be 
-// zero afterwards.
-/*************************************************************************************/
-
-void clearDecoder(){
-    PORTB = 0;
-}
 
 /***************************************************************/
 //                      setDigit function
 // it will choose its given digit and set that number for it.
 // The cases set the value on PORTA to the right segments and PORTB
-// to decoder. 
+// to decoder.
 /***************************************************************/
 
-void setDigit(){
-    DDRA = 0xFF;
-    // PORTA = 0x00;
+void setDigit()
+{
+    DDRA = 0xFF; // setting PORT A as an output
     int i;
-    for(i = 0; i < 5; i++) {
-        // clearDecoder(); // clear decoder
+    for (i = 0; i < 5; i++)
+    { // looping through the segment data and assigning the port the right values.
         PORTB = decoder[i]; // enable the right digit to turn on
-        // PORTA = ~(BLANK); // check hex first then add it on the display
-        PORTA = dec_to_7seg[segment_data[i]]; // turn on the right segments 
-        _delay_ms(2);
-        // switch (segment_data[i]) // set num on PORTA
-        // {
-
-        //     case 0: 
-        //         PORTA |= 
-
-        //         break;
-        //     case 1: 
-                
-        //         break;
-        //     case 2: 
-                
-        //         break;
-        //     case 3: 
-                
-        //         break;
-        //     case 4: 
-                
-        //         break;
-        //     default:
-        //         break;
-        // }
-
+        PORTA = dec_to_7seg[segment_data[i]]; // turn on the right segments
+        _delay_ms(0.5);
     }
-    
 }
