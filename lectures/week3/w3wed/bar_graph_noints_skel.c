@@ -34,16 +34,16 @@ void spi_init(void){
 //**********************************************************************
 int main(){     
 
-uint8_t display_count = ?____________?; //holds count for display 
+  uint8_t display_count = 0; //holds count for display 
 
-uint8_t i; //dummy counter
+  uint8_t i; //dummy counter
 
-spi_init();  //initalize SPI port
-while(1){                             //main while loop
+  spi_init();  //initalize SPI port
+  while(1){                             //main while loop
 
     ?________________________________?//send display_count to the display 
 
-    while (bit_is_clear(?_________________?)){} //spin till SPI data has been sent 
+    while (bit_is_clear(SPDR,SPIF)){} //spin till SPI data has been sent
 
     PORTB ?______________?            //send rising edge to regclk on HC595 
 
@@ -51,7 +51,11 @@ while(1){                             //main while loop
 
     __________________________________//shift display_count for next time 
 
-    if(?_____________________________________?;} //put indicator back to 1st positon
+    if(?_____________________________________?){
+
+
+
+    } //put indicator back to 1st positon
 
     for(i=0; i<=4; i++){_delay_ms(100);}         //0.5 sec delay
   } //while(1)

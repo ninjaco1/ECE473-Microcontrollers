@@ -213,7 +213,7 @@ void segsum(uint16_t sum)
     //break up decimal sum into 4 digit-segments
     //blank out leading zero digits
     //now move data to right place for misplaced colon position
-    int i, leading_zero;
+    int i;//, leading_zero;
 
     segment_data[0] = sum % 10;
     segment_data[1] = (sum % 100) / 10;
@@ -222,7 +222,7 @@ void segsum(uint16_t sum)
     segment_data[4] = sum / 1000;
 
     // remove the leading zeros
-    leading_zero = 1;
+    // leading_zero = 1;
     for(i = 4; i >0; i--){
         if(i == 2)
             continue;
