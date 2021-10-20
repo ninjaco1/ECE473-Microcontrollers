@@ -61,7 +61,6 @@ int main()
     set_dec_to_7seg(); // set values for dec_to_7seg array
     set_decoder(); // set values for the decoder array
 
-    // initially display all 0s on the display
     // Steps in what happens
     // person press a button, port A, phase 6
     // set that increment digit to a value, increment variable
@@ -106,7 +105,7 @@ int main()
         }
 
         if (current_num > 1023)
-            current_num -= 1023;
+            current_num -= 1024;
 
         segsum(current_num); // set each digit
         setDigit();         // setting the digit on display
