@@ -37,7 +37,7 @@ void spi_init(void){
   DDRB  |=   0x07; //Turn on SS, MOSI, SCLK
   SPCR  |=   (1 << SPE) | (1 << MSTR); //enable SPI, master mode 
   SPSR  |=   (1 << SPI2X); // double speed operation
- }//spi_init
+}//spi_init
 
 /***********************************************************************/
 //                              tcnt0_init                             
