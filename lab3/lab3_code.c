@@ -77,37 +77,37 @@ void set_decoder();
 // timers fucntions
 void spi_init(void);
 void tcnt0_init(void);
-ISR(TIMER0_OVF_vect);
+// ISR(TIMER0_OVF_vect);
+// decoder
+int8_t encoder_chk(uint8_t encoder_var);
 
 int main()
 {
-    DDRB = 0xF0; //set port B bits 4-7 B as outputs
+    DDRB = 0xF0; // set port B bits 4-7 B as outputs, decoder
+    DDRE = 0x20; // set E6 to output
+    DDRD = 0xB0; // slave select pins
+
+    
+    PORTE |= 0 << PORTE6; // SH/LD held low so it doesn't read from serial in but from encoder
 
     uint16_t current_num = 0; // the number that will be on the display
+    tcnt0_init();  //initalize counter timer zero
+    spi_init();    //initalize SPI port
+    sei();         //enable interrupts before entering loop
     set_dec_to_7seg(); // set values for dec_to_7seg array
     set_decoder(); // set values for the decoder array
 
-    // Steps in what happens
-    // person press a button, port A, phase 6
-    // set that increment digit to a value, increment variable
-    // which what is current digits on the display, variable
-    // determine what digit needs to go where
-    // use the decoder to send the number to the right digit, PORT B
-    // switch PORTA(pull down) to an output, turn on the right segments
+    
 
     while (1)
     {
 
         uint16_t i, j, inc;
-        //insert loop demake lay for debounce
-
-
-        // make PORTA an input port with pullups
-        // DDRA = 0x00;  // set port A as inputs
-        // PORTA = 0xFF; // set port A as pull ups
+        
+        
         //enable tristate buffer for pushbutton switches
         PORTB = TRI_BUFFER;
-
+        //insert loop demake lay for debounce
         for (j = 0; j < 12; j++)
         { // for the debounce
             for (i = 0; i < 8; i++)
@@ -120,10 +120,17 @@ int main()
 
 
                 // checking what button is being pressed
-                if (chk_buttons(i))
-                {
-                    inc = 1 << i;
-                    current_num = current_num + inc;
+                // if (chk_buttons(i))
+                // {
+                //     inc = 1 << i;
+                //     current_num = current_num + inc;
+                // }
+                
+                if (chk_buttons(1)){ // S1, + or - 2
+                    inc = 1 << 1;
+                }
+                if (chk_buttons(2)){ // S2, + or - 4
+                    inc = 1 << 2;
                 }
             }
         }
@@ -270,9 +277,9 @@ void setDigit()
 //interrupts disabled, poll SPIF bit in SPSR to check xmit completion
 /***********************************************************************/
 void spi_init(void){
-  DDRB  |=   0x07; //Turn on SS, MOSI, SCLK
-  SPCR  |=   (1 << SPE) | (1 << MSTR); //enable SPI, master mode 
-  SPSR  |=   (1 << SPI2X); // double speed operation
+    DDRB  |=   0x07; //Turn on SS, MOSI, SCLK
+    SPCR  |=   (1 << SPE) | (1 << MSTR); //enable SPI, master mode 
+    SPSR  |=   (1 << SPI2X); // double speed operation
 }//spi_init
 
 /***********************************************************************/
@@ -282,9 +289,9 @@ void spi_init(void){
 //Interrupt occurs at overflow 0xFF.
 //
 void tcnt0_init(void){
-  ASSR   |=  (1 << AS0); //ext osc TOSC
-  TIMSK  |=  (1 << TOIE0); //enable TCNT0 overflow interrupt
-  TCCR0  |=  (1 << CS00); //normal mode, no prescale
+    ASSR   |=  (1 << AS0); //ext osc TOSC
+    TIMSK  |=  (1 << TOIE0); //enable TCNT0 overflow interrupt
+    TCCR0  |=  (1 << CS00); //normal mode, no prescale
 }
 
 /*************************************************************************/
@@ -297,16 +304,45 @@ void tcnt0_init(void){
 //(1/32768)*256*64 = 500mS
 /*************************************************************************/
 ISR(TIMER0_OVF_vect){
-  static uint8_t count_7ms = 0;        //holds 7ms tick count in binary
-  static uint8_t display_count = 0x01; //holds count for display 
+    static uint8_t count_7ms = 0;        //holds 7ms tick count in binary
+    static uint8_t display_count = 0x01; //holds count for display 
 
-  count_7ms++;                //increment count every 7.8125 ms 
-  if ((count_7ms % 64)==0){ //?? interrupts equals one half second 
-    SPDR = display_count;               //send to display 
-    while (!(TIFR & (1 << TOV0))){}               //wait till data sent out (while loop)
-    PORTB |= (1 << PORTB0);          //HC595 output reg - rising edge...
-    PORTB &= (0 << PORTB0);          //and falling edge
-    display_count = display_count << 1; //shift display bit for next time 
-  }
-  if (display_count == 0x80){display_count= 1;} //back to 1st positon
+    count_7ms++;                //increment count every 7.8125 ms 
+    if ((count_7ms % 64)==0){ //?? interrupts equals one half second 
+        SPDR = display_count;               //send to display 
+        while (!(TIFR & (1 << TOV0))){}               //wait till data sent out (while loop)
+        PORTB |= (1 << PORTB0);          //HC595 output reg - rising edge...
+        PORTB &= (0 << PORTB0);          //and falling edge
+        display_count = display_count << 1; //shift display bit for next time 
+    }
+    if (display_count == 0x80){
+        display_count= 1;
+    } //back to 1st positon
+}
+
+/*************************************************************************/
+//                              encoder_chk
+// This function checks which direction the encoder is spinning.
+// If the encoder is rotated clockwise then it will return a 1.
+// If the encoder is rotated counter clockwise then it will return a 0.
+/*************************************************************************/
+int8_t encoder_chk(uint8_t encoder_var){
+    // A and B are in bits 0 and 1
+    static uint16_t state = {0}; // hold bits from encoder
+    uint8_t a_pin, b_pin;        // encoder pin states
+
+    // a_pin and b_pin are asserted TRUE when low
+    a_pin = ((encoder_var & 0x01) == 0) ? 0 : 1;
+    b_pin = ((encoder_var & 0x02) == 0) ? 0 : 1;
+
+    // update shift using only the A pin
+    state = (state << 1) | a_pin | 0xe0;
+
+    // check for falling edge on A pin
+    // if it did, then B pin state indicates direction
+    // of rotation. Return 1 for CW, 0 fro CCW
+    if(state == 0xf0)
+        return (b_pin) ? 1 : 0;
+    else
+        return -1;
 }
