@@ -296,8 +296,11 @@ ISR(TIMER0_OVF_vect){
 
 
     // check for encoder
-    static uint8_t new_A = 0, old_A = 0, new_B = 0, old_B = 0, serial_out = 0, incrementFlag = 1, oldincflag;
-    uint8_t return_val, count;
+    static uint8_t new_A = 0, old_A = 0, new_B = 0, old_B = 0, i = 0; 
+    static uint8_t serial_out = 0, incrementFlag = 1, oldincflag, count=4;
+    uint8_t return_val, i=0; 
+    uint8_t left[4] = {0x03, 0x01, 0x00, 0x02}; // state machine for going cw
+    uint8_t right[4] = {0x03, 0x02, 0x00, 0x01}; // state machine for going ccw
 
     
     // getting the data from serial out
@@ -307,7 +310,7 @@ ISR(TIMER0_OVF_vect){
 
     // clk pulse
     PORTB |= 1 << PORTB1;
-    PORTB &= 0 << PORTB0;
+    PORTB &= 0 << PORTB1;
     serial_out = read_write_spi(); // read 
     
 
@@ -316,68 +319,100 @@ ISR(TIMER0_OVF_vect){
     
     // encoder 2
     new_B = (serial_out & 0x0C) >> 2; // the next two then right shift the bits so they match new_A
+
+
     oldincflag = incrementFlag;
     return_val = -1; // default return value, no change
-    if ((new_A != old_A) || (new_B != old_B)){ // if change occured
-        if((new_A == 0) && (new_B == 0)){
-            if (old_A == 0){
-                // count++;
-                incrementFlag = 1;
-            }
-            else{
-                // count--;
-                incrementFlag = 0;
-            }
-        }
-        else if ((new_A == 0) && (new_B == 1)){
-            if (old_A == 0){
-                // count++;
-                incrementFlag = 1;
-            }
-            else{
-                // count--;
-                incrementFlag = 0;
+    // if ((new_A != old_A) || (new_B != old_B)){ // if change occured
+    //     if((new_A == 0) && (new_B == 0)){
+    //         if (old_A == 0){
+    //             // count++;
+    //             incrementFlag = 1;
+    //         }
+    //         else{
+    //             // count--;
+    //             incrementFlag = 0;
+    //         }
+    //     }
+    //     else if ((new_A == 0) && (new_B == 1)){
+    //         if (old_A == 0){
+    //             // count++;
+    //             incrementFlag = 1;
+    //         }
+    //         else{
+    //             // count--;
+    //             incrementFlag = 0;
 
-            }
-        }
-        else if ((new_A == 1) && (new_B == 1)){ // detent position
-            if (old_A == 0){ // one direction 
-                // if (count == 3){
-                //     return_val = 0;
-                // }
-                if (incrementFlag == 1)
-                    return_val = 0;
-            }
-            else{ // or the other direction
-                // if (count == -3){
-                //     return_val = 1;
-                // }
-                if (incrementFlag == 0)
-                    return_val = 1;
-            }
-            // count = 0; // count is always reset in detent position
-        }
-        else if ((new_A == 1) && (new_B == 0)){
-            if (old_A == 1){
-                // count++;
-                incrementFlag = 1;
-            }
-            else{ 
-                // count--;
-                incrementFlag = 0;
-            }
-        }
+    //         }
+    //     }
+    //     else if ((new_A == 1) && (new_B == 1)){ // detent position
+    //         if (old_A == 0){ // one direction 
+    //             // if (count == 3){
+    //             //     return_val = 0;
+    //             // }
+    //             if (incrementFlag == 1)
+    //                 return_val = 0;
+    //         }
+    //         else{ // or the other direction
+    //             // if (count == -3){
+    //             //     return_val = 1;
+    //             // }
+    //             if (incrementFlag == 0)
+    //                 return_val = 1;
+    //         }
+    //         // count = 0; // count is always reset in detent position
+    //     }
+    //     else if ((new_A == 1) && (new_B == 0)){
+    //         if (old_A == 1){
+    //             // count++;
+    //             incrementFlag = 1;
+    //         }
+    //         else{ 
+    //             // count--;
+    //             incrementFlag = 0;
+    //         }
+    //     }
+
+    //     old_A = new_A; // save what are now old values
+    //     old_B = new_B;
+
+    // } // if changed occured
+    // if return value is still -1 then nothing happen
+    if (new_A != old_A){
+        while (left[i%4] != new_A)
+            i++;
+        if (old_A == left[(i-1)%4])
+            count--;
+        while (right[i%4] != new_A)
+            i++;
+        if (old_A == right[(i-1)%4])
+            count++;
+    }
+    if (new_B != old_B){
+        while (left[i%4] != new_B)
+            i++;
+        if (old_B == left[(i-1)%4])
+            count--;
+        while (right[i%4] != new_B)
+            i++;
+        if (old_B == right[(i-1)%4])
+            count++;
+    }
 
         old_A = new_A; // save what are now old values
         old_B = new_B;
-
-    } // if changed occured
-    // if return value is still -1 then nothing happen
-    // if (return_val == -1){
-    //     current_num += 1;
-    //     return;
-    // }
-
+        
+    // when the encoder hits for 4 then 
+    if (count == 7){
+        // increment
+        incrementFlag = 1;
+        count = 4; // to set the value
+    }  
+    if (count == 1){
+        // decrement
+        incrementFlag = 0;
+        count = 4; // to reset the value
+    } 
     
 
     // check for push buttons
