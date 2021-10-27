@@ -305,41 +305,41 @@ ISR(TIMER0_OVF_vect){
     for (j = 0; j < 12; j++)
     { // for the debounce
       
-            //make PORTA an input port with pullups
-            DDRA = 0x00;  // set port A as inputs
-            PORTA = 0xFF; // set port A as pull ups
-            
-            inc = 0; // increment initalize to 0 first
+        //make PORTA an input port with pullups
+        DDRA = 0x00;  // set port A as inputs
+        PORTA = 0xFF; // set port A as pull ups
+        
+        inc = 0; // increment initalize to 0 first
 
 
-            // checking what button is being pressed
-            // if (chk_buttons(i))
-            // {
-            //     inc = 1 << i;
-            //     current_num = current_num + inc;
-            // }
-            
-            if (chk_buttons(1)){ // S1, + or - 2
-                inc = 1 << 1;
-                // check if its increment or decrement
-                // current_num += inc;
-                if (return_val == -1){
-                    
-                }
-                if (incrementFlag == 1)
-                    current_num += inc;
-                else if(incrementFlag == 0)
-                    current_num -= inc;
+        // checking what button is being pressed
+        // if (chk_buttons(i))
+        // {
+        //     inc = 1 << i;
+        //     current_num = current_num + inc;
+        // }
+        
+        if (chk_buttons(1)){ // S1, + or - 2
+            inc = 1 << 1;
+            // check if its increment or decrement
+            // current_num += inc;
+            if (return_val == -1){
+                
             }
-            if (chk_buttons(2)){ // S2, + or - 4
-                inc = 1 << 2;
-                // current_num += inc;
-                if (incrementFlag == 1)
-                    current_num += inc;
-                else if (incrementFlag == 0)
-                    current_num -= inc;
-            }
-     
+            if (incrementFlag == 1)
+                current_num += inc;
+            else if(incrementFlag == 0)
+                current_num -= inc;
+        }
+        if (chk_buttons(2)){ // S2, + or - 4
+            inc = 1 << 2;
+            // current_num += inc;
+            if (incrementFlag == 1)
+                current_num += inc;
+            else if (incrementFlag == 0)
+                current_num -= inc;
+        }
+    
     }
 
 
@@ -389,165 +389,102 @@ uint8_t read_write_spi(void){
 /*************************************************************************/
 //                                  encoder
 /*************************************************************************/
-void encoder(){
-
- // check for encoder
-    static uint8_t new_A = 0, old_A = 0, new_B = 0, old_B = 0; 
-    static uint8_t serial_out = 0, incrementFlag = 1, oldincflag, count=4;
-    uint8_t return_val, i = 0; 
-    uint8_t left[4] = {0x03, 0x01, 0x00, 0x02}; // state machine for going cw
-    uint8_t right[4] = {0x03, 0x02, 0x00, 0x01}; // state machine for going ccw
-
+uint8_t encoderRead(uint8_t data, uint8_t knob){
     
-    // getting the data from serial out
-    // PORTD &= 0 << PORTD3; // turn on slave select the encoder
-    // PORTD &= 0 << PORTD2; // turn off slave select for bar graph
-    PORTE |= 0 << PORTE6; // SH/LD held low so it doesn't read from serial in but from encoder
+        // check for encoder
+    static uint8_t new_A = -1, old_A = -1, new_B = -1, old_B = -1, count = 0; 
+    uint8_t return_val, a, b; 
 
-    // clk pulse, regclk
-    PORTB |= 1 << PORTB1;
-    PORTB &= 0 << PORTB1;
-    // serial_out = read_write_spi(); // read 
-    serial_out = SPDR;
-    
+    a = (knob == 0) ? 1 : 4; // where the position of a is
+    b = (knob == 0) ? 2 : 8; // where the position of b is
 
-    // encoder 1
-    new_A = serial_out & 0x03; // buttom 2 bits
-    
-    // encoder 2
-    new_B = (serial_out & 0x0C) >> 2; // the next two then right shift the bits so they match new_A
+    new_A = data & a; // most LSB
+    new_B = data & b; // 2nd LSB
 
 
-    oldincflag = incrementFlag;
     return_val = -1; // default return value, no change
-    // if ((new_A != old_A) || (new_B != old_B)){ // if change occured
-    //     if((new_A == 0) && (new_B == 0)){
-    //         if (old_A == 0){
-    //             // count++;
-    //             incrementFlag = 1;
-    //         }
-    //         else{
-    //             // count--;
-    //             incrementFlag = 0;
-    //         }
-    //     }
-    //     else if ((new_A == 0) && (new_B == 1)){
-    //         if (old_A == 0){
-    //             // count++;
-    //             incrementFlag = 1;
-    //         }
-    //         else{
-    //             // count--;
-    //             incrementFlag = 0;
 
-    //         }
-    //     }
-    //     else if ((new_A == 1) && (new_B == 1)){ // detent position
-    //         if (old_A == 0){ // one direction 
-    //             // if (count == 3){
-    //             //     return_val = 0;
-    //             // }
-    //             if (incrementFlag == 1)
-    //                 return_val = 0;
-    //         }
-    //         else{ // or the other direction
-    //             // if (count == -3){
-    //             //     return_val = 1;
-    //             // }
-    //             if (incrementFlag == 0)
-    //                 return_val = 1;
-    //         }
-    //         // count = 0; // count is always reset in detent position
-    //     }
-    //     else if ((new_A == 1) && (new_B == 0)){
-    //         if (old_A == 1){
-    //             // count++;
-    //             incrementFlag = 1;
-    //         }
-    //         else{ 
-    //             // count--;
-    //             incrementFlag = 0;
-    //         }
-    //     }
+    if ((new_A != old_A) || (new_B != old_B)){ // if change occured
+        if((new_A == 0) && (new_B == 0)){
+            if (old_A == 1){
+                count++;
+            }
+            else{
+                count--;
+            }
+        }
+        else if ((new_A == 0) && (new_B == 1)){
+            if (old_A == 0){
+                count++;
+               
+            }
+            else{
+                count--;
+                
 
-    //     old_A = new_A; // save what are now old values
-    //     old_B = new_B;
-
-    // } // if changed occured
-    // if return value is still -1 then nothing happen
-    if (new_A != old_A){
-        while (left[i%4] != new_A)
-            i++;
-        if (old_A == left[(i-1)%4])
-            count--;
-        while (right[i%4] != new_A)
-            i++;
-        if (old_A == right[(i-1)%4])
-            count++;
-    }
-    if (new_B != old_B){
-        while (left[i%4] != new_B)
-            i++;
-        if (old_B == left[(i-1)%4])
-            count--;
-        while (right[i%4] != new_B)
-            i++;
-        if (old_B == right[(i-1)%4])
-            count++;
-    }
+            }
+        }
+        else if ((new_A == 1) && (new_B == 1)){ // detent position
+            if (old_A == 0){ // one direction 
+                if (count == 3){
+                    return_val = 0;
+                }
+            
+            }
+            else{ // or the other direction
+                if (count == -3){
+                    return_val = 1;
+                }
+            
+            }
+            count = 0; // count is always reset in detent position
+        }
+        else if ((new_A == 1) && (new_B == 0)){
+            if (old_A == 1){
+                count++;
+           
+            }
+            else{ 
+                count--;
+              
+            }
+        }
 
         old_A = new_A; // save what are now old values
         old_B = new_B;
-        
-    // when the encoder hits for 4 then 
-    if (count == 7){
-        // increment
-        incrementFlag = 1;
-        count = 4; // to set the value
-    }  
-    if (count == 1){
-        // decrement
-        incrementFlag = 0;
-        count = 4; // to reset the value
-    } 
-    
-    // barGraph(0);
+
+    } // if changed occured
+    // if return value is still -1 then nothing happen
+    return (return_val); // return coder state
+
 
 }
 
-/******************************************************************************/
-
-
 
 
 /******************************************************************************/
-void barGraph(uint8_t incrementFlag){
-    static uint8_t count_7ms = 0;        //holds 7ms tick count in binary
-    static uint8_t display_count = 0x0; //holds count for display 
 
-//   count_7ms++;                //increment count every 7.8125 ms 
-//   if ((count_7ms % 64)==0){ //?? interrupts equals one half second 
-//     SPDR = display_count;               //send to display 
-//     while (!(TIFR & (1 << TOV0))){}               //wait till data sent out (while loop)
-//     PORTB |= (1 << PORTB0);          //HC595 output reg - rising edge...
-//     PORTB &= (0 << PORTB0);          //and falling edge
-//     display_count = display_count << 1; //shift display bit for next time 
-//   }
-//   if (display_count == 0x80){display_count= 1;} //back to 1st positon
 
-    if (incrementFlag){
-        SPDR = 0x0F;
-        while (!(TIFR & (1 << TOV0))){}               //wait till data sent out (while loop)
-        PORTB |= (1 << PORTB0);          //HC595 output reg - rising edge...
-        PORTB &= (0 << PORTB0);          //and falling edge
 
-    }
-    else if (incrementFlag == 0){
-        SPDR = 0xF0;
-        while (!(TIFR & (1 << TOV0))){}               //wait till data sent out (while loop)
-        PORTB |= (1 << PORTB0);          //HC595 output reg - rising edge...
-        PORTB &= (0 << PORTB0);          //and falling edge
-    }
+
+/******************************************************************************/
+void barGraph(uint8_t increment){
+    uint8_t display_mode; //holds count for display 
+
+    // top half on for increment
+    if (increment == 1)
+        display_mode = 0xF0;
+    else if (increment == 0) // bot half on for decrement
+        display_mode = 0x0F;
     else
-        return;
+        display_mode = 0b10101010; // otherwise display every other
+    
+
+   
+    barGraphOutput = display_mode;               //send to display 
+    // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+    PORTD |= (1 << PORTD2);          //HC595 output reg - rising edge...
+    PORTD &= (0 << PORTD2);          //and falling edge
+ 
+
 }

@@ -28,12 +28,16 @@
 //   vdd1                   vcc
 //   gnd1                   ground
 
+static uint8_t barGraphOutput = 0;
+static uint8_t incrementFlag = -1;
+
+
 ISR(TIMER0_OVF_vect);
 
 void spi_init(void);
 void tcnt0_init(void);
 void barGraph(uint8_t);
-uint8_t encoderRead(uint8_t data);
+uint8_t encoderRead(uint8_t data, uint8_t knob);
 
 
 int main() {
@@ -92,99 +96,91 @@ void tcnt0_init(void){
 ISR(TIMER0_OVF_vect){
 
 
-    uint8_t incrementFlag = -1;
-    static uint8_t serial_out;
+    
+    uint8_t serial_out;
     // getting the data from serial out
 
-    PORTE &= 0 << PORTE6; // SH/LD held low so it doesn't read from serial in but from encoder
-    PORTB &= 0 << PORTB7; // gnd the oe_n 
+  
 
 
-    // clk pulse, regclk, encoder, clk_inh
-    PORTD |= 1 << PORTD3;
-    PORTD &= 0 << PORTD3;
-    // serial_out = read_write_spi(); // read 
+    // before you read from SPI for the encoder
+    // make sure to turn the clk_inh on
+    // and turn shift/load low
+    // delay for a bit
+    // then turn clk_inh off, and shift/load high
+    // then read from spi
+
+
+   
+  
+    SPDR = barGraphOutput;
+    PORTD |= 1 << PORTD3; // turning on clk_inh
+    PORTE &= 0 << PORTE6; // turning SH/LD low
+
+    _delay_ms(20);
+    PORTD &= 0 << PORTD3; // turning off clk_inh
+    PORTE |= 1 << PORTE6;// turing SH/LD high
 
     serial_out = SPDR;
-    barGraph(encoderRead(serial_out));
-    // while (!(TIFR & (1 << TOV0))){} 
+    while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+    
+    uint8_t temp = encoderRead(serial_out,0);
+    uint8_t temp1 = encoderRead(serial_out, 1);
+    if (temp != -1)
+        incrementFlag = temp;
+    uint8_t rotation[2] = {temp, temp1};
+
+
+    barGraph(rotation[0]);
+    
 
 
 }
 
 
-void barGraph(uint8_t incrementFlag){
-    static uint8_t count_7ms = 0;        //holds 7ms tick count in binary
+void barGraph(uint8_t increment){
     uint8_t display_mode; //holds count for display 
 
     // top half on for increment
-    if (incrementFlag == 1)
+    if (increment == 1)
         display_mode = 0xF0;
-    else if (incrementFlag == 0)
+    else if (increment == 0) // bot half on for decrement
         display_mode = 0x0F;
     else
-        display_mode = 0b10101010;
-    // bot half on for decrement
+        display_mode = 0b10101010; // otherwise display every other
+    
 
-    count_7ms++;                //increment count every 7.8125 ms 
-    if ((count_7ms % 64)==0){ //?? interrupts equals one half second 
-        SPDR = display_mode;               //send to display 
-        while (!(TIFR & (1 << TOV0))){}               //wait till data sent out (while loop)
-        PORTD |= (1 << PORTD2);          //HC595 output reg - rising edge...
-        PORTD &= (0 << PORTD2);          //and falling edge
-        // display_count = display_count << 1; //shift display bit for next time 
-    }
-    // if (display_count == 0x80){display_count= 1;} //back to 1st positon
-
-    // static uint8_t count_7ms = 0;        //holds 7ms tick count in binary
-    // static uint8_t display_count = 0x01; //holds count for display 
-
-    // count_7ms++;                //increment count every 7.8125 ms 
-    // if ((count_7ms % 64)==0){ //?? interrupts equals one half second 
-    //     SPDR = display_count;               //send to display 
-    //     while (!(TIFR & (1 << TOV0))){}               //wait till data sent out (while loop)
-    //     // PORTB |= (1 << PORTB0);          //HC595 output reg - rising edge...
-    //     // PORTB &= (0 << PORTB0);          //and falling edge
-    //     PORTD |= (1 << PORTD2);          //HC595 output reg - rising edge...
-    //     PORTD &= (0 << PORTD2);          //and falling edge
-    //     display_count = display_count << 1; //shift display bit for next time 
-    // }
-    // if (display_count == 0x80){display_count= 1;} //back to 1st positon
+   
+    barGraphOutput = display_mode;               //send to display 
+    // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+    PORTD |= (1 << PORTD2);          //HC595 output reg - rising edge...
+    PORTD &= (0 << PORTD2);          //and falling edge
+ 
 
 }
 
-uint8_t encoderRead(uint8_t data){
-    DDRB &= 0 << 3;
-        // check for encoder
-    static uint8_t new_A = 0, old_A = 0, new_B = 0, old_B = 0, count = 0; 
-    // static uint8_t serial_out,incrementFlag = -1, count = 4;
-    uint8_t return_val, i = 0; 
-    // uint8_t left[4] = {0x03, 0x01, 0x00, 0x02}; // state machine for going cw
-    // uint8_t right[4] = {0x03, 0x02, 0x00, 0x01}; // state machine for going ccw
-
-    // encoder 1, AB
-    // new_A = serial_out & 0x03; // buttom 2 bits
+uint8_t encoderRead(uint8_t data, uint8_t knob){
     
-    // // encoder 2, CD
-    // new_B = (serial_out & 0x0C) >> 2; // the next two then right shift the bits so they match new_A
+        // check for encoder
+    static uint8_t new_A = -1, old_A = -1, new_B = -1, old_B = -1, count = 0; 
+    uint8_t return_val, a, b; 
 
-    new_A = data & 0x01; // most LSB
-    new_B = data & 0x02; // 2nd LSB
+    a = (knob == 0) ? 1 : 4; // where the position of a is
+    b = (knob == 0) ? 2 : 8; // where the position of b is
+
+    new_A = data & a; // most LSB
+    new_B = data & b; // 2nd LSB
 
 
     return_val = -1; // default return value, no change
 
-
-
     if ((new_A != old_A) || (new_B != old_B)){ // if change occured
         if((new_A == 0) && (new_B == 0)){
-            if (old_A == 0){
+            if (old_A == 1){
                 count++;
-               
             }
             else{
                 count--;
-                // incrementFlag = 0;
             }
         }
         else if ((new_A == 0) && (new_B == 1)){
@@ -211,7 +207,7 @@ uint8_t encoderRead(uint8_t data){
                 }
             
             }
-            // count = 0; // count is always reset in detent position
+            count = 0; // count is always reset in detent position
         }
         else if ((new_A == 1) && (new_B == 0)){
             if (old_A == 1){
@@ -229,51 +225,7 @@ uint8_t encoderRead(uint8_t data){
 
     } // if changed occured
     // if return value is still -1 then nothing happen
-    return return_val;
-
-
-
-
-    // if (new_A != old_A){
-    //     while (left[i%4] != new_A)
-    //         i++;
-    //     if (old_A == left[(i-1)%4])
-    //         count--;
-    //     while (right[i%4] != new_A)
-    //         i++;
-    //     if (old_A == right[(i-1)%4])
-    //         count++;
-    // }
-    // if (new_B != old_B){
-    //     while (left[i%4] != new_B)
-    //         i++;
-    //     if (old_B == left[(i-1)%4])
-    //         count--;
-    //     while (right[i%4] != new_B)
-    //         i++;
-    //     if (old_B == right[(i-1)%4])
-    //         count++;
-    // }
-
-    //     old_A = new_A; // save what are now old values
-    //     old_B = new_B;
-        
-    // // when the encoder hits for 4 then 
-    // if (count == 7){
-    //     // increment
-    //     incrementFlag = 1;
-    //     count = 4; // to set the value
-    //     // PORTB = 0xf0;
-    //     // _delay_ms(1000);
-    // }  
-    // if (count == 1){
-    //     // decrement
-    //     incrementFlag = 0;
-    //     count = 4; // to reset the value
-    //     // PORTB = 0xe0;
-    //     // _delay_ms(1000);
-    // } 
-
+    return (return_val); // return coder state
 
 
 }
