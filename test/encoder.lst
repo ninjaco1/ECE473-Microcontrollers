@@ -336,40 +336,42 @@ ISR(TIMER0_OVF_vect){
     
     uint8_t serial_out;
     // getting the data from serial out
-   
-  
-    SPDR = 0;
- 1a4:	1f b8       	out	0x0f, r1	; 15
-    while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
- 1a6:	77 9b       	sbis	0x0e, 7	; 14
- 1a8:	fe cf       	rjmp	.-4      	; 0x1a6 <__vector_16+0x2c>
+
     PORTD |= 1 << PORTD3; // turning on clk_inh
- 1aa:	93 9a       	sbi	0x12, 3	; 18
+ 1a4:	93 9a       	sbi	0x12, 3	; 18
     PORTE &= 0 << PORTE6; // turning SH/LD low
- 1ac:	83 b1       	in	r24, 0x03	; 3
- 1ae:	13 b8       	out	0x03, r1	; 3
+ 1a6:	83 b1       	in	r24, 0x03	; 3
+ 1a8:	13 b8       	out	0x03, r1	; 3
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 1b0:	2f ef       	ldi	r18, 0xFF	; 255
- 1b2:	83 ec       	ldi	r24, 0xC3	; 195
- 1b4:	99 e0       	ldi	r25, 0x09	; 9
- 1b6:	21 50       	subi	r18, 0x01	; 1
- 1b8:	80 40       	sbci	r24, 0x00	; 0
- 1ba:	90 40       	sbci	r25, 0x00	; 0
- 1bc:	e1 f7       	brne	.-8      	; 0x1b6 <__vector_16+0x3c>
- 1be:	00 c0       	rjmp	.+0      	; 0x1c0 <__vector_16+0x46>
- 1c0:	00 00       	nop
+ 1aa:	2f ef       	ldi	r18, 0xFF	; 255
+ 1ac:	83 ec       	ldi	r24, 0xC3	; 195
+ 1ae:	99 e0       	ldi	r25, 0x09	; 9
+ 1b0:	21 50       	subi	r18, 0x01	; 1
+ 1b2:	80 40       	sbci	r24, 0x00	; 0
+ 1b4:	90 40       	sbci	r25, 0x00	; 0
+ 1b6:	e1 f7       	brne	.-8      	; 0x1b0 <__vector_16+0x36>
+ 1b8:	00 c0       	rjmp	.+0      	; 0x1ba <__vector_16+0x40>
+ 1ba:	00 00       	nop
 
     _delay_ms(200);
     PORTD &= 0 << PORTD3; // turning off clk_inh
- 1c2:	82 b3       	in	r24, 0x12	; 18
- 1c4:	12 ba       	out	0x12, r1	; 18
+ 1bc:	82 b3       	in	r24, 0x12	; 18
+ 1be:	12 ba       	out	0x12, r1	; 18
     PORTE |= 1 << PORTE6;// turing SH/LD high
- 1c6:	1e 9a       	sbi	0x03, 6	; 3
+ 1c0:	1e 9a       	sbi	0x03, 6	; 3
+   
+  
+    SPDR = 0;
+ 1c2:	1f b8       	out	0x0f, r1	; 15
+    while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+ 1c4:	77 9b       	sbis	0x0e, 7	; 14
+ 1c6:	fe cf       	rjmp	.-4      	; 0x1c4 <__vector_16+0x4a>
+    
 
     serial_out = SPDR;
  1c8:	cf b1       	in	r28, 0x0f	; 15

@@ -2,7 +2,7 @@
 %%Title: lab3_code.c
 %%For: Anthony Nguyen
 %%Creator: a2ps version 4.14
-%%CreationDate: Wed Oct 27 02:26:29 2021
+%%CreationDate: Wed Oct 27 11:46:53 2021
 %%BoundingBox: 24 24 588 768
 %%DocumentData: Clean7Bit
 %%Orientation: Landscape
@@ -757,9 +757,9 @@ llx lly 12 add translate
 /x0 x v get 3.147420 add sx cw mul add store
 /y0 y v get bfs th add sub store
 x0 y0 moveto
-(// lab2_skel.c) c n
+(// lab3_code.c) c n
 (// Antony Nguyen) N
-(// 10.4.2021) N
+(// 10.27.2021) N
 () p n
 (#include) K
 ( <avr/io.h>) p n
@@ -868,7 +868,7 @@ x0 y0 moveto
 () N
 (// Decoder 3 to 8) c n
 (uint8_t decoder[8];) p n
-(lab3_code.c) (Page 1/7) (Oct 27, 21 2:08) title
+(lab3_code.c) (Page 1/7) (Oct 27, 21 11:46) title
 border
 /v 1 store
 /x0 x v get 3.147420 add sx cw mul add store
@@ -982,7 +982,7 @@ x0 y0 moveto
 (    dec_to_7seg[5] = ~\(FIVE\);) N
 (    dec_to_7seg[6] = ~\(SIX\);) N
 (    dec_to_7seg[7] = ~\(SEVEN\);) N
-(lab3_code.c) (Page 2/7) (Oct 27, 21 2:08) title
+(lab3_code.c) (Page 2/7) (Oct 27, 21 11:46) title
 border
 grestore
 (Printed by Anthony Nguyen) rhead
@@ -1098,7 +1098,7 @@ x0 y0 moveto
 (//blank out leading zero digits) c n
 (    ) p
 (//now move data to right place for misplaced colon position) c n
-(lab3_code.c) (Page 3/7) (Oct 27, 21 2:08) title
+(lab3_code.c) (Page 3/7) (Oct 27, 21 11:46) title
 border
 /v 1 store
 /x0 x v get 3.147420 add sx cw mul add store
@@ -1214,7 +1214,7 @@ x0 y0 moveto
 (\){) p n
 (    ASSR   |=  \(1 << AS0\); ) S
 (//ext osc TOSC) c n
-(lab3_code.c) (Page 4/7) (Oct 27, 21 2:08) title
+(lab3_code.c) (Page 4/7) (Oct 27, 21 11:46) title
 border
 grestore
 (Printed by Anthony Nguyen) rhead
@@ -1253,44 +1253,54 @@ x0 y0 moveto
 () N
 (    uint8_t serial_out;) N
 (    ) S
+(static) K
+( uint8_t bargraph = 0x00;) p n
+(        ) S
+(static) K
+( uint8_t light = 0x00;) p n
+() N
+(    ) S
 (// getting the data from serial out) c n
-(   ) p n
-(  ) N
-(    ) S
-(// SPDR = 0;) c n
-(    ) p
-(// while \(bit_is_clear\(SPSR,SPIF\)\){}               //wait till data sent out) c n
-( \(while loop\)) N
-(    ) p
-(// PORTD |= 1 << PORTD3; // turning on clk_inh) c n
-(    ) p
-(// PORTE &= 0 << PORTE6; // turning SH/LD low) c n
 () p n
-(    ) S
-(// _delay_ms\(200\);) c n
-(    ) p
-(// PORTD &= 0 << PORTD3; // turning off clk_inh) c n
-(    ) p
-(// PORTE |= 1 << PORTE6;// turing SH/LD high) c n
+(    PORTD |= 1 << PORTD3; ) S
+(// turning on clk_inh) c n
+(    PORTE &= 0 << PORTE6; ) p
+(// turning SH/LD low) c n
 () p n
+(    _delay_ms\(1\);) N
+(    PORTD &= 0 << PORTD3; ) S
+(// turning off clk_inh) c n
+(    PORTE |= 1 << PORTE6;) p
+(// turing SH/LD high) c n
+(  ) p n
+(    SPDR = light;) N
 (    ) S
-(// serial_out = SPDR;) c n
-(    ) p
-(// while \(bit_is_clear\(SPSR,SPIF\)\){}               //wait till data sent out) c n
-( \(while loop\)) N
+(while) K
+( \(bit_is_clear\(SPSR,SPIF\)\){}               ) p
+(//wait till data sent out \(w) c n
+(hile loop\)) N
 (    ) p n
+() N
+(    bargraph = SPDR;) N
 (    ) S
-(// uint8_t temp = encoderRead\(serial_out,0\);) c n
-(    ) p
+(if) K
+( \(bargraph != 0x00\) {) p n
+(        light = 0xff;) N
+(    }) N
+() N
+(    ) N
+(    ) N
+(    uint8_t temp = encoderRead\(serial_out,0\);) N
+(    ) S
 (// uint8_t temp1 = encoderRead\(serial_out, 1\);) c n
 (    ) p
-(// if \(temp != -1\)) c n
-(    ) p
-(//     incrementFlag = temp;) c n
-(    ) p
+(if) K
+( \(temp != -1\)) p n
+(        incrementFlag = temp;) N
+(    ) S
 (// uint8_t rotation[2] = {incrementFlag, temp1};) c n
 () p n
-() N
+(    barGraph\(incrementFlag\);) N
 (    ) S
 (// barGraph\(rotation[0]\);) c n
 (    ) p
@@ -1329,6 +1339,12 @@ x0 y0 moveto
 (            inc = 1 << 1;) p n
 (            ) S
 (// check if its increment or decrement) c n
+(lab3_code.c) (Page 5/7) (Oct 27, 21 11:46) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
 (            current_num += inc;) p n
 (            ) S
 (// if \(return_val == -1\){) c n
@@ -1342,12 +1358,6 @@ x0 y0 moveto
 (//     current_num += inc;) c n
 (            ) p
 (// else if\(incrementFlag == 0\)) c n
-(lab3_code.c) (Page 5/7) (Oct 27, 21 2:08) title
-border
-/v 1 store
-/x0 x v get 3.147420 add sx cw mul add store
-/y0 y v get bfs th add sub store
-x0 y0 moveto
 (            ) p
 (//     current_num -= inc;) c n
 (            ) p n
@@ -1454,19 +1464,7 @@ x0 y0 moveto
 (                    return_val = 0;) N
 (                }) N
 (            ) N
-(            }) N
-(            ) S
-(else) K
-({ ) p
-(// or the other direction) c n
-(                ) p
-(if) K
-( \(count == -3\){) p n
-(                    return_val = 1;) N
-(                }) N
-(            ) N
-(            }) N
-(lab3_code.c) (Page 6/7) (Oct 27, 21 2:08) title
+(lab3_code.c) (Page 6/7) (Oct 27, 21 11:46) title
 border
 grestore
 (Printed by Anthony Nguyen) rhead
@@ -1486,7 +1484,19 @@ llx lly 12 add translate
 /x0 x v get 3.147420 add sx cw mul add store
 /y0 y v get bfs th add sub store
 x0 y0 moveto
-(            count = 0; ) p
+(            }) p n
+(            ) S
+(else) K
+({ ) p
+(// or the other direction) c n
+(                ) p
+(if) K
+( \(count == -3\){) p n
+(                    return_val = 1;) N
+(                }) N
+(            ) N
+(            }) N
+(            count = 0; ) S
 (// count is always reset in detent position) c n
 (        }) p n
 (        ) S
@@ -1570,7 +1580,7 @@ x0 y0 moveto
 (//and falling edge) c n
 ( ) p n
 (}) S
-(lab3_code.c) (Page 7/7) (Oct 27, 21 2:08) title
+(lab3_code.c) (Page 7/7) (Oct 27, 21 11:46) title
 border
 grestore
 (Printed by Anthony Nguyen) rhead

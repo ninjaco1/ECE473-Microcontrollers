@@ -1,6 +1,6 @@
-// lab2_skel.c
+// lab3_code.c
 // Antony Nguyen
-// 10.4.2021
+// 10.27.2021
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -282,28 +282,36 @@ void tcnt0_init(void){
 ISR(TIMER0_OVF_vect){
 
     uint8_t serial_out;
+    static uint8_t bargraph = 0x00;
+        static uint8_t light = 0x00;
+
     // getting the data from serial out
-   
+
+    PORTD |= 1 << PORTD3; // turning on clk_inh
+    PORTE &= 0 << PORTE6; // turning SH/LD low
+
+    _delay_ms(1);
+    PORTD &= 0 << PORTD3; // turning off clk_inh
+    PORTE |= 1 << PORTE6;// turing SH/LD high
   
-    // SPDR = 0;
-    // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
-    // PORTD |= 1 << PORTD3; // turning on clk_inh
-    // PORTE &= 0 << PORTE6; // turning SH/LD low
-
-    // _delay_ms(200);
-    // PORTD &= 0 << PORTD3; // turning off clk_inh
-    // PORTE |= 1 << PORTE6;// turing SH/LD high
-
-    // serial_out = SPDR;
-    // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+    SPDR = light;
+    while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
     
-    // uint8_t temp = encoderRead(serial_out,0);
+
+    bargraph = SPDR;
+    if (bargraph != 0x00) {
+        light = 0xff;
+    }
+
+    
+    
+    uint8_t temp = encoderRead(serial_out,0);
     // uint8_t temp1 = encoderRead(serial_out, 1);
-    // if (temp != -1)
-    //     incrementFlag = temp;
+    if (temp != -1)
+        incrementFlag = temp;
     // uint8_t rotation[2] = {incrementFlag, temp1};
 
-
+    barGraph(incrementFlag);
     // barGraph(rotation[0]);
     // barGraph(-1);
 

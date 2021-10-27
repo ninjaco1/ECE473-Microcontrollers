@@ -93,16 +93,18 @@ ISR(TIMER0_OVF_vect){
     
     uint8_t serial_out;
     // getting the data from serial out
-   
-  
-    SPDR = 0;
-    while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+
     PORTD |= 1 << PORTD3; // turning on clk_inh
     PORTE &= 0 << PORTE6; // turning SH/LD low
 
     _delay_ms(200);
     PORTD &= 0 << PORTD3; // turning off clk_inh
     PORTE |= 1 << PORTE6;// turing SH/LD high
+   
+  
+    SPDR = 0;
+    while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+    
 
     serial_out = SPDR;
     // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
