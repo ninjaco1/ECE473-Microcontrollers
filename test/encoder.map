@@ -130,7 +130,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x0000000000000000      0x26c
+.text           0x0000000000000000      0x258
  *(.vectors)
  .vectors       0x0000000000000000       0x8c /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr51/crtatmega128.o
                 0x0000000000000000                __vectors
@@ -223,63 +223,63 @@ END GROUP
                 0x00000000000000ca                __vector_10
                 0x00000000000000ca                __vector_18
                 0x00000000000000ca                __vector_20
- .text          0x00000000000000ce      0x16a encoder.o
+ .text          0x00000000000000ce      0x156 encoder.o
                 0x00000000000000ce                spi_init
                 0x00000000000000de                tcnt0_init
                 0x00000000000000f2                barGraph
-                0x0000000000000124                encoderRead
-                0x000000000000018c                __vector_16
- .text          0x0000000000000238        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
- .text          0x0000000000000238        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
- .text          0x0000000000000238        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
-                0x0000000000000238                . = ALIGN (0x2)
+                0x0000000000000112                encoderRead
+                0x000000000000017a                __vector_16
+ .text          0x0000000000000224        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
+ .text          0x0000000000000224        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
+ .text          0x0000000000000224        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
+                0x0000000000000224                . = ALIGN (0x2)
  *(.text.*)
- .text.startup  0x0000000000000238       0x30 encoder.o
-                0x0000000000000238                main
+ .text.startup  0x0000000000000224       0x30 encoder.o
+                0x0000000000000224                main
  .text.libgcc.mul
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
  .text.libgcc.div
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
- .text.libgcc   0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
+ .text.libgcc   0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
  .text.libgcc.prologue
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
  .text.libgcc.builtins
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
  .text.libgcc.fmul
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
  .text.libgcc.fixed
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
  .text.libgcc.mul
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
  .text.libgcc.div
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
- .text.libgcc   0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
+ .text.libgcc   0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
  .text.libgcc.prologue
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
  .text.libgcc.builtins
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
  .text.libgcc.fmul
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
  .text.libgcc.fixed
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
  .text.libgcc.mul
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
  .text.libgcc.div
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
- .text.libgcc   0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
+ .text.libgcc   0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
  .text.libgcc.prologue
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
  .text.libgcc.builtins
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
  .text.libgcc.fmul
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
  .text.libgcc.fixed
-                0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
-                0x0000000000000268                . = ALIGN (0x2)
+                0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
+                0x0000000000000254                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000000000000268        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
-                0x0000000000000268                exit
-                0x0000000000000268                _exit
+ .fini9         0x0000000000000254        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
+                0x0000000000000254                exit
+                0x0000000000000254                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -298,11 +298,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000000000000268        0x4 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
+ .fini0         0x0000000000000254        0x4 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
  *(.fini0)
-                0x000000000000026c                _etext = .
+                0x0000000000000258                _etext = .
 
-.data           0x0000000000800100        0x2 load address 0x000000000000026c
+.data           0x0000000000800100        0x2 load address 0x0000000000000258
                 0x0000000000800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x0000000000800100        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr51/crtatmega128.o
@@ -319,25 +319,25 @@ END GROUP
                 0x0000000000800102                _edata = .
                 0x0000000000800102                PROVIDE (__data_end, .)
 
-.bss            0x0000000000800102        0x2
+.bss            0x0000000000800102        0x1
                 0x0000000000800102                PROVIDE (__bss_start, .)
  *(.bss)
  .bss           0x0000000000800102        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr51/crtatmega128.o
- .bss           0x0000000000800102        0x2 encoder.o
- .bss           0x0000000000800104        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
- .bss           0x0000000000800104        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
- .bss           0x0000000000800104        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
+ .bss           0x0000000000800102        0x1 encoder.o
+ .bss           0x0000000000800103        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
+ .bss           0x0000000000800103        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_copy_data.o)
+ .bss           0x0000000000800103        0x0 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/avr51/libgcc.a(_clear_bss.o)
  *(.bss*)
  *(COMMON)
-                0x0000000000800104                PROVIDE (__bss_end, .)
-                0x000000000000026c                __data_load_start = LOADADDR (.data)
-                0x000000000000026e                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000000000800103                PROVIDE (__bss_end, .)
+                0x0000000000000258                __data_load_start = LOADADDR (.data)
+                0x000000000000025a                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x0000000000800104        0x0
+.noinit         0x0000000000800103        0x0
                 [!provide]                        PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                        PROVIDE (__noinit_end, .)
-                0x0000000000800104                _end = .
+                0x0000000000800103                _end = .
                 [!provide]                        PROVIDE (__heap_start, .)
 
 .eeprom         0x0000000000810000        0x0
@@ -410,20 +410,20 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000      0xaca
+.debug_info     0x0000000000000000      0xac5
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000      0x780 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr51/crtatmega128.o
- .debug_info    0x0000000000000780      0x34a encoder.o
+ .debug_info    0x0000000000000780      0x345 encoder.o
 
-.debug_abbrev   0x0000000000000000      0x8f8
+.debug_abbrev   0x0000000000000000      0x907
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000      0x718 /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr51/crtatmega128.o
- .debug_abbrev  0x0000000000000718      0x1e0 encoder.o
+ .debug_abbrev  0x0000000000000718      0x1ef encoder.o
 
-.debug_line     0x0000000000000000      0x2b9
+.debug_line     0x0000000000000000      0x2a4
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x0000000000000000       0x1a /opt/avr8-gnu-toolchain-linux_x86_64/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr51/crtatmega128.o
- .debug_line    0x000000000000001a      0x29f encoder.o
+ .debug_line    0x000000000000001a      0x28a encoder.o
 
 .debug_frame    0x0000000000000000       0xc4
  *(.debug_frame)
@@ -435,9 +435,9 @@ END GROUP
  .debug_str     0x000000000000027d      0x1d7 encoder.o
                                         0x20b (size before relaxing)
 
-.debug_loc      0x0000000000000000      0x33b
+.debug_loc      0x0000000000000000      0x2db
  *(.debug_loc)
- .debug_loc     0x0000000000000000      0x33b encoder.o
+ .debug_loc     0x0000000000000000      0x2db encoder.o
 
 .debug_macinfo
  *(.debug_macinfo)

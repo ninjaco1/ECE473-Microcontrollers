@@ -50,12 +50,8 @@ int main() {
     spi_init();    //initalize SPI port
     sei();         //enable interrupts before entering loop
  
+    while(1){}
 
-    while(1){
-
-
-
-    }
 }
 
 /***********************************************************************/
@@ -94,47 +90,33 @@ void tcnt0_init(void){
 //(1/32768)*256*64 = 500mS
 /*************************************************************************/
 ISR(TIMER0_OVF_vect){
-
-
     
     uint8_t serial_out;
     // getting the data from serial out
-
-  
-
-
-    // before you read from SPI for the encoder
-    // make sure to turn the clk_inh on
-    // and turn shift/load low
-    // delay for a bit
-    // then turn clk_inh off, and shift/load high
-    // then read from spi
-
-
    
   
-    SPDR = barGraphOutput;
+    SPDR = 0;
+    while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
     PORTD |= 1 << PORTD3; // turning on clk_inh
     PORTE &= 0 << PORTE6; // turning SH/LD low
 
-    _delay_ms(20);
+    _delay_ms(200);
     PORTD &= 0 << PORTD3; // turning off clk_inh
     PORTE |= 1 << PORTE6;// turing SH/LD high
 
     serial_out = SPDR;
-    while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+    // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
     
     uint8_t temp = encoderRead(serial_out,0);
     uint8_t temp1 = encoderRead(serial_out, 1);
     if (temp != -1)
         incrementFlag = temp;
-    uint8_t rotation[2] = {temp, temp1};
+    uint8_t rotation[2] = {incrementFlag, temp1};
 
 
     barGraph(rotation[0]);
+    // barGraph(-1);
     
-
-
 }
 
 
@@ -150,9 +132,9 @@ void barGraph(uint8_t increment){
         display_mode = 0b10101010; // otherwise display every other
     
 
-   
-    barGraphOutput = display_mode;               //send to display 
-    // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+    SPDR = display_mode;
+    // barGraphOutput = display_mode;               //send to display 
+    while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
     PORTD |= (1 << PORTD2);          //HC595 output reg - rising edge...
     PORTD &= (0 << PORTD2);          //and falling edge
  
@@ -186,12 +168,9 @@ uint8_t encoderRead(uint8_t data, uint8_t knob){
         else if ((new_A == 0) && (new_B == 1)){
             if (old_A == 0){
                 count++;
-               
             }
             else{
                 count--;
-                
-
             }
         }
         else if ((new_A == 1) && (new_B == 1)){ // detent position
@@ -199,24 +178,20 @@ uint8_t encoderRead(uint8_t data, uint8_t knob){
                 if (count == 3){
                     return_val = 0;
                 }
-            
             }
             else{ // or the other direction
                 if (count == -3){
                     return_val = 1;
                 }
-            
             }
             count = 0; // count is always reset in detent position
         }
         else if ((new_A == 1) && (new_B == 0)){
             if (old_A == 1){
                 count++;
-           
             }
             else{ 
                 count--;
-              
             }
         }
 

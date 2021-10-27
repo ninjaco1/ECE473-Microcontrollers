@@ -70,6 +70,9 @@ uint8_t decoder[8];
 // current number on the display
 uint16_t current_num = 0;
 
+static uint8_t barGraphOutput = 0;
+static uint8_t incrementFlag = -1;
+
 
 // prototypes
 int8_t chk_buttons(int button); // check what button is being pressed
@@ -78,23 +81,21 @@ void setDigit();
 void clearDecoder();
 void set_dec_to_7seg();
 void set_decoder();
+
 // timers fucntions
 void spi_init(void);
 void tcnt0_init(void);
 ISR(TIMER0_OVF_vect);
-uint8_t read_write_spi(void);
+
 // encoder
-int8_t encoder_chk(uint8_t encoder_var);
-void barGraph(uint8_t incrementFlag);
-void encoder();
+void barGraph(uint8_t);
+uint8_t encoderRead(uint8_t data, uint8_t knob);
 
 int main()
 {
     DDRB = 0xF0; // set port B bits 4-7 B as outputs, decoder
     DDRE = 0x40; // set E6 to output
     DDRD = 0xB0; // slave select pins
-
-    
     
 
     // current_num = 0; // the number that will be on the display
@@ -279,22 +280,33 @@ void tcnt0_init(void){
 //(1/32768)*256*64 = 500mS
 /*************************************************************************/
 ISR(TIMER0_OVF_vect){
-    // static uint8_t count_7ms = 0;        //holds 7ms tick count in binary
-    // static uint8_t display_count = 0x01; //holds count for display 
 
-    // count_7ms++;                            //increment count every 7.8125 ms 
-    // if ((count_7ms % 64)==0){               //?? interrupts equals one half second 
-    //     SPDR = display_count;               //send to display 
-    //     while (!(TIFR & (1 << TOV0))){}               //wait till data sent out (while loop)
-    //     PORTB |= (1 << PORTB0);          //HC595 output reg - rising edge...
-    //     PORTB &= (0 << PORTB0);          //and falling edge
-    //     display_count = display_count << 1; //shift display bit for next time 
-    // }
-    // if (display_count == 0x80){
-    //     display_count= 1;
-    // } //back to 1st positon
-    uint8_t incrementFlag = -1, return_val;
-    encoder(); // check for the status of the encoder
+    uint8_t serial_out;
+    // getting the data from serial out
+   
+  
+    // SPDR = 0;
+    // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+    // PORTD |= 1 << PORTD3; // turning on clk_inh
+    // PORTE &= 0 << PORTE6; // turning SH/LD low
+
+    // _delay_ms(200);
+    // PORTD &= 0 << PORTD3; // turning off clk_inh
+    // PORTE |= 1 << PORTE6;// turing SH/LD high
+
+    // serial_out = SPDR;
+    // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+    
+    // uint8_t temp = encoderRead(serial_out,0);
+    // uint8_t temp1 = encoderRead(serial_out, 1);
+    // if (temp != -1)
+    //     incrementFlag = temp;
+    // uint8_t rotation[2] = {incrementFlag, temp1};
+
+
+    // barGraph(rotation[0]);
+    // barGraph(-1);
+
 
     // check for push buttons
     uint16_t j, inc;
@@ -310,81 +322,34 @@ ISR(TIMER0_OVF_vect){
         PORTA = 0xFF; // set port A as pull ups
         
         inc = 0; // increment initalize to 0 first
-
-
-        // checking what button is being pressed
-        // if (chk_buttons(i))
-        // {
-        //     inc = 1 << i;
-        //     current_num = current_num + inc;
-        // }
         
         if (chk_buttons(1)){ // S1, + or - 2
             inc = 1 << 1;
             // check if its increment or decrement
-            // current_num += inc;
-            if (return_val == -1){
-                
-            }
-            if (incrementFlag == 1)
-                current_num += inc;
-            else if(incrementFlag == 0)
-                current_num -= inc;
+            current_num += inc;
+            // if (return_val == -1){
+            //     continue;
+            // }
+            // if (incrementFlag == 1)
+            //     current_num += inc;
+            // else if(incrementFlag == 0)
+            //     current_num -= inc;
+            
         }
         if (chk_buttons(2)){ // S2, + or - 4
             inc = 1 << 2;
-            // current_num += inc;
-            if (incrementFlag == 1)
-                current_num += inc;
-            else if (incrementFlag == 0)
-                current_num -= inc;
+            current_num += inc;
+            // if (incrementFlag == 1)
+            //     current_num += inc;
+            // else if (incrementFlag == 0)
+            //     current_num -= inc;
+            
         }
     
     }
-
-
-
-
+    // current_num += 1;
 }
 
-/*************************************************************************/
-//                              encoder_chk
-// This function checks which direction the encoder is spinning.
-// If the encoder is rotated clockwise then it will return a 1.
-// If the encoder is rotated counter clockwise then it will return a 0.
-/*************************************************************************/
-int8_t encoder_chk(uint8_t encoder_var){
-    // A and B are in bits 0 and 1
-    static uint16_t state = {0}; // hold bits from encoder
-    uint8_t a_pin, b_pin;        // encoder pin states
-
-    // a_pin and b_pin are asserted TRUE when low
-    a_pin = ((encoder_var & 0x01) == 0) ? 0 : 1;
-    b_pin = ((encoder_var & 0x02) == 0) ? 0 : 1;
-
-    // update shift using only the A pin
-    state = (state << 1) | a_pin | 0xe0;
-
-    // check for falling edge on A pin
-    // if it did, then B pin state indicates direction
-    // of rotation. Return 1 for CW, 0 fro CCW
-    if(state == 0xf0)
-        return (b_pin) ? 1 : 0;
-    else
-        return -1;
-}
-
-
-/*************************************************************************/
-//                            read_write_spi
-//
-/*************************************************************************/
-uint8_t read_write_spi(void){
-    // load data into spi buffer
-    SPDR = 0;
-    while (bit_is_clear(SPSR,SPIF)){}
-    return (SPDR);
-}
 
 /*************************************************************************/
 //                                  encoder
@@ -463,10 +428,10 @@ uint8_t encoderRead(uint8_t data, uint8_t knob){
 
 
 /******************************************************************************/
-
-
-
-
+//                             barGraph
+//
+//
+//
 /******************************************************************************/
 void barGraph(uint8_t increment){
     uint8_t display_mode; //holds count for display 
@@ -480,11 +445,10 @@ void barGraph(uint8_t increment){
         display_mode = 0b10101010; // otherwise display every other
     
 
-   
-    barGraphOutput = display_mode;               //send to display 
-    // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+    SPDR = display_mode;
+    // barGraphOutput = display_mode;               //send to display 
+    while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
     PORTD |= (1 << PORTD2);          //HC595 output reg - rising edge...
     PORTD &= (0 << PORTD2);          //and falling edge
  
-
 }
