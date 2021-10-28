@@ -357,50 +357,34 @@ ISR(TIMER0_OVF_vect){
     }
     PORTB &= ~(TRI_BUFFER); // turn off the tri state buffer 
 
-
-
-
-    // // spi 
-    // PORTE &= ~(1 << PORTE6); // turning SH/LD low
-    // PORTE |= 1 << PORTE6;// turing SH/LD high
-
-    // SPDR = 0; // give the bargraph garbage
-    // data = SPDR; // get the value of the encoder
-
-    // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
-    
-    // PORTD |= 1 << PORTD3; // turning on clk_inh
-    // PORTD &= ~(1 << PORTD3); // turning off clk_inh
-
-
-    // uint8_t enc1 = encoderRead(data, 0);
-    // uint8_t enc2 = encoderRead(data, 1);
-
-    // barGraph();
-
-    // enocoder
-
-
-    // test block start
-    // PORTE &= ~(1 << PORTE6); // turning SH/LD low
-    // PORTE |= 1 << PORTE6;// turing SH/LD high
-
-    // SPDR = 0; // give the bargraph garbage
-    
-    // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
-    
-    // uint8_t datas = SPDR; // get the value of the encoder
-    // PORTD |= 1 << PORTD3; // turning on clk_inh
-    // PORTD &= ~(1 << PORTD3); // turning off clk_inh
-
-    // test block end
-
-    // uint8_t enc1 = encoder_chk(data & 0b00000011);
-    // uint8_t enc2 = encoder_chk(data >> 2);
-
+    //
     uint8_t enc1 = encoderRead(data, 0);
     uint8_t enc2 = encoderRead(data, 1);
 
+
+    if (incDec2 == 1 && incDec4 == 1){
+        current_num = current_num;
+
+    }
+    else if (incDec2 == 0 && incDec4 == 0){
+        if(enc1 == 0 || enc2 == 0)
+            current_num -= 1;
+        if (enc1 == 1 || enc2 == 1)
+            current_num += 1;
+    }
+    else if (incDec2 == 1){
+        if(enc1 == 0 || enc2 == 0)
+            current_num -= 2;
+        if (enc1 == 1 || enc2 == 1)
+            current_num += 2;
+    }
+    else if (incDec4 == 1){
+        if (enc1 == 0 || enc2 == 0)
+            current_num -= 4;
+        if (enc1 == 1 || enc2 == 1)
+            current_num += 4;
+    }
+    
 
 
 
@@ -450,23 +434,23 @@ uint8_t encoderRead(uint8_t data, uint8_t knob){
             if (old_state[a_index] == 0){ // one direction 
                 if (count == 3){
                     return_val = 0;
-                    if(incDec2 == 1){
-                        current_num -= 2;
-                    }
-                    if(incDec4 == 1){
-                        current_num -= 4;
-                    }
+                    // if(incDec2 == 1){
+                    //     current_num -= 2;
+                    // }
+                    // if(incDec4 == 1){
+                    //     current_num -= 4;
+                    // }
                 }
             }
             else{ // or the other direction
                 if (count == -3){
                     return_val = 1;
-                    if(incDec2 == 1){
-                        current_num += 2;
-                    }
-                    if(incDec4 == 1){
-                        current_num += 4;
-                    }
+                    // if(incDec2 == 1){
+                    //     current_num += 2;
+                    // }
+                    // if(incDec4 == 1){
+                    //     current_num += 4;
+                    // }
 
                 }
             }

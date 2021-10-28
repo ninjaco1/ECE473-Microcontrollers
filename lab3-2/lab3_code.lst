@@ -3,31 +3,31 @@ lab3_code.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000004  00800100  00000616  000006aa  2**0
+  0 .data         00000004  00800100  000006b8  0000074c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000616  00000000  00000000  00000094  2**1
+  1 .text         000006b8  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000032  00800104  00800104  000006ae  2**0
+  2 .bss          00000032  00800104  00800104  00000750  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000006ae  2**0
+  3 .comment      00000030  00000000  00000000  00000750  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000006e0  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000780  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000028  00000000  00000000  0000071c  2**0
+  5 .debug_aranges 00000028  00000000  00000000  000007bc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000d7c  00000000  00000000  00000744  2**0
+  6 .debug_info   00000d84  00000000  00000000  000007e4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000009d2  00000000  00000000  000014c0  2**0
+  7 .debug_abbrev 000009d2  00000000  00000000  00001568  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000524  00000000  00000000  00001e92  2**0
+  8 .debug_line   000005c0  00000000  00000000  00001f3a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000130  00000000  00000000  000023b8  2**2
+  9 .debug_frame  00000130  00000000  00000000  000024fc  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000004b4  00000000  00000000  000024e8  2**0
+ 10 .debug_str    000004b4  00000000  00000000  0000262c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000004e1  00000000  00000000  0000299c  2**0
+ 11 .debug_loc    0000054a  00000000  00000000  00002ae0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000030  00000000  00000000  00002e7d  2**0
+ 12 .debug_ranges 00000030  00000000  00000000  0000302a  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -49,7 +49,7 @@ Disassembly of section .text:
   34:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
   38:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
   3c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
-  40:	0c 94 cb 01 	jmp	0x396	; 0x396 <__vector_16>
+  40:	0c 94 b1 01 	jmp	0x362	; 0x362 <__vector_16>
   44:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
   48:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
   4c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
@@ -81,7 +81,7 @@ Disassembly of section .text:
   98:	11 e0       	ldi	r17, 0x01	; 1
   9a:	a0 e0       	ldi	r26, 0x00	; 0
   9c:	b1 e0       	ldi	r27, 0x01	; 1
-  9e:	e6 e1       	ldi	r30, 0x16	; 22
+  9e:	e8 eb       	ldi	r30, 0xB8	; 184
   a0:	f6 e0       	ldi	r31, 0x06	; 6
   a2:	00 e0       	ldi	r16, 0x00	; 0
   a4:	0b bf       	out	0x3b, r16	; 59
@@ -105,8 +105,8 @@ Disassembly of section .text:
   bc:	a6 33       	cpi	r26, 0x36	; 54
   be:	b2 07       	cpc	r27, r18
   c0:	e1 f7       	brne	.-8      	; 0xba <.do_clear_bss_loop>
-  c2:	0e 94 72 02 	call	0x4e4	; 0x4e4 <main>
-  c6:	0c 94 09 03 	jmp	0x612	; 0x612 <_exit>
+  c2:	0e 94 c3 02 	call	0x586	; 0x586 <main>
+  c6:	0c 94 5a 03 	jmp	0x6b4	; 0x6b4 <_exit>
 
 000000ca <__bad_interrupt>:
   ca:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -252,7 +252,7 @@ void segsum(uint16_t sum)
  160:	9c 01       	movw	r18, r24
  162:	ad ec       	ldi	r26, 0xCD	; 205
  164:	bc ec       	ldi	r27, 0xCC	; 204
- 166:	0e 94 fa 02 	call	0x5f4	; 0x5f4 <__umulhisi3>
+ 166:	0e 94 4b 03 	call	0x696	; 0x696 <__umulhisi3>
  16a:	96 95       	lsr	r25
  16c:	87 95       	ror	r24
  16e:	96 95       	lsr	r25
@@ -282,7 +282,7 @@ void segsum(uint16_t sum)
  19e:	27 95       	ror	r18
  1a0:	ab e7       	ldi	r26, 0x7B	; 123
  1a2:	b4 e1       	ldi	r27, 0x14	; 20
- 1a4:	0e 94 fa 02 	call	0x5f4	; 0x5f4 <__umulhisi3>
+ 1a4:	0e 94 4b 03 	call	0x696	; 0x696 <__umulhisi3>
  1a8:	96 95       	lsr	r25
  1aa:	87 95       	ror	r24
  1ac:	64 e6       	ldi	r22, 0x64	; 100
@@ -297,7 +297,7 @@ void segsum(uint16_t sum)
  1be:	9c 01       	movw	r18, r24
  1c0:	ad ec       	ldi	r26, 0xCD	; 205
  1c2:	bc ec       	ldi	r27, 0xCC	; 204
- 1c4:	0e 94 fa 02 	call	0x5f4	; 0x5f4 <__umulhisi3>
+ 1c4:	0e 94 4b 03 	call	0x696	; 0x696 <__umulhisi3>
  1c8:	96 95       	lsr	r25
  1ca:	87 95       	ror	r24
  1cc:	96 95       	lsr	r25
@@ -318,7 +318,7 @@ void segsum(uint16_t sum)
  1ea:	27 95       	ror	r18
  1ec:	a5 ec       	ldi	r26, 0xC5	; 197
  1ee:	b0 e2       	ldi	r27, 0x20	; 32
- 1f0:	0e 94 fa 02 	call	0x5f4	; 0x5f4 <__umulhisi3>
+ 1f0:	0e 94 4b 03 	call	0x696	; 0x696 <__umulhisi3>
  1f4:	fc 01       	movw	r30, r24
  1f6:	f2 95       	swap	r31
  1f8:	e2 95       	swap	r30
@@ -344,7 +344,7 @@ void segsum(uint16_t sum)
  220:	27 95       	ror	r18
  222:	ab e7       	ldi	r26, 0x7B	; 123
  224:	b4 e1       	ldi	r27, 0x14	; 20
- 226:	0e 94 fa 02 	call	0x5f4	; 0x5f4 <__umulhisi3>
+ 226:	0e 94 4b 03 	call	0x696	; 0x696 <__umulhisi3>
  22a:	96 95       	lsr	r25
  22c:	87 95       	ror	r24
  22e:	80 93 34 01 	sts	0x0134, r24	; 0x800134 <segment_data+0x3>
@@ -674,612 +674,717 @@ void tcnt0_init(void){
         else if ((new_A == 1) && (new_B == 1)){ // detent position
             if (old_state[a_index] == 0){ // one direction 
  340:	41 11       	cpse	r20, r1
- 342:	04 c0       	rjmp	.+8      	; 0x34c <encoderRead+0x8a>
+ 342:	0b c0       	rjmp	.+22     	; 0x35a <encoderRead+0x98>
                 if (count == 3){
- 344:	80 91 08 01 	lds	r24, 0x0108	; 0x800108 <count.1810>
- 348:	83 30       	cpi	r24, 0x03	; 3
- 34a:	31 f0       	breq	.+12     	; 0x358 <encoderRead+0x96>
-    
-    new_A = (data & a) ? 1 : 0; // most LSB
-    new_B = (data & b) ? 1 : 0; // 2nd LSB
-
-
-    return_val = -1; // default return value, no change
- 34c:	8f ef       	ldi	r24, 0xFF	; 255
-                        current_num += 4;
-                    }
+ 344:	81 e0       	ldi	r24, 0x01	; 1
+ 346:	90 91 08 01 	lds	r25, 0x0108	; 0x800108 <count.1810>
+ 34a:	93 30       	cpi	r25, 0x03	; 3
+ 34c:	41 f0       	breq	.+16     	; 0x35e <encoderRead+0x9c>
+ 34e:	81 95       	neg	r24
+                    //     current_num += 4;
+                    // }
 
                 }
             }
             count = 0; // count is always reset in detent position
- 34e:	10 92 08 01 	sts	0x0108, r1	; 0x800108 <count.1810>
+ 350:	10 92 08 01 	sts	0x0108, r1	; 0x800108 <count.1810>
             else{ 
                 count--;
             }
         }
 
         old_state[a_index] = new_A; // save what are now old values
- 352:	30 83       	st	Z, r19
+ 354:	30 83       	st	Z, r19
         old_state[b_index] = new_B;
- 354:	2c 93       	st	X, r18
- 356:	08 95       	ret
-        }
-        else if ((new_A == 1) && (new_B == 1)){ // detent position
-            if (old_state[a_index] == 0){ // one direction 
-                if (count == 3){
-                    return_val = 0;
-                    if(incDec2 == 1){
- 358:	80 91 1b 01 	lds	r24, 0x011B	; 0x80011b <incDec2>
- 35c:	81 30       	cpi	r24, 0x01	; 1
- 35e:	31 f0       	breq	.+12     	; 0x36c <encoderRead+0xaa>
-                        current_num -= 2;
-                    }
-                    if(incDec4 == 1){
- 360:	80 91 1a 01 	lds	r24, 0x011A	; 0x80011a <incDec4>
- 364:	81 30       	cpi	r24, 0x01	; 1
- 366:	61 f0       	breq	.+24     	; 0x380 <encoderRead+0xbe>
-            }
-        }
-        else if ((new_A == 1) && (new_B == 1)){ // detent position
-            if (old_state[a_index] == 0){ // one direction 
-                if (count == 3){
-                    return_val = 0;
- 368:	80 e0       	ldi	r24, 0x00	; 0
- 36a:	f1 cf       	rjmp	.-30     	; 0x34e <encoderRead+0x8c>
-                    if(incDec2 == 1){
-                        current_num -= 2;
- 36c:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <__data_end>
- 370:	90 91 05 01 	lds	r25, 0x0105	; 0x800105 <__data_end+0x1>
- 374:	02 97       	sbiw	r24, 0x02	; 2
- 376:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <__data_end+0x1>
- 37a:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <__data_end>
- 37e:	f0 cf       	rjmp	.-32     	; 0x360 <encoderRead+0x9e>
-                    }
-                    if(incDec4 == 1){
-                        current_num -= 4;
- 380:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <__data_end>
- 384:	90 91 05 01 	lds	r25, 0x0105	; 0x800105 <__data_end+0x1>
- 388:	04 97       	sbiw	r24, 0x04	; 4
- 38a:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <__data_end+0x1>
- 38e:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <__data_end>
-            }
-        }
-        else if ((new_A == 1) && (new_B == 1)){ // detent position
-            if (old_state[a_index] == 0){ // one direction 
-                if (count == 3){
-                    return_val = 0;
- 392:	80 e0       	ldi	r24, 0x00	; 0
- 394:	dc cf       	rjmp	.-72     	; 0x34e <encoderRead+0x8c>
+ 356:	2c 93       	st	X, r18
+ 358:	08 95       	ret
+    
+    new_A = (data & a) ? 1 : 0; // most LSB
+    new_B = (data & b) ? 1 : 0; // 2nd LSB
 
-00000396 <__vector_16>:
+
+    return_val = -1; // default return value, no change
+ 35a:	8f ef       	ldi	r24, 0xFF	; 255
+ 35c:	f9 cf       	rjmp	.-14     	; 0x350 <encoderRead+0x8e>
+                count--;     
+            }
+        }
+        else if ((new_A == 1) && (new_B == 1)){ // detent position
+            if (old_state[a_index] == 0){ // one direction 
+                if (count == 3){
+ 35e:	80 e0       	ldi	r24, 0x00	; 0
+ 360:	f6 cf       	rjmp	.-20     	; 0x34e <encoderRead+0x8c>
+
+00000362 <__vector_16>:
     ASSR   |=  (1 << AS0); //ext osc TOSC
     TIMSK  |=  (1 << TOIE0); //enable TCNT0 overflow interrupt
     TCCR0  |=  (1 << CS00); //normal mode, no prescale
 }
 
 ISR(TIMER0_OVF_vect){
- 396:	1f 92       	push	r1
- 398:	0f 92       	push	r0
- 39a:	0f b6       	in	r0, 0x3f	; 63
- 39c:	0f 92       	push	r0
- 39e:	11 24       	eor	r1, r1
- 3a0:	0b b6       	in	r0, 0x3b	; 59
- 3a2:	0f 92       	push	r0
- 3a4:	2f 93       	push	r18
- 3a6:	3f 93       	push	r19
- 3a8:	4f 93       	push	r20
- 3aa:	5f 93       	push	r21
- 3ac:	6f 93       	push	r22
- 3ae:	7f 93       	push	r23
- 3b0:	8f 93       	push	r24
- 3b2:	9f 93       	push	r25
- 3b4:	af 93       	push	r26
- 3b6:	bf 93       	push	r27
- 3b8:	cf 93       	push	r28
- 3ba:	df 93       	push	r29
- 3bc:	ef 93       	push	r30
- 3be:	ff 93       	push	r31
+ 362:	1f 92       	push	r1
+ 364:	0f 92       	push	r0
+ 366:	0f b6       	in	r0, 0x3f	; 63
+ 368:	0f 92       	push	r0
+ 36a:	11 24       	eor	r1, r1
+ 36c:	0b b6       	in	r0, 0x3b	; 59
+ 36e:	0f 92       	push	r0
+ 370:	2f 93       	push	r18
+ 372:	3f 93       	push	r19
+ 374:	4f 93       	push	r20
+ 376:	5f 93       	push	r21
+ 378:	6f 93       	push	r22
+ 37a:	7f 93       	push	r23
+ 37c:	8f 93       	push	r24
+ 37e:	9f 93       	push	r25
+ 380:	af 93       	push	r26
+ 382:	bf 93       	push	r27
+ 384:	cf 93       	push	r28
+ 386:	df 93       	push	r29
+ 388:	ef 93       	push	r30
+ 38a:	ff 93       	push	r31
     
     //insert loop demake lay for debounce
 
     // checking the push buttons 
     // for loop for each phase of the digit
     PORTB |= TRI_BUFFER;
- 3c0:	88 b3       	in	r24, 0x18	; 24
- 3c2:	80 67       	ori	r24, 0x70	; 112
- 3c4:	88 bb       	out	0x18, r24	; 24
- 3c6:	4c e0       	ldi	r20, 0x0C	; 12
- 3c8:	50 e0       	ldi	r21, 0x00	; 0
- 3ca:	20 91 0b 01 	lds	r18, 0x010B	; 0x80010b <state.1771+0x2>
- 3ce:	30 91 0c 01 	lds	r19, 0x010C	; 0x80010c <state.1771+0x3>
- 3d2:	80 91 0d 01 	lds	r24, 0x010D	; 0x80010d <state.1771+0x4>
- 3d6:	90 91 0e 01 	lds	r25, 0x010E	; 0x80010e <state.1771+0x5>
+ 38c:	88 b3       	in	r24, 0x18	; 24
+ 38e:	80 67       	ori	r24, 0x70	; 112
+ 390:	88 bb       	out	0x18, r24	; 24
+ 392:	4c e0       	ldi	r20, 0x0C	; 12
+ 394:	50 e0       	ldi	r21, 0x00	; 0
+ 396:	20 91 0b 01 	lds	r18, 0x010B	; 0x80010b <state.1771+0x2>
+ 39a:	30 91 0c 01 	lds	r19, 0x010C	; 0x80010c <state.1771+0x3>
+ 39e:	80 91 0d 01 	lds	r24, 0x010D	; 0x80010d <state.1771+0x4>
+ 3a2:	90 91 0e 01 	lds	r25, 0x010E	; 0x80010e <state.1771+0x5>
     for (i = 0; i < 12; i++)
     { // for the debounce
         
         //make PORTA an input port with pullups
         DDRA = 0x00;  // set port A as inputs
         PORTA = 0xFF; // set port A as pull ups
- 3da:	cf ef       	ldi	r28, 0xFF	; 255
+ 3a6:	cf ef       	ldi	r28, 0xFF	; 255
         
 
         // checking what button is being pressed
         if (chk_buttons(1)) // set the increment mode on 
         {
             incDec2 ^= 1; // flip the bits for the flag
- 3dc:	b1 e0       	ldi	r27, 0x01	; 1
+ 3a8:	b1 e0       	ldi	r27, 0x01	; 1
 
         }
         if (chk_buttons(2)) // set the decrement mode on
         {
             incDec4 ^= 1; // flip the bits for the flag
             barGraphDisplay ^= 1 << 1; // show up on the 2nd led
- 3de:	d2 e0       	ldi	r29, 0x02	; 2
+ 3aa:	d2 e0       	ldi	r29, 0x02	; 2
 
     for (i = 0; i < 12; i++)
     { // for the debounce
         
         //make PORTA an input port with pullups
         DDRA = 0x00;  // set port A as inputs
- 3e0:	1a ba       	out	0x1a, r1	; 26
+ 3ac:	1a ba       	out	0x1a, r1	; 26
         PORTA = 0xFF; // set port A as pull ups
- 3e2:	cb bb       	out	0x1b, r28	; 27
+ 3ae:	cb bb       	out	0x1b, r28	; 27
     // bit_is_clear: test whether but but in IO register sfr is clear. This will return non zero
     // if the but is clear, and 0 if the bit is set
     // handling multiple inputs
     // https://www.avrfreaks.net/sites/default/files/debouncing.pdf'
 
     state[button] = (state[button] << 1) | (!bit_is_clear(PINA, button)) | 0xE000; // when the second button is pressed
- 3e4:	a9 b3       	in	r26, 0x19	; 25
- 3e6:	22 0f       	add	r18, r18
- 3e8:	33 1f       	adc	r19, r19
- 3ea:	30 6e       	ori	r19, 0xE0	; 224
- 3ec:	a1 fb       	bst	r26, 1
- 3ee:	66 27       	eor	r22, r22
- 3f0:	60 f9       	bld	r22, 0
- 3f2:	70 e0       	ldi	r23, 0x00	; 0
- 3f4:	26 2b       	or	r18, r22
- 3f6:	37 2b       	or	r19, r23
- 3f8:	30 93 0c 01 	sts	0x010C, r19	; 0x80010c <state.1771+0x3>
- 3fc:	20 93 0b 01 	sts	0x010B, r18	; 0x80010b <state.1771+0x2>
+ 3b0:	a9 b3       	in	r26, 0x19	; 25
+ 3b2:	22 0f       	add	r18, r18
+ 3b4:	33 1f       	adc	r19, r19
+ 3b6:	30 6e       	ori	r19, 0xE0	; 224
+ 3b8:	a1 fb       	bst	r26, 1
+ 3ba:	66 27       	eor	r22, r22
+ 3bc:	60 f9       	bld	r22, 0
+ 3be:	70 e0       	ldi	r23, 0x00	; 0
+ 3c0:	26 2b       	or	r18, r22
+ 3c2:	37 2b       	or	r19, r23
+ 3c4:	30 93 0c 01 	sts	0x010C, r19	; 0x80010c <state.1771+0x3>
+ 3c8:	20 93 0b 01 	sts	0x010B, r18	; 0x80010b <state.1771+0x2>
 
     // debuging to see how state debouncing works
     // PORTB = state[button];
     // _delay_ms(1000);
 
     if (state[button] == 0xF000)
- 400:	21 15       	cp	r18, r1
- 402:	a0 ef       	ldi	r26, 0xF0	; 240
- 404:	3a 07       	cpc	r19, r26
- 406:	51 f4       	brne	.+20     	; 0x41c <__LOCK_REGION_LENGTH__+0x1c>
+ 3cc:	21 15       	cp	r18, r1
+ 3ce:	a0 ef       	ldi	r26, 0xF0	; 240
+ 3d0:	3a 07       	cpc	r19, r26
+ 3d2:	51 f4       	brne	.+20     	; 0x3e8 <__vector_16+0x86>
         
 
         // checking what button is being pressed
         if (chk_buttons(1)) // set the increment mode on 
         {
             incDec2 ^= 1; // flip the bits for the flag
- 408:	a0 91 1b 01 	lds	r26, 0x011B	; 0x80011b <incDec2>
- 40c:	ab 27       	eor	r26, r27
- 40e:	a0 93 1b 01 	sts	0x011B, r26	; 0x80011b <incDec2>
+ 3d4:	a0 91 1b 01 	lds	r26, 0x011B	; 0x80011b <incDec2>
+ 3d8:	ab 27       	eor	r26, r27
+ 3da:	a0 93 1b 01 	sts	0x011B, r26	; 0x80011b <incDec2>
             barGraphDisplay ^= 1 << 0; // show up on the first led
- 412:	a0 91 1c 01 	lds	r26, 0x011C	; 0x80011c <barGraphDisplay>
- 416:	ab 27       	eor	r26, r27
- 418:	a0 93 1c 01 	sts	0x011C, r26	; 0x80011c <barGraphDisplay>
+ 3de:	a0 91 1c 01 	lds	r26, 0x011C	; 0x80011c <barGraphDisplay>
+ 3e2:	ab 27       	eor	r26, r27
+ 3e4:	a0 93 1c 01 	sts	0x011C, r26	; 0x80011c <barGraphDisplay>
     // bit_is_clear: test whether but but in IO register sfr is clear. This will return non zero
     // if the but is clear, and 0 if the bit is set
     // handling multiple inputs
     // https://www.avrfreaks.net/sites/default/files/debouncing.pdf'
 
     state[button] = (state[button] << 1) | (!bit_is_clear(PINA, button)) | 0xE000; // when the second button is pressed
- 41c:	a9 b3       	in	r26, 0x19	; 25
- 41e:	88 0f       	add	r24, r24
- 420:	99 1f       	adc	r25, r25
- 422:	90 6e       	ori	r25, 0xE0	; 224
- 424:	a2 fb       	bst	r26, 2
- 426:	ee 27       	eor	r30, r30
- 428:	e0 f9       	bld	r30, 0
- 42a:	f0 e0       	ldi	r31, 0x00	; 0
- 42c:	8e 2b       	or	r24, r30
- 42e:	9f 2b       	or	r25, r31
- 430:	90 93 0e 01 	sts	0x010E, r25	; 0x80010e <state.1771+0x5>
- 434:	80 93 0d 01 	sts	0x010D, r24	; 0x80010d <state.1771+0x4>
+ 3e8:	a9 b3       	in	r26, 0x19	; 25
+ 3ea:	88 0f       	add	r24, r24
+ 3ec:	99 1f       	adc	r25, r25
+ 3ee:	90 6e       	ori	r25, 0xE0	; 224
+ 3f0:	a2 fb       	bst	r26, 2
+ 3f2:	ee 27       	eor	r30, r30
+ 3f4:	e0 f9       	bld	r30, 0
+ 3f6:	f0 e0       	ldi	r31, 0x00	; 0
+ 3f8:	8e 2b       	or	r24, r30
+ 3fa:	9f 2b       	or	r25, r31
+ 3fc:	90 93 0e 01 	sts	0x010E, r25	; 0x80010e <state.1771+0x5>
+ 400:	80 93 0d 01 	sts	0x010D, r24	; 0x80010d <state.1771+0x4>
 
     // debuging to see how state debouncing works
     // PORTB = state[button];
     // _delay_ms(1000);
 
     if (state[button] == 0xF000)
- 438:	81 15       	cp	r24, r1
- 43a:	a0 ef       	ldi	r26, 0xF0	; 240
- 43c:	9a 07       	cpc	r25, r26
- 43e:	51 f4       	brne	.+20     	; 0x454 <__LOCK_REGION_LENGTH__+0x54>
+ 404:	81 15       	cp	r24, r1
+ 406:	a0 ef       	ldi	r26, 0xF0	; 240
+ 408:	9a 07       	cpc	r25, r26
+ 40a:	51 f4       	brne	.+20     	; 0x420 <__LOCK_REGION_LENGTH__+0x20>
             barGraphDisplay ^= 1 << 0; // show up on the first led
 
         }
         if (chk_buttons(2)) // set the decrement mode on
         {
             incDec4 ^= 1; // flip the bits for the flag
- 440:	a0 91 1a 01 	lds	r26, 0x011A	; 0x80011a <incDec4>
- 444:	ab 27       	eor	r26, r27
- 446:	a0 93 1a 01 	sts	0x011A, r26	; 0x80011a <incDec4>
+ 40c:	a0 91 1a 01 	lds	r26, 0x011A	; 0x80011a <incDec4>
+ 410:	ab 27       	eor	r26, r27
+ 412:	a0 93 1a 01 	sts	0x011A, r26	; 0x80011a <incDec4>
             barGraphDisplay ^= 1 << 1; // show up on the 2nd led
- 44a:	a0 91 1c 01 	lds	r26, 0x011C	; 0x80011c <barGraphDisplay>
- 44e:	ad 27       	eor	r26, r29
- 450:	a0 93 1c 01 	sts	0x011C, r26	; 0x80011c <barGraphDisplay>
- 454:	41 50       	subi	r20, 0x01	; 1
- 456:	51 09       	sbc	r21, r1
+ 416:	a0 91 1c 01 	lds	r26, 0x011C	; 0x80011c <barGraphDisplay>
+ 41a:	ad 27       	eor	r26, r29
+ 41c:	a0 93 1c 01 	sts	0x011C, r26	; 0x80011c <barGraphDisplay>
+ 420:	41 50       	subi	r20, 0x01	; 1
+ 422:	51 09       	sbc	r21, r1
 
     // checking the push buttons 
     // for loop for each phase of the digit
     PORTB |= TRI_BUFFER;
 
     for (i = 0; i < 12; i++)
- 458:	19 f6       	brne	.-122    	; 0x3e0 <__vector_16+0x4a>
+ 424:	19 f6       	brne	.-122    	; 0x3ac <__vector_16+0x4a>
             incDec4 ^= 1; // flip the bits for the flag
             barGraphDisplay ^= 1 << 1; // show up on the 2nd led
         }
         
     }
     PORTB &= ~(TRI_BUFFER); // turn off the tri state buffer 
- 45a:	88 b3       	in	r24, 0x18	; 24
- 45c:	8f 78       	andi	r24, 0x8F	; 143
- 45e:	88 bb       	out	0x18, r24	; 24
-    // test block end
+ 426:	88 b3       	in	r24, 0x18	; 24
+ 428:	8f 78       	andi	r24, 0x8F	; 143
+ 42a:	88 bb       	out	0x18, r24	; 24
 
-    // uint8_t enc1 = encoder_chk(data & 0b00000011);
-    // uint8_t enc2 = encoder_chk(data >> 2);
-
+    //
     uint8_t enc1 = encoderRead(data, 0);
- 460:	c0 91 19 01 	lds	r28, 0x0119	; 0x800119 <data>
- 464:	60 e0       	ldi	r22, 0x00	; 0
- 466:	8c 2f       	mov	r24, r28
- 468:	0e 94 61 01 	call	0x2c2	; 0x2c2 <encoderRead>
+ 42c:	c0 91 19 01 	lds	r28, 0x0119	; 0x800119 <data>
+ 430:	60 e0       	ldi	r22, 0x00	; 0
+ 432:	8c 2f       	mov	r24, r28
+ 434:	0e 94 61 01 	call	0x2c2	; 0x2c2 <encoderRead>
+ 438:	d8 2f       	mov	r29, r24
     uint8_t enc2 = encoderRead(data, 1);
- 46c:	61 e0       	ldi	r22, 0x01	; 1
- 46e:	8c 2f       	mov	r24, r28
- 470:	0e 94 61 01 	call	0x2c2	; 0x2c2 <encoderRead>
-    //     current_num += 2;
-    // if ((enc1 == 0 && incDec2 == 0x01) || (enc2 == 0 && incDec2 == 0x01))
-    //     current_num -= 2;
+ 43a:	61 e0       	ldi	r22, 0x01	; 1
+ 43c:	8c 2f       	mov	r24, r28
+ 43e:	0e 94 61 01 	call	0x2c2	; 0x2c2 <encoderRead>
+
+
+    if (incDec2 == 1 && incDec4 == 1){
+ 442:	90 91 1b 01 	lds	r25, 0x011B	; 0x80011b <incDec2>
+ 446:	91 30       	cpi	r25, 0x01	; 1
+ 448:	c9 f1       	breq	.+114    	; 0x4bc <__LOCK_REGION_LENGTH__+0xbc>
+        current_num = current_num;
+
+    }
+    else if (incDec2 == 0 && incDec4 == 0){
+ 44a:	91 11       	cpse	r25, r1
+ 44c:	1e c0       	rjmp	.+60     	; 0x48a <__LOCK_REGION_LENGTH__+0x8a>
+ 44e:	90 91 1a 01 	lds	r25, 0x011A	; 0x80011a <incDec4>
+ 452:	91 11       	cpse	r25, r1
+ 454:	1c c0       	rjmp	.+56     	; 0x48e <__LOCK_REGION_LENGTH__+0x8e>
+        if(enc1 == 0 || enc2 == 0)
+ 456:	d1 11       	cpse	r29, r1
+ 458:	4f c0       	rjmp	.+158    	; 0x4f8 <__LOCK_REGION_LENGTH__+0xf8>
+            current_num -= 1;
+ 45a:	20 91 04 01 	lds	r18, 0x0104	; 0x800104 <__data_end>
+ 45e:	30 91 05 01 	lds	r19, 0x0105	; 0x800105 <__data_end+0x1>
+ 462:	21 50       	subi	r18, 0x01	; 1
+ 464:	31 09       	sbc	r19, r1
+ 466:	30 93 05 01 	sts	0x0105, r19	; 0x800105 <__data_end+0x1>
+ 46a:	20 93 04 01 	sts	0x0104, r18	; 0x800104 <__data_end>
+        if (enc1 == 1 || enc2 == 1)
+ 46e:	d1 30       	cpi	r29, 0x01	; 1
+ 470:	11 f0       	breq	.+4      	; 0x476 <__LOCK_REGION_LENGTH__+0x76>
+ 472:	81 30       	cpi	r24, 0x01	; 1
+ 474:	71 f4       	brne	.+28     	; 0x492 <__LOCK_REGION_LENGTH__+0x92>
+            current_num += 1;
+ 476:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <__data_end>
+ 47a:	90 91 05 01 	lds	r25, 0x0105	; 0x800105 <__data_end+0x1>
+ 47e:	01 96       	adiw	r24, 0x01	; 1
+ 480:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <__data_end+0x1>
+ 484:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <__data_end>
+ 488:	04 c0       	rjmp	.+8      	; 0x492 <__LOCK_REGION_LENGTH__+0x92>
+ 48a:	90 91 1a 01 	lds	r25, 0x011A	; 0x80011a <incDec4>
+        if(enc1 == 0 || enc2 == 0)
+            current_num -= 2;
+        if (enc1 == 1 || enc2 == 1)
+            current_num += 2;
+    }
+    else if (incDec4 == 1){
+ 48e:	91 30       	cpi	r25, 0x01	; 1
+ 490:	c9 f1       	breq	.+114    	; 0x504 <__LOCK_REGION_LENGTH__+0x104>
+    }
+    
+
 
 
 }
- 474:	ff 91       	pop	r31
- 476:	ef 91       	pop	r30
- 478:	df 91       	pop	r29
- 47a:	cf 91       	pop	r28
- 47c:	bf 91       	pop	r27
- 47e:	af 91       	pop	r26
- 480:	9f 91       	pop	r25
- 482:	8f 91       	pop	r24
- 484:	7f 91       	pop	r23
- 486:	6f 91       	pop	r22
- 488:	5f 91       	pop	r21
- 48a:	4f 91       	pop	r20
- 48c:	3f 91       	pop	r19
- 48e:	2f 91       	pop	r18
- 490:	0f 90       	pop	r0
- 492:	0b be       	out	0x3b, r0	; 59
- 494:	0f 90       	pop	r0
- 496:	0f be       	out	0x3f, r0	; 63
- 498:	0f 90       	pop	r0
- 49a:	1f 90       	pop	r1
- 49c:	18 95       	reti
+ 492:	ff 91       	pop	r31
+ 494:	ef 91       	pop	r30
+ 496:	df 91       	pop	r29
+ 498:	cf 91       	pop	r28
+ 49a:	bf 91       	pop	r27
+ 49c:	af 91       	pop	r26
+ 49e:	9f 91       	pop	r25
+ 4a0:	8f 91       	pop	r24
+ 4a2:	7f 91       	pop	r23
+ 4a4:	6f 91       	pop	r22
+ 4a6:	5f 91       	pop	r21
+ 4a8:	4f 91       	pop	r20
+ 4aa:	3f 91       	pop	r19
+ 4ac:	2f 91       	pop	r18
+ 4ae:	0f 90       	pop	r0
+ 4b0:	0b be       	out	0x3b, r0	; 59
+ 4b2:	0f 90       	pop	r0
+ 4b4:	0f be       	out	0x3f, r0	; 63
+ 4b6:	0f 90       	pop	r0
+ 4b8:	1f 90       	pop	r1
+ 4ba:	18 95       	reti
+    //
+    uint8_t enc1 = encoderRead(data, 0);
+    uint8_t enc2 = encoderRead(data, 1);
 
-0000049e <barGraph>:
+
+    if (incDec2 == 1 && incDec4 == 1){
+ 4bc:	90 91 1a 01 	lds	r25, 0x011A	; 0x80011a <incDec4>
+ 4c0:	91 30       	cpi	r25, 0x01	; 1
+ 4c2:	39 f3       	breq	.-50     	; 0x492 <__LOCK_REGION_LENGTH__+0x92>
+            current_num -= 1;
+        if (enc1 == 1 || enc2 == 1)
+            current_num += 1;
+    }
+    else if (incDec2 == 1){
+        if(enc1 == 0 || enc2 == 0)
+ 4c4:	d1 11       	cpse	r29, r1
+ 4c6:	1b c0       	rjmp	.+54     	; 0x4fe <__LOCK_REGION_LENGTH__+0xfe>
+            current_num -= 2;
+ 4c8:	20 91 04 01 	lds	r18, 0x0104	; 0x800104 <__data_end>
+ 4cc:	30 91 05 01 	lds	r19, 0x0105	; 0x800105 <__data_end+0x1>
+ 4d0:	22 50       	subi	r18, 0x02	; 2
+ 4d2:	31 09       	sbc	r19, r1
+ 4d4:	30 93 05 01 	sts	0x0105, r19	; 0x800105 <__data_end+0x1>
+ 4d8:	20 93 04 01 	sts	0x0104, r18	; 0x800104 <__data_end>
+        if (enc1 == 1 || enc2 == 1)
+ 4dc:	d1 30       	cpi	r29, 0x01	; 1
+ 4de:	11 f0       	breq	.+4      	; 0x4e4 <__LOCK_REGION_LENGTH__+0xe4>
+ 4e0:	81 30       	cpi	r24, 0x01	; 1
+ 4e2:	b9 f6       	brne	.-82     	; 0x492 <__LOCK_REGION_LENGTH__+0x92>
+            current_num += 2;
+ 4e4:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <__data_end>
+ 4e8:	90 91 05 01 	lds	r25, 0x0105	; 0x800105 <__data_end+0x1>
+ 4ec:	02 96       	adiw	r24, 0x02	; 2
+ 4ee:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <__data_end+0x1>
+ 4f2:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <__data_end>
+ 4f6:	cd cf       	rjmp	.-102    	; 0x492 <__LOCK_REGION_LENGTH__+0x92>
+    if (incDec2 == 1 && incDec4 == 1){
+        current_num = current_num;
+
+    }
+    else if (incDec2 == 0 && incDec4 == 0){
+        if(enc1 == 0 || enc2 == 0)
+ 4f8:	81 11       	cpse	r24, r1
+ 4fa:	b9 cf       	rjmp	.-142    	; 0x46e <__LOCK_REGION_LENGTH__+0x6e>
+ 4fc:	ae cf       	rjmp	.-164    	; 0x45a <__LOCK_REGION_LENGTH__+0x5a>
+            current_num -= 1;
+        if (enc1 == 1 || enc2 == 1)
+            current_num += 1;
+    }
+    else if (incDec2 == 1){
+        if(enc1 == 0 || enc2 == 0)
+ 4fe:	81 11       	cpse	r24, r1
+ 500:	ed cf       	rjmp	.-38     	; 0x4dc <__LOCK_REGION_LENGTH__+0xdc>
+ 502:	e2 cf       	rjmp	.-60     	; 0x4c8 <__LOCK_REGION_LENGTH__+0xc8>
+            current_num -= 2;
+        if (enc1 == 1 || enc2 == 1)
+            current_num += 2;
+    }
+    else if (incDec4 == 1){
+        if (enc1 == 0 || enc2 == 0)
+ 504:	dd 23       	and	r29, r29
+ 506:	89 f0       	breq	.+34     	; 0x52a <__LOCK_REGION_LENGTH__+0x12a>
+ 508:	88 23       	and	r24, r24
+ 50a:	79 f0       	breq	.+30     	; 0x52a <__LOCK_REGION_LENGTH__+0x12a>
+            current_num -= 4;
+        if (enc1 == 1 || enc2 == 1)
+ 50c:	d1 30       	cpi	r29, 0x01	; 1
+ 50e:	19 f0       	breq	.+6      	; 0x516 <__LOCK_REGION_LENGTH__+0x116>
+ 510:	81 30       	cpi	r24, 0x01	; 1
+ 512:	09 f0       	breq	.+2      	; 0x516 <__LOCK_REGION_LENGTH__+0x116>
+ 514:	be cf       	rjmp	.-132    	; 0x492 <__LOCK_REGION_LENGTH__+0x92>
+            current_num += 4;
+ 516:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <__data_end>
+ 51a:	90 91 05 01 	lds	r25, 0x0105	; 0x800105 <__data_end+0x1>
+ 51e:	04 96       	adiw	r24, 0x04	; 4
+ 520:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <__data_end+0x1>
+ 524:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <__data_end>
+    }
+    
+
+
+
+}
+ 528:	b4 cf       	rjmp	.-152    	; 0x492 <__LOCK_REGION_LENGTH__+0x92>
+        if (enc1 == 1 || enc2 == 1)
+            current_num += 2;
+    }
+    else if (incDec4 == 1){
+        if (enc1 == 0 || enc2 == 0)
+            current_num -= 4;
+ 52a:	20 91 04 01 	lds	r18, 0x0104	; 0x800104 <__data_end>
+ 52e:	30 91 05 01 	lds	r19, 0x0105	; 0x800105 <__data_end+0x1>
+ 532:	24 50       	subi	r18, 0x04	; 4
+ 534:	31 09       	sbc	r19, r1
+ 536:	30 93 05 01 	sts	0x0105, r19	; 0x800105 <__data_end+0x1>
+ 53a:	20 93 04 01 	sts	0x0104, r18	; 0x800104 <__data_end>
+ 53e:	e6 cf       	rjmp	.-52     	; 0x50c <__LOCK_REGION_LENGTH__+0x10c>
+
+00000540 <barGraph>:
 }
 
 void barGraph(){
     
 
     SPDR = barGraphDisplay;
- 49e:	80 91 1c 01 	lds	r24, 0x011C	; 0x80011c <barGraphDisplay>
- 4a2:	8f b9       	out	0x0f, r24	; 15
+ 540:	80 91 1c 01 	lds	r24, 0x011C	; 0x80011c <barGraphDisplay>
+ 544:	8f b9       	out	0x0f, r24	; 15
     // SPDR = data;
     // barGraphOutput = display_mode;               //send to display 
     while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
- 4a4:	77 9b       	sbis	0x0e, 7	; 14
- 4a6:	fe cf       	rjmp	.-4      	; 0x4a4 <barGraph+0x6>
+ 546:	77 9b       	sbis	0x0e, 7	; 14
+ 548:	fe cf       	rjmp	.-4      	; 0x546 <barGraph+0x6>
     PORTD |= (1 << PORTD2);          //HC595 output reg - rising edge...
- 4a8:	92 9a       	sbi	0x12, 2	; 18
+ 54a:	92 9a       	sbi	0x12, 2	; 18
     PORTD &= (0 << PORTD2);          //and falling edge
- 4aa:	82 b3       	in	r24, 0x12	; 18
- 4ac:	12 ba       	out	0x12, r1	; 18
- 4ae:	08 95       	ret
+ 54c:	82 b3       	in	r24, 0x12	; 18
+ 54e:	12 ba       	out	0x12, r1	; 18
+ 550:	08 95       	ret
 
-000004b0 <encoder_chk>:
+00000552 <encoder_chk>:
     static uint16_t state = {0}; // holds bits from encoder
     uint8_t a_pin, b_pin;        // encoder pin states
 
     // a_pin and b_pin are asserted TRUE when low
     a_pin = ((encoder_var & 0x01) == 0) ? 0 : 1;
     b_pin = ((encoder_var & 0x02) == 0) ? 0 : 1;
- 4b0:	81 fb       	bst	r24, 1
- 4b2:	99 27       	eor	r25, r25
- 4b4:	90 f9       	bld	r25, 0
+ 552:	81 fb       	bst	r24, 1
+ 554:	99 27       	eor	r25, r25
+ 556:	90 f9       	bld	r25, 0
 
     // update shift using only the A pin
     state = (state << 1) | a_pin | 0xE0;
- 4b6:	40 91 06 01 	lds	r20, 0x0106	; 0x800106 <state.1824>
- 4ba:	50 91 07 01 	lds	r21, 0x0107	; 0x800107 <state.1824+0x1>
- 4be:	44 0f       	add	r20, r20
- 4c0:	55 1f       	adc	r21, r21
- 4c2:	40 6e       	ori	r20, 0xE0	; 224
- 4c4:	28 2f       	mov	r18, r24
- 4c6:	21 70       	andi	r18, 0x01	; 1
- 4c8:	30 e0       	ldi	r19, 0x00	; 0
- 4ca:	24 2b       	or	r18, r20
- 4cc:	35 2b       	or	r19, r21
- 4ce:	30 93 07 01 	sts	0x0107, r19	; 0x800107 <state.1824+0x1>
- 4d2:	20 93 06 01 	sts	0x0106, r18	; 0x800106 <state.1824>
+ 558:	40 91 06 01 	lds	r20, 0x0106	; 0x800106 <state.1824>
+ 55c:	50 91 07 01 	lds	r21, 0x0107	; 0x800107 <state.1824+0x1>
+ 560:	44 0f       	add	r20, r20
+ 562:	55 1f       	adc	r21, r21
+ 564:	40 6e       	ori	r20, 0xE0	; 224
+ 566:	28 2f       	mov	r18, r24
+ 568:	21 70       	andi	r18, 0x01	; 1
+ 56a:	30 e0       	ldi	r19, 0x00	; 0
+ 56c:	24 2b       	or	r18, r20
+ 56e:	35 2b       	or	r19, r21
+ 570:	30 93 07 01 	sts	0x0107, r19	; 0x800107 <state.1824+0x1>
+ 574:	20 93 06 01 	sts	0x0106, r18	; 0x800106 <state.1824>
 
     // check for falling edge on A pin
     // if it did, then B pin state indicates direction
     // of rotation. Return 1 for CW, 0 for CCW
     if (state == 0xF0){
- 4d6:	20 3f       	cpi	r18, 0xF0	; 240
- 4d8:	31 05       	cpc	r19, r1
- 4da:	11 f4       	brne	.+4      	; 0x4e0 <encoder_chk+0x30>
+ 578:	20 3f       	cpi	r18, 0xF0	; 240
+ 57a:	31 05       	cpc	r19, r1
+ 57c:	11 f4       	brne	.+4      	; 0x582 <encoder_chk+0x30>
         return (b_pin) ? 1 : 0;
- 4dc:	89 2f       	mov	r24, r25
- 4de:	08 95       	ret
+ 57e:	89 2f       	mov	r24, r25
+ 580:	08 95       	ret
     }
     else 
         return -1; // no movement detected
- 4e0:	8f ef       	ldi	r24, 0xFF	; 255
+ 582:	8f ef       	ldi	r24, 0xFF	; 255
 
- 4e2:	08 95       	ret
+ 584:	08 95       	ret
 
-000004e4 <main>:
+00000586 <main>:
 ISR(TIMER0_OVF_vect);
 int8_t encoder_chk(uint8_t encoder_var);
 
 int main()
 {
     DDRB = 0xF0; //set port B bits 4-7 B as outputs
- 4e4:	80 ef       	ldi	r24, 0xF0	; 240
- 4e6:	87 bb       	out	0x17, r24	; 23
+ 586:	80 ef       	ldi	r24, 0xF0	; 240
+ 588:	87 bb       	out	0x17, r24	; 23
     DDRE |= 0b01000000; // set E6 to output
- 4e8:	16 9a       	sbi	0x02, 6	; 2
+ 58a:	16 9a       	sbi	0x02, 6	; 2
     DDRD |= 0b00001100; // slave select pins
- 4ea:	81 b3       	in	r24, 0x11	; 17
- 4ec:	8c 60       	ori	r24, 0x0C	; 12
- 4ee:	81 bb       	out	0x11, r24	; 17
+ 58c:	81 b3       	in	r24, 0x11	; 17
+ 58e:	8c 60       	ori	r24, 0x0C	; 12
+ 590:	81 bb       	out	0x11, r24	; 17
 
     PORTB &= ~(1 << PORTB7); 
- 4f0:	c7 98       	cbi	0x18, 7	; 24
+ 592:	c7 98       	cbi	0x18, 7	; 24
 //Initalizes timer/counter0 (TCNT0). TCNT0 is running in async mode
 //with external 32khz crystal.  Runs in normal mode with no prescaling.
 //Interrupt occurs at overflow 0xFF.
 //
 void tcnt0_init(void){
     ASSR   |=  (1 << AS0); //ext osc TOSC
- 4f2:	80 b7       	in	r24, 0x30	; 48
- 4f4:	88 60       	ori	r24, 0x08	; 8
- 4f6:	80 bf       	out	0x30, r24	; 48
+ 594:	80 b7       	in	r24, 0x30	; 48
+ 596:	88 60       	ori	r24, 0x08	; 8
+ 598:	80 bf       	out	0x30, r24	; 48
     TIMSK  |=  (1 << TOIE0); //enable TCNT0 overflow interrupt
- 4f8:	87 b7       	in	r24, 0x37	; 55
- 4fa:	81 60       	ori	r24, 0x01	; 1
- 4fc:	87 bf       	out	0x37, r24	; 55
+ 59a:	87 b7       	in	r24, 0x37	; 55
+ 59c:	81 60       	ori	r24, 0x01	; 1
+ 59e:	87 bf       	out	0x37, r24	; 55
     TCCR0  |=  (1 << CS00); //normal mode, no prescale
- 4fe:	83 b7       	in	r24, 0x33	; 51
- 500:	81 60       	ori	r24, 0x01	; 1
- 502:	83 bf       	out	0x33, r24	; 51
+ 5a0:	83 b7       	in	r24, 0x33	; 51
+ 5a2:	81 60       	ori	r24, 0x01	; 1
+ 5a4:	83 bf       	out	0x33, r24	; 51
 //external device specific initalizations.  Sets up SPI to be:                        
 //master mode, clock=clk/2, cycle half phase, low polarity, MSB first
 //interrupts disabled, poll SPIF bit in SPSR to check xmit completion
 /***********************************************************************/
 void spi_init(void){
     DDRB  |=   0x07; //Turn on SS, MOSI, SCLK
- 504:	87 b3       	in	r24, 0x17	; 23
- 506:	87 60       	ori	r24, 0x07	; 7
- 508:	87 bb       	out	0x17, r24	; 23
+ 5a6:	87 b3       	in	r24, 0x17	; 23
+ 5a8:	87 60       	ori	r24, 0x07	; 7
+ 5aa:	87 bb       	out	0x17, r24	; 23
     SPCR  |=   (1 << SPE) | (1 << MSTR); //enable SPI, master mode 
- 50a:	8d b1       	in	r24, 0x0d	; 13
- 50c:	80 65       	ori	r24, 0x50	; 80
- 50e:	8d b9       	out	0x0d, r24	; 13
+ 5ac:	8d b1       	in	r24, 0x0d	; 13
+ 5ae:	80 65       	ori	r24, 0x50	; 80
+ 5b0:	8d b9       	out	0x0d, r24	; 13
     SPSR  |=   (1 << SPI2X); // double speed operation
- 510:	70 9a       	sbi	0x0e, 0	; 14
+ 5b2:	70 9a       	sbi	0x0e, 0	; 14
 
     PORTB &= ~(1 << PORTB7); 
 
     tcnt0_init();  //initalize counter timer zero
     spi_init();    //initalize SPI port
     sei();         //enable interrupts before entering loop
- 512:	78 94       	sei
+ 5b4:	78 94       	sei
 // setting the dec_to_7seg array for which segment to turn off in order to see
 // the digit on the LED display. 
 /******************************************************************************/
 void set_dec_to_7seg()
 {
     dec_to_7seg[0] = ~(ZERO);
- 514:	80 ec       	ldi	r24, 0xC0	; 192
- 516:	80 93 25 01 	sts	0x0125, r24	; 0x800125 <dec_to_7seg>
+ 5b6:	80 ec       	ldi	r24, 0xC0	; 192
+ 5b8:	80 93 25 01 	sts	0x0125, r24	; 0x800125 <dec_to_7seg>
     dec_to_7seg[1] = ~(ONE);
- 51a:	89 ef       	ldi	r24, 0xF9	; 249
- 51c:	80 93 26 01 	sts	0x0126, r24	; 0x800126 <dec_to_7seg+0x1>
+ 5bc:	89 ef       	ldi	r24, 0xF9	; 249
+ 5be:	80 93 26 01 	sts	0x0126, r24	; 0x800126 <dec_to_7seg+0x1>
     dec_to_7seg[2] = ~(TWO);
- 520:	84 ea       	ldi	r24, 0xA4	; 164
- 522:	80 93 27 01 	sts	0x0127, r24	; 0x800127 <dec_to_7seg+0x2>
+ 5c2:	84 ea       	ldi	r24, 0xA4	; 164
+ 5c4:	80 93 27 01 	sts	0x0127, r24	; 0x800127 <dec_to_7seg+0x2>
     dec_to_7seg[3] = ~(THREE);
- 526:	80 eb       	ldi	r24, 0xB0	; 176
- 528:	80 93 28 01 	sts	0x0128, r24	; 0x800128 <dec_to_7seg+0x3>
+ 5c8:	80 eb       	ldi	r24, 0xB0	; 176
+ 5ca:	80 93 28 01 	sts	0x0128, r24	; 0x800128 <dec_to_7seg+0x3>
     dec_to_7seg[4] = ~(FOUR);
- 52c:	89 e9       	ldi	r24, 0x99	; 153
- 52e:	80 93 29 01 	sts	0x0129, r24	; 0x800129 <dec_to_7seg+0x4>
+ 5ce:	89 e9       	ldi	r24, 0x99	; 153
+ 5d0:	80 93 29 01 	sts	0x0129, r24	; 0x800129 <dec_to_7seg+0x4>
     dec_to_7seg[5] = ~(FIVE);
- 532:	82 e9       	ldi	r24, 0x92	; 146
- 534:	80 93 2a 01 	sts	0x012A, r24	; 0x80012a <dec_to_7seg+0x5>
+ 5d4:	82 e9       	ldi	r24, 0x92	; 146
+ 5d6:	80 93 2a 01 	sts	0x012A, r24	; 0x80012a <dec_to_7seg+0x5>
     dec_to_7seg[6] = ~(SIX);
- 538:	82 e8       	ldi	r24, 0x82	; 130
- 53a:	80 93 2b 01 	sts	0x012B, r24	; 0x80012b <dec_to_7seg+0x6>
+ 5da:	82 e8       	ldi	r24, 0x82	; 130
+ 5dc:	80 93 2b 01 	sts	0x012B, r24	; 0x80012b <dec_to_7seg+0x6>
     dec_to_7seg[7] = ~(SEVEN);
- 53e:	88 ef       	ldi	r24, 0xF8	; 248
- 540:	80 93 2c 01 	sts	0x012C, r24	; 0x80012c <dec_to_7seg+0x7>
+ 5e0:	88 ef       	ldi	r24, 0xF8	; 248
+ 5e2:	80 93 2c 01 	sts	0x012C, r24	; 0x80012c <dec_to_7seg+0x7>
     dec_to_7seg[8] = ~(EIGHT);
- 544:	80 e8       	ldi	r24, 0x80	; 128
- 546:	80 93 2d 01 	sts	0x012D, r24	; 0x80012d <dec_to_7seg+0x8>
+ 5e6:	80 e8       	ldi	r24, 0x80	; 128
+ 5e8:	80 93 2d 01 	sts	0x012D, r24	; 0x80012d <dec_to_7seg+0x8>
     dec_to_7seg[9] = ~(NINE);
- 54a:	88 e9       	ldi	r24, 0x98	; 152
- 54c:	80 93 2e 01 	sts	0x012E, r24	; 0x80012e <dec_to_7seg+0x9>
+ 5ec:	88 e9       	ldi	r24, 0x98	; 152
+ 5ee:	80 93 2e 01 	sts	0x012E, r24	; 0x80012e <dec_to_7seg+0x9>
     dec_to_7seg[10] = ~(COLON);
- 550:	8c ef       	ldi	r24, 0xFC	; 252
- 552:	80 93 2f 01 	sts	0x012F, r24	; 0x80012f <dec_to_7seg+0xa>
+ 5f2:	8c ef       	ldi	r24, 0xFC	; 252
+ 5f4:	80 93 2f 01 	sts	0x012F, r24	; 0x80012f <dec_to_7seg+0xa>
     dec_to_7seg[11] = ~(BLANK);
- 556:	8f ef       	ldi	r24, 0xFF	; 255
- 558:	80 93 30 01 	sts	0x0130, r24	; 0x800130 <dec_to_7seg+0xb>
+ 5f8:	8f ef       	ldi	r24, 0xFF	; 255
+ 5fa:	80 93 30 01 	sts	0x0130, r24	; 0x800130 <dec_to_7seg+0xb>
 // This function sets the right value for decoder so that it display the right 
 // digit. The index value of the decoder represents the Yx output of the decoder.
 /******************************************************************************/
 void set_decoder()
 {
     decoder[0] = DIGIT4;
- 55c:	10 92 1d 01 	sts	0x011D, r1	; 0x80011d <decoder>
+ 5fe:	10 92 1d 01 	sts	0x011D, r1	; 0x80011d <decoder>
     decoder[1] = DIGIT3;
- 560:	80 e1       	ldi	r24, 0x10	; 16
- 562:	80 93 1e 01 	sts	0x011E, r24	; 0x80011e <decoder+0x1>
+ 602:	80 e1       	ldi	r24, 0x10	; 16
+ 604:	80 93 1e 01 	sts	0x011E, r24	; 0x80011e <decoder+0x1>
     decoder[2] = DIS_COLON;
- 566:	80 e2       	ldi	r24, 0x20	; 32
- 568:	80 93 1f 01 	sts	0x011F, r24	; 0x80011f <decoder+0x2>
+ 608:	80 e2       	ldi	r24, 0x20	; 32
+ 60a:	80 93 1f 01 	sts	0x011F, r24	; 0x80011f <decoder+0x2>
     decoder[3] = DIGIT2;
- 56c:	80 e3       	ldi	r24, 0x30	; 48
- 56e:	80 93 20 01 	sts	0x0120, r24	; 0x800120 <decoder+0x3>
+ 60e:	80 e3       	ldi	r24, 0x30	; 48
+ 610:	80 93 20 01 	sts	0x0120, r24	; 0x800120 <decoder+0x3>
     decoder[4] = DIGIT1;
- 572:	80 e4       	ldi	r24, 0x40	; 64
- 574:	80 93 21 01 	sts	0x0121, r24	; 0x800121 <decoder+0x4>
+ 614:	80 e4       	ldi	r24, 0x40	; 64
+ 616:	80 93 21 01 	sts	0x0121, r24	; 0x800121 <decoder+0x4>
     decoder[7] = TRI_BUFFER;
- 578:	80 e7       	ldi	r24, 0x70	; 112
- 57a:	80 93 24 01 	sts	0x0124, r24	; 0x800124 <decoder+0x7>
+ 61a:	80 e7       	ldi	r24, 0x70	; 112
+ 61c:	80 93 24 01 	sts	0x0124, r24	; 0x800124 <decoder+0x7>
 // to decoder.
 /***************************************************************/
 
 void setDigit()
 {
     DDRA = 0xFF; // setting PORT A as an output
- 57e:	1f ef       	ldi	r17, 0xFF	; 255
+ 620:	1f ef       	ldi	r17, 0xFF	; 255
         // data = SPDR;
         // while (bit_is_clear(SPSR,SPIF)){}
 
         // end of new block
 
         PORTD |= 1 << PORTD3; // clock_inh = 1
- 580:	93 9a       	sbi	0x12, 3	; 18
+ 622:	93 9a       	sbi	0x12, 3	; 18
         PORTE &= 0 << PORTE6; // load 
- 582:	83 b1       	in	r24, 0x03	; 3
- 584:	13 b8       	out	0x03, r1	; 3
+ 624:	83 b1       	in	r24, 0x03	; 3
+ 626:	13 b8       	out	0x03, r1	; 3
 
         PORTE |= 1 << PORTE6;
- 586:	1e 9a       	sbi	0x03, 6	; 3
+ 628:	1e 9a       	sbi	0x03, 6	; 3
         PORTD &= ~(1 << PORTD3);
- 588:	93 98       	cbi	0x12, 3	; 18
+ 62a:	93 98       	cbi	0x12, 3	; 18
 
         SPDR = 0;
- 58a:	1f b8       	out	0x0f, r1	; 15
+ 62c:	1f b8       	out	0x0f, r1	; 15
        
         while (bit_is_clear(SPSR,SPIF)){}
- 58c:	77 9b       	sbis	0x0e, 7	; 14
- 58e:	fe cf       	rjmp	.-4      	; 0x58c <main+0xa8>
+ 62e:	77 9b       	sbis	0x0e, 7	; 14
+ 630:	fe cf       	rjmp	.-4      	; 0x62e <main+0xa8>
         data = SPDR;
- 590:	8f b1       	in	r24, 0x0f	; 15
- 592:	80 93 19 01 	sts	0x0119, r24	; 0x800119 <data>
+ 632:	8f b1       	in	r24, 0x0f	; 15
+ 634:	80 93 19 01 	sts	0x0119, r24	; 0x800119 <data>
 }
 
 void barGraph(){
     
 
     SPDR = barGraphDisplay;
- 596:	80 91 1c 01 	lds	r24, 0x011C	; 0x80011c <barGraphDisplay>
- 59a:	8f b9       	out	0x0f, r24	; 15
+ 638:	80 91 1c 01 	lds	r24, 0x011C	; 0x80011c <barGraphDisplay>
+ 63c:	8f b9       	out	0x0f, r24	; 15
     // SPDR = data;
     // barGraphOutput = display_mode;               //send to display 
     while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
- 59c:	77 9b       	sbis	0x0e, 7	; 14
- 59e:	fe cf       	rjmp	.-4      	; 0x59c <main+0xb8>
+ 63e:	77 9b       	sbis	0x0e, 7	; 14
+ 640:	fe cf       	rjmp	.-4      	; 0x63e <main+0xb8>
     PORTD |= (1 << PORTD2);          //HC595 output reg - rising edge...
- 5a0:	92 9a       	sbi	0x12, 2	; 18
+ 642:	92 9a       	sbi	0x12, 2	; 18
     PORTD &= (0 << PORTD2);          //and falling edge
- 5a2:	82 b3       	in	r24, 0x12	; 18
- 5a4:	12 ba       	out	0x12, r1	; 18
+ 644:	82 b3       	in	r24, 0x12	; 18
+ 646:	12 ba       	out	0x12, r1	; 18
         barGraph();
 
 
 
 
         if (current_num > 1023)
- 5a6:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <__data_end>
- 5aa:	90 91 05 01 	lds	r25, 0x0105	; 0x800105 <__data_end+0x1>
- 5ae:	81 15       	cp	r24, r1
- 5b0:	24 e0       	ldi	r18, 0x04	; 4
- 5b2:	92 07       	cpc	r25, r18
- 5b4:	28 f0       	brcs	.+10     	; 0x5c0 <main+0xdc>
+ 648:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <__data_end>
+ 64c:	90 91 05 01 	lds	r25, 0x0105	; 0x800105 <__data_end+0x1>
+ 650:	81 15       	cp	r24, r1
+ 652:	24 e0       	ldi	r18, 0x04	; 4
+ 654:	92 07       	cpc	r25, r18
+ 656:	28 f0       	brcs	.+10     	; 0x662 <main+0xdc>
             current_num -= 1024;
- 5b6:	94 50       	subi	r25, 0x04	; 4
- 5b8:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <__data_end+0x1>
- 5bc:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <__data_end>
+ 658:	94 50       	subi	r25, 0x04	; 4
+ 65a:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <__data_end+0x1>
+ 65e:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <__data_end>
 
         segsum(current_num); // set each digit
- 5c0:	0e 94 af 00 	call	0x15e	; 0x15e <segsum>
+ 662:	0e 94 af 00 	call	0x15e	; 0x15e <segsum>
 // to decoder.
 /***************************************************************/
 
 void setDigit()
 {
     DDRA = 0xFF; // setting PORT A as an output
- 5c4:	1a bb       	out	0x1a, r17	; 26
- 5c6:	ad e1       	ldi	r26, 0x1D	; 29
- 5c8:	b1 e0       	ldi	r27, 0x01	; 1
- 5ca:	c1 e3       	ldi	r28, 0x31	; 49
- 5cc:	d1 e0       	ldi	r29, 0x01	; 1
+ 666:	1a bb       	out	0x1a, r17	; 26
+ 668:	ad e1       	ldi	r26, 0x1D	; 29
+ 66a:	b1 e0       	ldi	r27, 0x01	; 1
+ 66c:	c1 e3       	ldi	r28, 0x31	; 49
+ 66e:	d1 e0       	ldi	r29, 0x01	; 1
     int i;
     for (i = 0; i < 5; i++)
     { // looping through the segment data and assigning the port the right values.
         PORTB = decoder[i]; // enable the right digit to turn on
- 5ce:	8d 91       	ld	r24, X+
- 5d0:	88 bb       	out	0x18, r24	; 24
+ 670:	8d 91       	ld	r24, X+
+ 672:	88 bb       	out	0x18, r24	; 24
         PORTA = dec_to_7seg[segment_data[i]]; // turn on the right segments
- 5d2:	e9 91       	ld	r30, Y+
- 5d4:	f0 e0       	ldi	r31, 0x00	; 0
- 5d6:	eb 5d       	subi	r30, 0xDB	; 219
- 5d8:	fe 4f       	sbci	r31, 0xFE	; 254
- 5da:	80 81       	ld	r24, Z
- 5dc:	8b bb       	out	0x1b, r24	; 27
- 5de:	8f ec       	ldi	r24, 0xCF	; 207
- 5e0:	97 e0       	ldi	r25, 0x07	; 7
- 5e2:	01 97       	sbiw	r24, 0x01	; 1
- 5e4:	f1 f7       	brne	.-4      	; 0x5e2 <main+0xfe>
- 5e6:	00 c0       	rjmp	.+0      	; 0x5e8 <main+0x104>
- 5e8:	00 00       	nop
+ 674:	e9 91       	ld	r30, Y+
+ 676:	f0 e0       	ldi	r31, 0x00	; 0
+ 678:	eb 5d       	subi	r30, 0xDB	; 219
+ 67a:	fe 4f       	sbci	r31, 0xFE	; 254
+ 67c:	80 81       	ld	r24, Z
+ 67e:	8b bb       	out	0x1b, r24	; 27
+ 680:	8f ec       	ldi	r24, 0xCF	; 207
+ 682:	97 e0       	ldi	r25, 0x07	; 7
+ 684:	01 97       	sbiw	r24, 0x01	; 1
+ 686:	f1 f7       	brne	.-4      	; 0x684 <main+0xfe>
+ 688:	00 c0       	rjmp	.+0      	; 0x68a <main+0x104>
+ 68a:	00 00       	nop
 
 void setDigit()
 {
     DDRA = 0xFF; // setting PORT A as an output
     int i;
     for (i = 0; i < 5; i++)
- 5ea:	91 e0       	ldi	r25, 0x01	; 1
- 5ec:	a2 32       	cpi	r26, 0x22	; 34
- 5ee:	b9 07       	cpc	r27, r25
- 5f0:	71 f7       	brne	.-36     	; 0x5ce <main+0xea>
- 5f2:	c6 cf       	rjmp	.-116    	; 0x580 <main+0x9c>
+ 68c:	91 e0       	ldi	r25, 0x01	; 1
+ 68e:	a2 32       	cpi	r26, 0x22	; 34
+ 690:	b9 07       	cpc	r27, r25
+ 692:	71 f7       	brne	.-36     	; 0x670 <main+0xea>
+ 694:	c6 cf       	rjmp	.-116    	; 0x622 <main+0x9c>
 
-000005f4 <__umulhisi3>:
- 5f4:	a2 9f       	mul	r26, r18
- 5f6:	b0 01       	movw	r22, r0
- 5f8:	b3 9f       	mul	r27, r19
- 5fa:	c0 01       	movw	r24, r0
- 5fc:	a3 9f       	mul	r26, r19
- 5fe:	70 0d       	add	r23, r0
- 600:	81 1d       	adc	r24, r1
- 602:	11 24       	eor	r1, r1
- 604:	91 1d       	adc	r25, r1
- 606:	b2 9f       	mul	r27, r18
- 608:	70 0d       	add	r23, r0
- 60a:	81 1d       	adc	r24, r1
- 60c:	11 24       	eor	r1, r1
- 60e:	91 1d       	adc	r25, r1
- 610:	08 95       	ret
+00000696 <__umulhisi3>:
+ 696:	a2 9f       	mul	r26, r18
+ 698:	b0 01       	movw	r22, r0
+ 69a:	b3 9f       	mul	r27, r19
+ 69c:	c0 01       	movw	r24, r0
+ 69e:	a3 9f       	mul	r26, r19
+ 6a0:	70 0d       	add	r23, r0
+ 6a2:	81 1d       	adc	r24, r1
+ 6a4:	11 24       	eor	r1, r1
+ 6a6:	91 1d       	adc	r25, r1
+ 6a8:	b2 9f       	mul	r27, r18
+ 6aa:	70 0d       	add	r23, r0
+ 6ac:	81 1d       	adc	r24, r1
+ 6ae:	11 24       	eor	r1, r1
+ 6b0:	91 1d       	adc	r25, r1
+ 6b2:	08 95       	ret
 
-00000612 <_exit>:
- 612:	f8 94       	cli
+000006b4 <_exit>:
+ 6b4:	f8 94       	cli
 
-00000614 <__stop_program>:
- 614:	ff cf       	rjmp	.-2      	; 0x614 <__stop_program>
+000006b6 <__stop_program>:
+ 6b6:	ff cf       	rjmp	.-2      	; 0x6b6 <__stop_program>
