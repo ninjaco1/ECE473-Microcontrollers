@@ -92,7 +92,6 @@ uint8_t encoderRead(uint8_t data, uint8_t knob);
 void spi_init(void);
 void tcnt0_init(void);
 ISR(TIMER0_OVF_vect);
-int8_t encoder_chk(uint8_t encoder_var);
 
 int main()
 {
@@ -114,57 +113,21 @@ int main()
     while (1)
     {
 
-
-        // spi, bar graph works start
-        // PORTE &= ~(1 << PORTE6); // turning SH/LD low
-        // PORTE |= 1 << PORTE6;// turing SH/LD high
-
-        // SPDR = 0; // give the bargraph garbage
-        
-        // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
-        
-        // data = SPDR; // get the value of the encoder
-        // PORTD |= 1 << PORTD3; // turning on clk_inh
-        // PORTD &= ~(1 << PORTD3); // turning off clk_inh
-
-        // barGraph();
-
-        // bar graph works end
-
-        // PORTD |= 1 << PORTD3;
-        // PORTE &= 0 << PORTE6;
-
-        // _delay_ms(1);
-
-        // PORTE |= 1 << PORTE6;
-        // PORTD &= ~(1 << PORTD3);
-
-        // SPDR = 0;
-        // data = SPDR;
-        // while (bit_is_clear(SPSR,SPIF)){}
-
-        // end of new block
-
+        // spi 
         PORTD |= 1 << PORTD3; // clock_inh = 1
-        PORTE &= 0 << PORTE6; // load 
+        PORTE &= 0 << PORTE6; // load sh/ld
 
-        PORTE |= 1 << PORTE6;
-        PORTD &= ~(1 << PORTD3);
+        PORTE |= 1 << PORTE6; // sh/ld
+        PORTD &= ~(1 << PORTD3); // clock_inh
 
-        SPDR = 0;
+        SPDR = 0; // writing a random value
        
         while (bit_is_clear(SPSR,SPIF)){}
-        data = SPDR;
+        data = SPDR; // read data
 
         // end of another block
 
-
-
-
         barGraph();
-
-
-
 
         if (current_num > 1023)
             current_num -= 1024;
@@ -231,10 +194,6 @@ int8_t chk_buttons(int button)
     // https://www.avrfreaks.net/sites/default/files/debouncing.pdf'
 
     state[button] = (state[button] << 1) | (!bit_is_clear(PINA, button)) | 0xE000; // when the second button is pressed
-
-    // debuging to see how state debouncing works
-    // PORTB = state[button];
-    // _delay_ms(1000);
 
     if (state[button] == 0xF000)
         return 1;
@@ -323,9 +282,16 @@ void tcnt0_init(void){
     TCCR0  |=  (1 << CS00); //normal mode, no prescale
 }
 
+/******************************************************************************/
+//                                    ISR
+// Then fucntion will will called when there is an interrupt within the system
+// and when the overflow flag for timer counter 0 it set.
+// This fucntions checks the push buttons to see which buttons were pressed
+// then set it in its correct mode.
+// Afterwards checks the encoder to see where it is.
+/******************************************************************************/
 ISR(TIMER0_OVF_vect){
     uint16_t i;
-    // static uint8_t bargraph = 0, data;
     
     //insert loop demake lay for debounce
 
@@ -357,11 +323,11 @@ ISR(TIMER0_OVF_vect){
     }
     PORTB &= ~(TRI_BUFFER); // turn off the tri state buffer 
 
-    //
+    // reading each knob
     uint8_t enc1 = encoderRead(data, 0);
     uint8_t enc2 = encoderRead(data, 1);
 
-
+    // each case of what the knob or buttons will be
     if (incDec2 == 1 && incDec4 == 1){
         current_num = current_num;
 
@@ -385,13 +351,15 @@ ISR(TIMER0_OVF_vect){
             current_num += 4;
     }
     
-
-
-
 }
 
 
-
+/******************************************************************************/
+//                                 encoderRead
+// This function checks the state of the encoder so see what its behavior is.
+// It will return -1 if there is no change within. It will return 1 if the system is 
+// CW. It will return 0 if the system is CCW. 
+/******************************************************************************/
 uint8_t encoderRead(uint8_t data, uint8_t knob){
 
     // check for encoder
@@ -434,24 +402,12 @@ uint8_t encoderRead(uint8_t data, uint8_t knob){
             if (old_state[a_index] == 0){ // one direction 
                 if (count == 3){
                     return_val = 0;
-                    // if(incDec2 == 1){
-                    //     current_num -= 2;
-                    // }
-                    // if(incDec4 == 1){
-                    //     current_num -= 4;
-                    // }
                 }
             }
             else{ // or the other direction
                 if (count == -3){
                     return_val = 1;
-                    // if(incDec2 == 1){
-                    //     current_num += 2;
-                    // }
-                    // if(incDec4 == 1){
-                    //     current_num += 4;
-                    // }
-
+   
                 }
             }
             count = 0; // count is always reset in detent position
@@ -473,38 +429,16 @@ uint8_t encoderRead(uint8_t data, uint8_t knob){
     return (return_val); // return coder state
 }
 
+
+/******************************************************************************/
+//                                  barGraph
+// Set the mode on the bar graph. 
+/******************************************************************************/
 void barGraph(){
     
-
     SPDR = barGraphDisplay;
-    // SPDR = data;
-    // barGraphOutput = display_mode;               //send to display 
     while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
     PORTD |= (1 << PORTD2);          //HC595 output reg - rising edge...
     PORTD &= (0 << PORTD2);          //and falling edge
 
-
 }
-
-int8_t encoder_chk(uint8_t encoder_var){
-    // A and B are in bits 0 and 1
-    static uint16_t state = {0}; // holds bits from encoder
-    uint8_t a_pin, b_pin;        // encoder pin states
-
-    // a_pin and b_pin are asserted TRUE when low
-    a_pin = ((encoder_var & 0x01) == 0) ? 0 : 1;
-    b_pin = ((encoder_var & 0x02) == 0) ? 0 : 1;
-
-    // update shift using only the A pin
-    state = (state << 1) | a_pin | 0xE0;
-
-    // check for falling edge on A pin
-    // if it did, then B pin state indicates direction
-    // of rotation. Return 1 for CW, 0 for CCW
-    if (state == 0xF0){
-        return (b_pin) ? 1 : 0;
-    }
-    else 
-        return -1; // no movement detected
-
-} // encoder_chk
