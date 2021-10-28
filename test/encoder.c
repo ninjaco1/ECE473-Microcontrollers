@@ -36,7 +36,7 @@ ISR(TIMER0_OVF_vect);
 
 void spi_init(void);
 void tcnt0_init(void);
-void barGraph(uint8_t);
+void barGraph();
 uint8_t encoderRead(uint8_t data, uint8_t knob);
 
 
@@ -91,44 +91,44 @@ void tcnt0_init(void){
 /*************************************************************************/
 ISR(TIMER0_OVF_vect){
     
-    uint8_t serial_out;
-    // getting the data from serial out
+     // check spi
+        uint8_t serial_out;
+        static uint8_t bargraph = 0x00;
+        static uint8_t light = 0x00;
 
-    PORTD |= 1 << PORTD3; // turning on clk_inh
-    PORTE &= 0 << PORTE6; // turning SH/LD low
+        // getting the data from serial out
 
-    _delay_ms(200);
-    PORTD &= 0 << PORTD3; // turning off clk_inh
-    PORTE |= 1 << PORTE6;// turing SH/LD high
-   
-  
-    SPDR = 0;
-    while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
-    
+        PORTE &= ~(1 << PORTE6); // turning SH/LD low
+        PORTE |= 1 << PORTE6;// turing SH/LD high
+        SPDR = light;
 
-    serial_out = SPDR;
-    // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
-    
-    uint8_t temp = encoderRead(serial_out,0);
-    uint8_t temp1 = encoderRead(serial_out, 1);
-    if (temp != -1)
-        incrementFlag = temp;
-    uint8_t rotation[2] = {incrementFlag, temp1};
+        bargraph = SPDR;
+        while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+        
+        PORTD |= 1 << PORTD3; // turning on clk_inh
+        PORTD &= ~(1 << PORTD3); // turning off clk_inh
 
+        
+        if (bargraph != 0x00) {
+            light = 0xff;
+        }
 
-    barGraph(rotation[0]);
-    // barGraph(-1);
+        uint8_t temp = encoderRead(bargraph, 0);
+        barGraph();
+        // trigger bargraph after write
+        
+
     
 }
 
 
-void barGraph(uint8_t increment){
+void barGraph(){
     uint8_t display_mode; //holds count for display 
 
     // top half on for increment
-    if (increment == 1)
+    if (incrementFlag == 1)
         display_mode = 0xF0;
-    else if (increment == 0) // bot half on for decrement
+    else if (incrementFlag == 0) // bot half on for decrement
         display_mode = 0x0F;
     else
         display_mode = 0b10101010; // otherwise display every other

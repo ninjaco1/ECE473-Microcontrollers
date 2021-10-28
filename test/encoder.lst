@@ -3,31 +3,31 @@ encoder.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000002  00800100  00000258  000002ec  2**0
+  0 .data         00000002  00800100  00000224  000002b8  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000258  00000000  00000000  00000094  2**1
+  1 .text         00000224  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000001  00800102  00800102  000002ee  2**0
+  2 .bss          00000003  00800102  00800102  000002ba  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000002ee  2**0
+  3 .comment      00000030  00000000  00000000  000002ba  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000320  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000002ec  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000028  00000000  00000000  0000035c  2**0
+  5 .debug_aranges 00000028  00000000  00000000  00000328  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000ac5  00000000  00000000  00000384  2**0
+  6 .debug_info   000009f5  00000000  00000000  00000350  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000907  00000000  00000000  00000e49  2**0
+  7 .debug_abbrev 000008c6  00000000  00000000  00000d45  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000002a4  00000000  00000000  00001750  2**0
+  8 .debug_line   00000221  00000000  00000000  0000160b  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000000c4  00000000  00000000  000019f4  2**2
+  9 .debug_frame  000000bc  00000000  00000000  0000182c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000454  00000000  00000000  00001ab8  2**0
+ 10 .debug_str    000003f6  00000000  00000000  000018e8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000002db  00000000  00000000  00001f0c  2**0
+ 11 .debug_loc    00000172  00000000  00000000  00001cde  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000030  00000000  00000000  000021e7  2**0
+ 12 .debug_ranges 00000018  00000000  00000000  00001e50  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -49,7 +49,7 @@ Disassembly of section .text:
   34:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
   38:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
   3c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
-  40:	0c 94 bd 00 	jmp	0x17a	; 0x17a <__vector_16>
+  40:	0c 94 b5 00 	jmp	0x16a	; 0x16a <__vector_16>
   44:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
   48:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
   4c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
@@ -81,7 +81,7 @@ Disassembly of section .text:
   98:	11 e0       	ldi	r17, 0x01	; 1
   9a:	a0 e0       	ldi	r26, 0x00	; 0
   9c:	b1 e0       	ldi	r27, 0x01	; 1
-  9e:	e8 e5       	ldi	r30, 0x58	; 88
+  9e:	e4 e2       	ldi	r30, 0x24	; 36
   a0:	f2 e0       	ldi	r31, 0x02	; 2
   a2:	00 e0       	ldi	r16, 0x00	; 0
   a4:	0b bf       	out	0x3b, r16	; 59
@@ -102,11 +102,11 @@ Disassembly of section .text:
   ba:	1d 92       	st	X+, r1
 
 000000bc <.do_clear_bss_start>:
-  bc:	a3 30       	cpi	r26, 0x03	; 3
+  bc:	a5 30       	cpi	r26, 0x05	; 5
   be:	b2 07       	cpc	r27, r18
   c0:	e1 f7       	brne	.-8      	; 0xba <.do_clear_bss_loop>
-  c2:	0e 94 12 01 	call	0x224	; 0x224 <main>
-  c6:	0c 94 2a 01 	jmp	0x254	; 0x254 <_exit>
+  c2:	0e 94 f8 00 	call	0x1f0	; 0x1f0 <main>
+  c6:	0c 94 10 01 	jmp	0x220	; 0x220 <_exit>
 
 000000ca <__bad_interrupt>:
   ca:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -150,373 +150,298 @@ void tcnt0_init(void){
   f0:	08 95       	ret
 
 000000f2 <barGraph>:
-
-void barGraph(uint8_t increment){
-    uint8_t display_mode; //holds count for display 
-
-    // top half on for increment
-    if (increment == 1)
-  f2:	81 30       	cpi	r24, 0x01	; 1
-  f4:	61 f0       	breq	.+24     	; 0x10e <barGraph+0x1c>
-        display_mode = 0xF0;
-    else if (increment == 0) // bot half on for decrement
-  f6:	81 11       	cpse	r24, r1
-  f8:	08 c0       	rjmp	.+16     	; 0x10a <barGraph+0x18>
         display_mode = 0x0F;
-  fa:	8f e0       	ldi	r24, 0x0F	; 15
     else
         display_mode = 0b10101010; // otherwise display every other
     
 
     SPDR = display_mode;
-  fc:	8f b9       	out	0x0f, r24	; 15
+  f2:	8a ea       	ldi	r24, 0xAA	; 170
+  f4:	8f b9       	out	0x0f, r24	; 15
     // barGraphOutput = display_mode;               //send to display 
     while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
-  fe:	77 9b       	sbis	0x0e, 7	; 14
- 100:	fe cf       	rjmp	.-4      	; 0xfe <barGraph+0xc>
+  f6:	77 9b       	sbis	0x0e, 7	; 14
+  f8:	fe cf       	rjmp	.-4      	; 0xf6 <barGraph+0x4>
     PORTD |= (1 << PORTD2);          //HC595 output reg - rising edge...
- 102:	92 9a       	sbi	0x12, 2	; 18
+  fa:	92 9a       	sbi	0x12, 2	; 18
     PORTD &= (0 << PORTD2);          //and falling edge
- 104:	82 b3       	in	r24, 0x12	; 18
- 106:	12 ba       	out	0x12, r1	; 18
- 108:	08 95       	ret
-    if (increment == 1)
-        display_mode = 0xF0;
-    else if (increment == 0) // bot half on for decrement
-        display_mode = 0x0F;
-    else
-        display_mode = 0b10101010; // otherwise display every other
- 10a:	8a ea       	ldi	r24, 0xAA	; 170
- 10c:	f7 cf       	rjmp	.-18     	; 0xfc <barGraph+0xa>
-void barGraph(uint8_t increment){
-    uint8_t display_mode; //holds count for display 
+  fc:	82 b3       	in	r24, 0x12	; 18
+  fe:	12 ba       	out	0x12, r1	; 18
+ 100:	08 95       	ret
 
-    // top half on for increment
-    if (increment == 1)
-        display_mode = 0xF0;
- 10e:	80 ef       	ldi	r24, 0xF0	; 240
- 110:	f5 cf       	rjmp	.-22     	; 0xfc <barGraph+0xa>
-
-00000112 <encoderRead>:
+00000102 <encoderRead>:
     
         // check for encoder
     static uint8_t new_A = -1, old_A = -1, new_B = -1, old_B = -1, count = 0; 
     uint8_t return_val, a, b; 
 
     a = (knob == 0) ? 1 : 4; // where the position of a is
- 112:	61 11       	cpse	r22, r1
- 114:	19 c0       	rjmp	.+50     	; 0x148 <encoderRead+0x36>
- 116:	91 e0       	ldi	r25, 0x01	; 1
+ 102:	61 11       	cpse	r22, r1
+ 104:	19 c0       	rjmp	.+50     	; 0x138 <encoderRead+0x36>
+ 106:	91 e0       	ldi	r25, 0x01	; 1
     b = (knob == 0) ? 2 : 8; // where the position of b is
- 118:	22 e0       	ldi	r18, 0x02	; 2
+ 108:	22 e0       	ldi	r18, 0x02	; 2
 
     new_A = data & a; // most LSB
- 11a:	98 23       	and	r25, r24
+ 10a:	98 23       	and	r25, r24
     new_B = data & b; // 2nd LSB
- 11c:	82 23       	and	r24, r18
+ 10c:	82 23       	and	r24, r18
 
 
     return_val = -1; // default return value, no change
 
     if ((new_A != old_A) || (new_B != old_B)){ // if change occured
- 11e:	20 91 01 01 	lds	r18, 0x0101	; 0x800101 <old_A.1776>
- 122:	92 17       	cp	r25, r18
- 124:	c9 f0       	breq	.+50     	; 0x158 <encoderRead+0x46>
+ 10e:	20 91 01 01 	lds	r18, 0x0101	; 0x800101 <old_A.1774>
+ 112:	92 17       	cp	r25, r18
+ 114:	c9 f0       	breq	.+50     	; 0x148 <encoderRead+0x46>
         if((new_A == 0) && (new_B == 0)){
- 126:	91 11       	cpse	r25, r1
- 128:	1d c0       	rjmp	.+58     	; 0x164 <encoderRead+0x52>
- 12a:	81 11       	cpse	r24, r1
- 12c:	07 c0       	rjmp	.+14     	; 0x13c <encoderRead+0x2a>
+ 116:	91 11       	cpse	r25, r1
+ 118:	1d c0       	rjmp	.+58     	; 0x154 <encoderRead+0x52>
+ 11a:	81 11       	cpse	r24, r1
+ 11c:	07 c0       	rjmp	.+14     	; 0x12c <encoderRead+0x2a>
             if (old_A == 1){
- 12e:	21 30       	cpi	r18, 0x01	; 1
- 130:	f1 f0       	breq	.+60     	; 0x16e <encoderRead+0x5c>
+ 11e:	21 30       	cpi	r18, 0x01	; 1
+ 120:	f1 f0       	breq	.+60     	; 0x15e <encoderRead+0x5c>
                 count++;
             }
             else{
                 count--;
- 132:	20 91 02 01 	lds	r18, 0x0102	; 0x800102 <__data_end>
- 136:	21 50       	subi	r18, 0x01	; 1
- 138:	20 93 02 01 	sts	0x0102, r18	; 0x800102 <__data_end>
+ 122:	20 91 02 01 	lds	r18, 0x0102	; 0x800102 <__data_end>
+ 126:	21 50       	subi	r18, 0x01	; 1
+ 128:	20 93 02 01 	sts	0x0102, r18	; 0x800102 <__data_end>
             else{ 
                 count--;
             }
         }
 
         old_A = new_A; // save what are now old values
- 13c:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <old_A.1776>
+ 12c:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <old_A.1774>
         old_B = new_B;
- 140:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 130:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
     } // if changed occured
     // if return value is still -1 then nothing happen
     return (return_val); // return coder state
 
 
- 144:	8f ef       	ldi	r24, 0xFF	; 255
- 146:	08 95       	ret
+ 134:	8f ef       	ldi	r24, 0xFF	; 255
+ 136:	08 95       	ret
     
         // check for encoder
     static uint8_t new_A = -1, old_A = -1, new_B = -1, old_B = -1, count = 0; 
     uint8_t return_val, a, b; 
 
     a = (knob == 0) ? 1 : 4; // where the position of a is
- 148:	94 e0       	ldi	r25, 0x04	; 4
+ 138:	94 e0       	ldi	r25, 0x04	; 4
     b = (knob == 0) ? 2 : 8; // where the position of b is
- 14a:	28 e0       	ldi	r18, 0x08	; 8
+ 13a:	28 e0       	ldi	r18, 0x08	; 8
 
     new_A = data & a; // most LSB
- 14c:	98 23       	and	r25, r24
+ 13c:	98 23       	and	r25, r24
     new_B = data & b; // 2nd LSB
- 14e:	82 23       	and	r24, r18
+ 13e:	82 23       	and	r24, r18
 
 
     return_val = -1; // default return value, no change
 
     if ((new_A != old_A) || (new_B != old_B)){ // if change occured
- 150:	20 91 01 01 	lds	r18, 0x0101	; 0x800101 <old_A.1776>
- 154:	92 13       	cpse	r25, r18
- 156:	e7 cf       	rjmp	.-50     	; 0x126 <encoderRead+0x14>
- 158:	30 91 00 01 	lds	r19, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
- 15c:	83 17       	cp	r24, r19
- 15e:	91 f3       	breq	.-28     	; 0x144 <encoderRead+0x32>
+ 140:	20 91 01 01 	lds	r18, 0x0101	; 0x800101 <old_A.1774>
+ 144:	92 13       	cpse	r25, r18
+ 146:	e7 cf       	rjmp	.-50     	; 0x116 <encoderRead+0x14>
+ 148:	30 91 00 01 	lds	r19, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 14c:	83 17       	cp	r24, r19
+ 14e:	91 f3       	breq	.-28     	; 0x134 <encoderRead+0x32>
         if((new_A == 0) && (new_B == 0)){
- 160:	99 23       	and	r25, r25
- 162:	19 f3       	breq	.-58     	; 0x12a <encoderRead+0x18>
+ 150:	99 23       	and	r25, r25
+ 152:	19 f3       	breq	.-58     	; 0x11a <encoderRead+0x18>
                     return_val = 1;
                 }
             }
             count = 0; // count is always reset in detent position
         }
         else if ((new_A == 1) && (new_B == 0)){
- 164:	91 30       	cpi	r25, 0x01	; 1
- 166:	51 f7       	brne	.-44     	; 0x13c <encoderRead+0x2a>
+ 154:	91 30       	cpi	r25, 0x01	; 1
+ 156:	51 f7       	brne	.-44     	; 0x12c <encoderRead+0x2a>
 
 
     return_val = -1; // default return value, no change
 
     if ((new_A != old_A) || (new_B != old_B)){ // if change occured
         if((new_A == 0) && (new_B == 0)){
- 168:	81 11       	cpse	r24, r1
- 16a:	e8 cf       	rjmp	.-48     	; 0x13c <encoderRead+0x2a>
- 16c:	e0 cf       	rjmp	.-64     	; 0x12e <encoderRead+0x1c>
+ 158:	81 11       	cpse	r24, r1
+ 15a:	e8 cf       	rjmp	.-48     	; 0x12c <encoderRead+0x2a>
+ 15c:	e0 cf       	rjmp	.-64     	; 0x11e <encoderRead+0x1c>
             if (old_A == 1){
                 count++;
- 16e:	20 91 02 01 	lds	r18, 0x0102	; 0x800102 <__data_end>
- 172:	2f 5f       	subi	r18, 0xFF	; 255
- 174:	20 93 02 01 	sts	0x0102, r18	; 0x800102 <__data_end>
- 178:	e1 cf       	rjmp	.-62     	; 0x13c <encoderRead+0x2a>
+ 15e:	20 91 02 01 	lds	r18, 0x0102	; 0x800102 <__data_end>
+ 162:	2f 5f       	subi	r18, 0xFF	; 255
+ 164:	20 93 02 01 	sts	0x0102, r18	; 0x800102 <__data_end>
+ 168:	e1 cf       	rjmp	.-62     	; 0x12c <encoderRead+0x2a>
 
-0000017a <__vector_16>:
+0000016a <__vector_16>:
 //TCNT0 interrupts come at 7.8125ms internals.
 // 1/32768         = 30.517578uS
 //(1/32768)*256    = 7.8125ms
 //(1/32768)*256*64 = 500mS
 /*************************************************************************/
 ISR(TIMER0_OVF_vect){
- 17a:	1f 92       	push	r1
- 17c:	0f 92       	push	r0
- 17e:	0f b6       	in	r0, 0x3f	; 63
- 180:	0f 92       	push	r0
- 182:	11 24       	eor	r1, r1
- 184:	0b b6       	in	r0, 0x3b	; 59
- 186:	0f 92       	push	r0
- 188:	2f 93       	push	r18
- 18a:	3f 93       	push	r19
- 18c:	4f 93       	push	r20
- 18e:	5f 93       	push	r21
- 190:	6f 93       	push	r22
- 192:	7f 93       	push	r23
- 194:	8f 93       	push	r24
- 196:	9f 93       	push	r25
- 198:	af 93       	push	r26
- 19a:	bf 93       	push	r27
- 19c:	cf 93       	push	r28
- 19e:	df 93       	push	r29
- 1a0:	ef 93       	push	r30
- 1a2:	ff 93       	push	r31
-    
-    uint8_t serial_out;
-    // getting the data from serial out
+ 16a:	1f 92       	push	r1
+ 16c:	0f 92       	push	r0
+ 16e:	0f b6       	in	r0, 0x3f	; 63
+ 170:	0f 92       	push	r0
+ 172:	11 24       	eor	r1, r1
+ 174:	0b b6       	in	r0, 0x3b	; 59
+ 176:	0f 92       	push	r0
+ 178:	2f 93       	push	r18
+ 17a:	3f 93       	push	r19
+ 17c:	4f 93       	push	r20
+ 17e:	5f 93       	push	r21
+ 180:	6f 93       	push	r22
+ 182:	7f 93       	push	r23
+ 184:	8f 93       	push	r24
+ 186:	9f 93       	push	r25
+ 188:	af 93       	push	r26
+ 18a:	bf 93       	push	r27
+ 18c:	ef 93       	push	r30
+ 18e:	ff 93       	push	r31
+        static uint8_t bargraph = 0x00;
+        static uint8_t light = 0x00;
 
-    PORTD |= 1 << PORTD3; // turning on clk_inh
+        // getting the data from serial out
+
+        PORTE &= ~(1 << PORTE6); // turning SH/LD low
+ 190:	1e 98       	cbi	0x03, 6	; 3
+        PORTE |= 1 << PORTE6;// turing SH/LD high
+ 192:	1e 9a       	sbi	0x03, 6	; 3
+        SPDR = light;
+ 194:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <light.1758>
+ 198:	8f b9       	out	0x0f, r24	; 15
+
+        bargraph = SPDR;
+ 19a:	8f b1       	in	r24, 0x0f	; 15
+ 19c:	80 93 03 01 	sts	0x0103, r24	; 0x800103 <bargraph.1757>
+        while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+ 1a0:	77 9b       	sbis	0x0e, 7	; 14
+ 1a2:	fe cf       	rjmp	.-4      	; 0x1a0 <__vector_16+0x36>
+        
+        PORTD |= 1 << PORTD3; // turning on clk_inh
  1a4:	93 9a       	sbi	0x12, 3	; 18
-    PORTE &= 0 << PORTE6; // turning SH/LD low
- 1a6:	83 b1       	in	r24, 0x03	; 3
- 1a8:	13 b8       	out	0x03, r1	; 3
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
+        PORTD &= ~(1 << PORTD3); // turning off clk_inh
+ 1a6:	93 98       	cbi	0x12, 3	; 18
 
-	__builtin_avr_delay_cycles(__ticks_dc);
- 1aa:	2f ef       	ldi	r18, 0xFF	; 255
- 1ac:	83 ec       	ldi	r24, 0xC3	; 195
- 1ae:	99 e0       	ldi	r25, 0x09	; 9
- 1b0:	21 50       	subi	r18, 0x01	; 1
- 1b2:	80 40       	sbci	r24, 0x00	; 0
- 1b4:	90 40       	sbci	r25, 0x00	; 0
- 1b6:	e1 f7       	brne	.-8      	; 0x1b0 <__vector_16+0x36>
- 1b8:	00 c0       	rjmp	.+0      	; 0x1ba <__vector_16+0x40>
- 1ba:	00 00       	nop
+        
+        if (bargraph != 0x00) {
+ 1a8:	80 91 03 01 	lds	r24, 0x0103	; 0x800103 <bargraph.1757>
+ 1ac:	88 23       	and	r24, r24
+ 1ae:	19 f0       	breq	.+6      	; 0x1b6 <__vector_16+0x4c>
+            light = 0xff;
+ 1b0:	9f ef       	ldi	r25, 0xFF	; 255
+ 1b2:	90 93 04 01 	sts	0x0104, r25	; 0x800104 <light.1758>
+        }
 
-    _delay_ms(200);
-    PORTD &= 0 << PORTD3; // turning off clk_inh
- 1bc:	82 b3       	in	r24, 0x12	; 18
- 1be:	12 ba       	out	0x12, r1	; 18
-    PORTE |= 1 << PORTE6;// turing SH/LD high
- 1c0:	1e 9a       	sbi	0x03, 6	; 3
-   
-  
-    SPDR = 0;
- 1c2:	1f b8       	out	0x0f, r1	; 15
-    while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
- 1c4:	77 9b       	sbis	0x0e, 7	; 14
- 1c6:	fe cf       	rjmp	.-4      	; 0x1c4 <__vector_16+0x4a>
-    
-
-    serial_out = SPDR;
- 1c8:	cf b1       	in	r28, 0x0f	; 15
-    // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
-    
-    uint8_t temp = encoderRead(serial_out,0);
- 1ca:	60 e0       	ldi	r22, 0x00	; 0
- 1cc:	8c 2f       	mov	r24, r28
- 1ce:	0e 94 89 00 	call	0x112	; 0x112 <encoderRead>
- 1d2:	d8 2f       	mov	r29, r24
-    uint8_t temp1 = encoderRead(serial_out, 1);
- 1d4:	61 e0       	ldi	r22, 0x01	; 1
- 1d6:	8c 2f       	mov	r24, r28
- 1d8:	0e 94 89 00 	call	0x112	; 0x112 <encoderRead>
-
-void barGraph(uint8_t increment){
-    uint8_t display_mode; //holds count for display 
-
-    // top half on for increment
-    if (increment == 1)
- 1dc:	d1 30       	cpi	r29, 0x01	; 1
- 1de:	01 f1       	breq	.+64     	; 0x220 <__vector_16+0xa6>
-        display_mode = 0xF0;
-    else if (increment == 0) // bot half on for decrement
- 1e0:	d1 11       	cpse	r29, r1
- 1e2:	1c c0       	rjmp	.+56     	; 0x21c <__vector_16+0xa2>
+        uint8_t temp = encoderRead(bargraph, 0);
+ 1b6:	60 e0       	ldi	r22, 0x00	; 0
+ 1b8:	0e 94 81 00 	call	0x102	; 0x102 <encoderRead>
         display_mode = 0x0F;
- 1e4:	8f e0       	ldi	r24, 0x0F	; 15
     else
         display_mode = 0b10101010; // otherwise display every other
     
 
     SPDR = display_mode;
- 1e6:	8f b9       	out	0x0f, r24	; 15
+ 1bc:	8a ea       	ldi	r24, 0xAA	; 170
+ 1be:	8f b9       	out	0x0f, r24	; 15
     // barGraphOutput = display_mode;               //send to display 
     while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
- 1e8:	77 9b       	sbis	0x0e, 7	; 14
- 1ea:	fe cf       	rjmp	.-4      	; 0x1e8 <__vector_16+0x6e>
+ 1c0:	77 9b       	sbis	0x0e, 7	; 14
+ 1c2:	fe cf       	rjmp	.-4      	; 0x1c0 <__vector_16+0x56>
     PORTD |= (1 << PORTD2);          //HC595 output reg - rising edge...
- 1ec:	92 9a       	sbi	0x12, 2	; 18
+ 1c4:	92 9a       	sbi	0x12, 2	; 18
     PORTD &= (0 << PORTD2);          //and falling edge
- 1ee:	82 b3       	in	r24, 0x12	; 18
- 1f0:	12 ba       	out	0x12, r1	; 18
+ 1c6:	82 b3       	in	r24, 0x12	; 18
+ 1c8:	12 ba       	out	0x12, r1	; 18
+        barGraph();
+        // trigger bargraph after write
+        
 
-
-    barGraph(rotation[0]);
-    // barGraph(-1);
     
 }
- 1f2:	ff 91       	pop	r31
- 1f4:	ef 91       	pop	r30
- 1f6:	df 91       	pop	r29
- 1f8:	cf 91       	pop	r28
- 1fa:	bf 91       	pop	r27
- 1fc:	af 91       	pop	r26
- 1fe:	9f 91       	pop	r25
- 200:	8f 91       	pop	r24
- 202:	7f 91       	pop	r23
- 204:	6f 91       	pop	r22
- 206:	5f 91       	pop	r21
- 208:	4f 91       	pop	r20
- 20a:	3f 91       	pop	r19
- 20c:	2f 91       	pop	r18
- 20e:	0f 90       	pop	r0
- 210:	0b be       	out	0x3b, r0	; 59
- 212:	0f 90       	pop	r0
- 214:	0f be       	out	0x3f, r0	; 63
- 216:	0f 90       	pop	r0
- 218:	1f 90       	pop	r1
- 21a:	18 95       	reti
-    if (increment == 1)
-        display_mode = 0xF0;
-    else if (increment == 0) // bot half on for decrement
-        display_mode = 0x0F;
-    else
-        display_mode = 0b10101010; // otherwise display every other
- 21c:	8a ea       	ldi	r24, 0xAA	; 170
- 21e:	e3 cf       	rjmp	.-58     	; 0x1e6 <__vector_16+0x6c>
-void barGraph(uint8_t increment){
-    uint8_t display_mode; //holds count for display 
+ 1ca:	ff 91       	pop	r31
+ 1cc:	ef 91       	pop	r30
+ 1ce:	bf 91       	pop	r27
+ 1d0:	af 91       	pop	r26
+ 1d2:	9f 91       	pop	r25
+ 1d4:	8f 91       	pop	r24
+ 1d6:	7f 91       	pop	r23
+ 1d8:	6f 91       	pop	r22
+ 1da:	5f 91       	pop	r21
+ 1dc:	4f 91       	pop	r20
+ 1de:	3f 91       	pop	r19
+ 1e0:	2f 91       	pop	r18
+ 1e2:	0f 90       	pop	r0
+ 1e4:	0b be       	out	0x3b, r0	; 59
+ 1e6:	0f 90       	pop	r0
+ 1e8:	0f be       	out	0x3f, r0	; 63
+ 1ea:	0f 90       	pop	r0
+ 1ec:	1f 90       	pop	r1
+ 1ee:	18 95       	reti
 
-    // top half on for increment
-    if (increment == 1)
-        display_mode = 0xF0;
- 220:	80 ef       	ldi	r24, 0xF0	; 240
- 222:	e1 cf       	rjmp	.-62     	; 0x1e6 <__vector_16+0x6c>
-
-00000224 <main>:
+000001f0 <main>:
 uint8_t encoderRead(uint8_t data, uint8_t knob);
 
 
 int main() {
 
     DDRB = 0xF0; // set port B bits 4-7 B as outputs, decoder
- 224:	80 ef       	ldi	r24, 0xF0	; 240
- 226:	87 bb       	out	0x17, r24	; 23
+ 1f0:	80 ef       	ldi	r24, 0xF0	; 240
+ 1f2:	87 bb       	out	0x17, r24	; 23
     DDRE |= 0b01000000; // set E6 to output
- 228:	16 9a       	sbi	0x02, 6	; 2
+ 1f4:	16 9a       	sbi	0x02, 6	; 2
     DDRD |= 0b00001100; // slave select pins
- 22a:	81 b3       	in	r24, 0x11	; 17
- 22c:	8c 60       	ori	r24, 0x0C	; 12
- 22e:	81 bb       	out	0x11, r24	; 17
+ 1f6:	81 b3       	in	r24, 0x11	; 17
+ 1f8:	8c 60       	ori	r24, 0x0C	; 12
+ 1fa:	81 bb       	out	0x11, r24	; 17
 //Initalizes timer/counter0 (TCNT0). TCNT0 is running in async mode
 //with external 32khz crystal.  Runs in normal mode with no prescaling.
 //Interrupt occurs at overflow 0xFF.
 //
 void tcnt0_init(void){
     ASSR   |=  (1 << AS0); //ext osc TOSC
- 230:	80 b7       	in	r24, 0x30	; 48
- 232:	88 60       	ori	r24, 0x08	; 8
- 234:	80 bf       	out	0x30, r24	; 48
+ 1fc:	80 b7       	in	r24, 0x30	; 48
+ 1fe:	88 60       	ori	r24, 0x08	; 8
+ 200:	80 bf       	out	0x30, r24	; 48
     TIMSK  |=  (1 << TOIE0); //enable TCNT0 overflow interrupt
- 236:	87 b7       	in	r24, 0x37	; 55
- 238:	81 60       	ori	r24, 0x01	; 1
- 23a:	87 bf       	out	0x37, r24	; 55
+ 202:	87 b7       	in	r24, 0x37	; 55
+ 204:	81 60       	ori	r24, 0x01	; 1
+ 206:	87 bf       	out	0x37, r24	; 55
     TCCR0  |=  (1 << CS00); //normal mode, no prescale
- 23c:	83 b7       	in	r24, 0x33	; 51
- 23e:	81 60       	ori	r24, 0x01	; 1
- 240:	83 bf       	out	0x33, r24	; 51
+ 208:	83 b7       	in	r24, 0x33	; 51
+ 20a:	81 60       	ori	r24, 0x01	; 1
+ 20c:	83 bf       	out	0x33, r24	; 51
 //external device specific initalizations.  Sets up SPI to be:                        
 //master mode, clock=clk/2, cycle half phase, low polarity, MSB first
 //interrupts disabled, poll SPIF bit in SPSR to check xmit completion
 /***********************************************************************/
 void spi_init(void){
     DDRB  |=   0x07; //Turn on SS, MOSI, SCLK
- 242:	87 b3       	in	r24, 0x17	; 23
- 244:	87 60       	ori	r24, 0x07	; 7
- 246:	87 bb       	out	0x17, r24	; 23
+ 20e:	87 b3       	in	r24, 0x17	; 23
+ 210:	87 60       	ori	r24, 0x07	; 7
+ 212:	87 bb       	out	0x17, r24	; 23
     SPCR  |=   (1 << SPE) | (1 << MSTR); //enable SPI, master mode 
- 248:	8d b1       	in	r24, 0x0d	; 13
- 24a:	80 65       	ori	r24, 0x50	; 80
- 24c:	8d b9       	out	0x0d, r24	; 13
+ 214:	8d b1       	in	r24, 0x0d	; 13
+ 216:	80 65       	ori	r24, 0x50	; 80
+ 218:	8d b9       	out	0x0d, r24	; 13
     SPSR  |=   (1 << SPI2X); // double speed operation
- 24e:	70 9a       	sbi	0x0e, 0	; 14
+ 21a:	70 9a       	sbi	0x0e, 0	; 14
     DDRE |= 0b01000000; // set E6 to output
     DDRD |= 0b00001100; // slave select pins
 
     tcnt0_init();  //initalize counter timer zero
     spi_init();    //initalize SPI port
     sei();         //enable interrupts before entering loop
- 250:	78 94       	sei
- 252:	ff cf       	rjmp	.-2      	; 0x252 <main+0x2e>
+ 21c:	78 94       	sei
+ 21e:	ff cf       	rjmp	.-2      	; 0x21e <main+0x2e>
 
-00000254 <_exit>:
- 254:	f8 94       	cli
+00000220 <_exit>:
+ 220:	f8 94       	cli
 
-00000256 <__stop_program>:
- 256:	ff cf       	rjmp	.-2      	; 0x256 <__stop_program>
+00000222 <__stop_program>:
+ 222:	ff cf       	rjmp	.-2      	; 0x222 <__stop_program>
