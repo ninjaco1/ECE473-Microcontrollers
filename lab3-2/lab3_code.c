@@ -76,6 +76,7 @@ static uint8_t barGraphDisplay = 0;
 // determine if we are increment or decrement mode
 static uint8_t incDec2 = 0;
 static uint8_t incDec4 = 0;
+static uint8_t data = 0;
 
 // lab 2 functions
 int8_t chk_buttons(int button); // check what button is being pressed
@@ -91,6 +92,7 @@ uint8_t encoderRead(uint8_t data, uint8_t knob);
 void spi_init(void);
 void tcnt0_init(void);
 ISR(TIMER0_OVF_vect);
+int8_t encoder_chk(uint8_t encoder_var);
 
 int main()
 {
@@ -107,8 +109,61 @@ int main()
     set_dec_to_7seg(); // set values for dec_to_7seg array
     set_decoder(); // set values for the decoder array
 
+    
+
     while (1)
     {
+
+
+        // spi, bar graph works start
+        // PORTE &= ~(1 << PORTE6); // turning SH/LD low
+        // PORTE |= 1 << PORTE6;// turing SH/LD high
+
+        // SPDR = 0; // give the bargraph garbage
+        
+        // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+        
+        // data = SPDR; // get the value of the encoder
+        // PORTD |= 1 << PORTD3; // turning on clk_inh
+        // PORTD &= ~(1 << PORTD3); // turning off clk_inh
+
+        // barGraph();
+
+        // bar graph works end
+
+        // PORTD |= 1 << PORTD3;
+        // PORTE &= 0 << PORTE6;
+
+        // _delay_ms(1);
+
+        // PORTE |= 1 << PORTE6;
+        // PORTD &= ~(1 << PORTD3);
+
+        // SPDR = 0;
+        // data = SPDR;
+        // while (bit_is_clear(SPSR,SPIF)){}
+
+        // end of new block
+
+        PORTD |= 1 << PORTD3; // clock_inh = 1
+        PORTE &= 0 << PORTE6; // load 
+
+        PORTE |= 1 << PORTE6;
+        PORTD &= ~(1 << PORTD3);
+
+        SPDR = 0;
+       
+        while (bit_is_clear(SPSR,SPIF)){}
+        data = SPDR;
+
+        // end of another block
+
+
+
+
+        barGraph();
+
+
 
 
         if (current_num > 1023)
@@ -270,7 +325,7 @@ void tcnt0_init(void){
 
 ISR(TIMER0_OVF_vect){
     uint16_t i;
-    static uint8_t bargraph = 0, data;
+    // static uint8_t bargraph = 0, data;
     
     //insert loop demake lay for debounce
 
@@ -302,37 +357,51 @@ ISR(TIMER0_OVF_vect){
     }
     PORTB &= ~(TRI_BUFFER); // turn off the tri state buffer 
 
-    // spi 
-    PORTE &= ~(1 << PORTE6); // turning SH/LD low
-    PORTE |= 1 << PORTE6;// turing SH/LD high
-    SPDR = 0; // give the bargraph garabage
 
-    data = SPDR;
-    while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+
+
+    // // spi 
+    // PORTE &= ~(1 << PORTE6); // turning SH/LD low
+    // PORTE |= 1 << PORTE6;// turing SH/LD high
+
+    // SPDR = 0; // give the bargraph garbage
+    // data = SPDR; // get the value of the encoder
+
+    // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
     
-    PORTD |= 1 << PORTD3; // turning on clk_inh
-    PORTD &= ~(1 << PORTD3); // turning off clk_inh
+    // PORTD |= 1 << PORTD3; // turning on clk_inh
+    // PORTD &= ~(1 << PORTD3); // turning off clk_inh
 
-    barGraph();
+
+    // uint8_t enc1 = encoderRead(data, 0);
+    // uint8_t enc2 = encoderRead(data, 1);
+
+    // barGraph();
 
     // enocoder
+
+
+    // test block start
+    // PORTE &= ~(1 << PORTE6); // turning SH/LD low
+    // PORTE |= 1 << PORTE6;// turing SH/LD high
+
+    // SPDR = 0; // give the bargraph garbage
+    
+    // while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
+    
+    // uint8_t datas = SPDR; // get the value of the encoder
+    // PORTD |= 1 << PORTD3; // turning on clk_inh
+    // PORTD &= ~(1 << PORTD3); // turning off clk_inh
+
+    // test block end
+
+    // uint8_t enc1 = encoder_chk(data & 0b00000011);
+    // uint8_t enc2 = encoder_chk(data >> 2);
+
     uint8_t enc1 = encoderRead(data, 0);
     uint8_t enc2 = encoderRead(data, 1);
 
-    // if((enc1 == 1 && incDec2 == 1) || (enc2 == 1 && incDec2 == 1) ){
-    //     current_num += 2;
-    // }
-    // if((enc1 == 0 && incDec2 == 1) || (enc2 == 0 && incDec2 == 1)){
-    //     current_num -= 2;
-    // }
-    // if((enc1 == 1 && incDec4 == 1) || (enc2 == 1 && incDec4 == 1)){
-    //     current_num += 4;
-    // }
-    // if((enc1 == 0 && incDec4 == 1) || (enc2 == 0 && incDec4 == 1)){
-    //     current_num -= 4;
-    // }
 
- 
 
 
 }
@@ -343,14 +412,16 @@ uint8_t encoderRead(uint8_t data, uint8_t knob){
 
     // check for encoder
     static uint8_t old_state[4] = {0xff,0xff,0xff,0xff};
-    static uint8_t new_A = -1;
-    static uint8_t new_B = -1;
+    uint8_t new_A = -1;
+    uint8_t new_B = -1;
     static uint8_t count = 0; 
-    uint8_t return_val, a, b; 
+    uint8_t return_val, a, b, a_index, b_index; 
 
     a = (knob == 0) ? 1 : 4; // where the position of a is
     b = (knob == 0) ? 2 : 8; // where the position of b is
 
+    a_index = (knob == 0) ? 0 : 2;
+    b_index = (knob == 0) ? 1 : 3;
     
     new_A = (data & a) ? 1 : 0; // most LSB
     new_B = (data & b) ? 1 : 0; // 2nd LSB
@@ -358,9 +429,9 @@ uint8_t encoderRead(uint8_t data, uint8_t knob){
 
     return_val = -1; // default return value, no change
 
-    if ((new_A != old_state[knob]) || (new_B != old_state[knob + 1])){ // if change occured
+    if ((new_A != old_state[a_index]) || (new_B != old_state[b_index])){ // if change occured
         if((new_A == 0) && (new_B == 0)){
-            if (old_state[knob] == 1){
+            if (old_state[a_index] == 1){
                 count++;
             }
             else{
@@ -368,7 +439,7 @@ uint8_t encoderRead(uint8_t data, uint8_t knob){
             }
         }
         else if ((new_A == 0) && (new_B == 1)){
-            if (old_state[knob] == 0){
+            if (old_state[a_index] == 0){
                 count++;
             }
             else{
@@ -376,7 +447,7 @@ uint8_t encoderRead(uint8_t data, uint8_t knob){
             }
         }
         else if ((new_A == 1) && (new_B == 1)){ // detent position
-            if (old_state[knob] == 0){ // one direction 
+            if (old_state[a_index] == 0){ // one direction 
                 if (count == 3){
                     return_val = 0;
                     if(incDec2 == 1){
@@ -402,7 +473,7 @@ uint8_t encoderRead(uint8_t data, uint8_t knob){
             count = 0; // count is always reset in detent position
         }
         else if ((new_A == 1) && (new_B == 0)){
-            if (old_state[knob] == 1){
+            if (old_state[a_index] == 1){
                 count++;
             }
             else{ 
@@ -410,8 +481,8 @@ uint8_t encoderRead(uint8_t data, uint8_t knob){
             }
         }
 
-        old_state[knob] = new_A; // save what are now old values
-        old_state[knob + 1] = new_B;
+        old_state[a_index] = new_A; // save what are now old values
+        old_state[b_index] = new_B;
 
     } // if changed occured
     // if return value is still -1 then nothing happen
@@ -422,6 +493,7 @@ void barGraph(){
     
 
     SPDR = barGraphDisplay;
+    // SPDR = data;
     // barGraphOutput = display_mode;               //send to display 
     while (bit_is_clear(SPSR,SPIF)){}               //wait till data sent out (while loop)
     PORTD |= (1 << PORTD2);          //HC595 output reg - rising edge...
@@ -429,3 +501,26 @@ void barGraph(){
 
 
 }
+
+int8_t encoder_chk(uint8_t encoder_var){
+    // A and B are in bits 0 and 1
+    static uint16_t state = {0}; // holds bits from encoder
+    uint8_t a_pin, b_pin;        // encoder pin states
+
+    // a_pin and b_pin are asserted TRUE when low
+    a_pin = ((encoder_var & 0x01) == 0) ? 0 : 1;
+    b_pin = ((encoder_var & 0x02) == 0) ? 0 : 1;
+
+    // update shift using only the A pin
+    state = (state << 1) | a_pin | 0xE0;
+
+    // check for falling edge on A pin
+    // if it did, then B pin state indicates direction
+    // of rotation. Return 1 for CW, 0 for CCW
+    if (state == 0xF0){
+        return (b_pin) ? 1 : 0;
+    }
+    else 
+        return -1; // no movement detected
+
+} // encoder_chk
