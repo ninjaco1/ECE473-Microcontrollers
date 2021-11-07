@@ -1,0 +1,232 @@
+
+heartbeat_skel.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000028  00800100  00000160  000001f4  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         00000160  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          00000001  00800128  00800128  0000021c  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  0000021c  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000024c  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000028  00000000  00000000  00000288  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00000867  00000000  00000000  000002b0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 000007b8  00000000  00000000  00000b17  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   000000f9  00000000  00000000  000012cf  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000058  00000000  00000000  000013c8  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    00000385  00000000  00000000  00001420  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    00000070  00000000  00000000  000017a5  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000018  00000000  00000000  00001815  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 46 00 	jmp	0x8c	; 0x8c <__ctors_end>
+   4:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+   8:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+   c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  10:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  14:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  18:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  1c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  20:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  24:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  28:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  2c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  30:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  34:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  38:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  3c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  40:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  44:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  48:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  4c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  50:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  54:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  58:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  5c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  60:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  64:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  68:	0c 94 67 00 	jmp	0xce	; 0xce <__vector_26>
+  6c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  70:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  74:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  78:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  7c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  80:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  84:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  88:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+
+0000008c <__ctors_end>:
+  8c:	11 24       	eor	r1, r1
+  8e:	1f be       	out	0x3f, r1	; 63
+  90:	cf ef       	ldi	r28, 0xFF	; 255
+  92:	d0 e1       	ldi	r29, 0x10	; 16
+  94:	de bf       	out	0x3e, r29	; 62
+  96:	cd bf       	out	0x3d, r28	; 61
+
+00000098 <__do_copy_data>:
+  98:	11 e0       	ldi	r17, 0x01	; 1
+  9a:	a0 e0       	ldi	r26, 0x00	; 0
+  9c:	b1 e0       	ldi	r27, 0x01	; 1
+  9e:	e0 e6       	ldi	r30, 0x60	; 96
+  a0:	f1 e0       	ldi	r31, 0x01	; 1
+  a2:	00 e0       	ldi	r16, 0x00	; 0
+  a4:	0b bf       	out	0x3b, r16	; 59
+  a6:	02 c0       	rjmp	.+4      	; 0xac <__do_copy_data+0x14>
+  a8:	07 90       	elpm	r0, Z+
+  aa:	0d 92       	st	X+, r0
+  ac:	a8 32       	cpi	r26, 0x28	; 40
+  ae:	b1 07       	cpc	r27, r17
+  b0:	d9 f7       	brne	.-10     	; 0xa8 <__do_copy_data+0x10>
+
+000000b2 <__do_clear_bss>:
+  b2:	21 e0       	ldi	r18, 0x01	; 1
+  b4:	a8 e2       	ldi	r26, 0x28	; 40
+  b6:	b1 e0       	ldi	r27, 0x01	; 1
+  b8:	01 c0       	rjmp	.+2      	; 0xbc <.do_clear_bss_start>
+
+000000ba <.do_clear_bss_loop>:
+  ba:	1d 92       	st	X+, r1
+
+000000bc <.do_clear_bss_start>:
+  bc:	a9 32       	cpi	r26, 0x29	; 41
+  be:	b2 07       	cpc	r27, r18
+  c0:	e1 f7       	brne	.-8      	; 0xba <.do_clear_bss_loop>
+  c2:	0e 94 94 00 	call	0x128	; 0x128 <main>
+  c6:	0c 94 ae 00 	jmp	0x15c	; 0x15c <_exit>
+
+000000ca <__bad_interrupt>:
+  ca:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+000000ce <__vector_26>:
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+uint16_t brightness[20] = {0x0000, 0x0ccc, 0x1998, 0x2664, 0x3330, 0x3ffc, 0x4cc8, 0x5994, 0x6660, 0x732c, 0x7ff8, 0x8cc4, 0x9990, 0x865c, 0xb328, 0xbff4, 0xccc0, 0xd98c, 0xe658, 0xf324, 0xf000};
+
+ISR(TIMER3_COMPA_vect) {
+  ce:	1f 92       	push	r1
+  d0:	0f 92       	push	r0
+  d2:	0f b6       	in	r0, 0x3f	; 63
+  d4:	0f 92       	push	r0
+  d6:	11 24       	eor	r1, r1
+  d8:	0b b6       	in	r0, 0x3b	; 59
+  da:	0f 92       	push	r0
+  dc:	2f 93       	push	r18
+  de:	3f 93       	push	r19
+  e0:	8f 93       	push	r24
+  e2:	ef 93       	push	r30
+  e4:	ff 93       	push	r31
+  static uint8_t index=0;  //steps through the array 
+  //PORTB |= 1 << PORTB5;
+  if (index == 20){ 
+  e6:	80 91 28 01 	lds	r24, 0x0128	; 0x800128 <__data_end>
+  ea:	84 31       	cpi	r24, 0x14	; 20
+  ec:	c9 f0       	breq	.+50     	; 0x120 <__vector_26+0x52>
+  ee:	e8 2f       	mov	r30, r24
+  f0:	f0 e0       	ldi	r31, 0x00	; 0
+  f2:	8f 5f       	subi	r24, 0xFF	; 255
+    //PORTB &= 0 << PORTB5;
+    index = 0;
+  }  //set bounds on index
+  OCR1A = brightness[index];  //sset OCR1A to new value
+  f4:	ee 0f       	add	r30, r30
+  f6:	ff 1f       	adc	r31, r31
+  f8:	e0 50       	subi	r30, 0x00	; 0
+  fa:	ff 4f       	sbci	r31, 0xFF	; 255
+  fc:	20 81       	ld	r18, Z
+  fe:	31 81       	ldd	r19, Z+1	; 0x01
+ 100:	3b bd       	out	0x2b, r19	; 43
+ 102:	2a bd       	out	0x2a, r18	; 42
+  index++;
+ 104:	80 93 28 01 	sts	0x0128, r24	; 0x800128 <__data_end>
+
+}
+ 108:	ff 91       	pop	r31
+ 10a:	ef 91       	pop	r30
+ 10c:	8f 91       	pop	r24
+ 10e:	3f 91       	pop	r19
+ 110:	2f 91       	pop	r18
+ 112:	0f 90       	pop	r0
+ 114:	0b be       	out	0x3b, r0	; 59
+ 116:	0f 90       	pop	r0
+ 118:	0f be       	out	0x3f, r0	; 63
+ 11a:	0f 90       	pop	r0
+ 11c:	1f 90       	pop	r1
+ 11e:	18 95       	reti
+ 120:	81 e0       	ldi	r24, 0x01	; 1
+ 122:	e0 e0       	ldi	r30, 0x00	; 0
+ 124:	f0 e0       	ldi	r31, 0x00	; 0
+ 126:	e6 cf       	rjmp	.-52     	; 0xf4 <__vector_26+0x26>
+
+00000128 <main>:
+
+int main() {
+  // setup TCNT1 in PWM mode 
+  //set PORTB bit 5 as the PWM output
+  DDRB   = 0x20;          
+ 128:	80 e2       	ldi	r24, 0x20	; 32
+ 12a:	87 bb       	out	0x17, r24	; 23
+  //fast PWM, set on match, clear at top, ICR1 holds value of TOP 
+  TCCR1A |=  (1 << COM1A1) | (1 << COM1A0) | (1 << WGM11) | (0 << WGM10);
+ 12c:	8f b5       	in	r24, 0x2f	; 47
+ 12e:	82 6c       	ori	r24, 0xC2	; 194
+ 130:	8f bd       	out	0x2f, r24	; 47
+  //use ICR1 as source for TOP, use clk/1
+  TCCR1B |=  (1 << ICES1) | (1 << WGM13) | (1 << WGM12) | (0 << CS12) | (0 << CS11) | (1 << CS10);
+ 132:	8e b5       	in	r24, 0x2e	; 46
+ 134:	89 65       	ori	r24, 0x59	; 89
+ 136:	8e bd       	out	0x2e, r24	; 46
+  //no forced compare 
+  //TCCR1C = (0 << FOC1A);
+  TCCR1C = 0x00;
+ 138:	10 92 7a 00 	sts	0x007A, r1	; 0x80007a <__TEXT_REGION_LENGTH__+0x7e007a>
+  //clear at 0xF000                               
+  ICR1  = 0xF000;
+ 13c:	80 e0       	ldi	r24, 0x00	; 0
+ 13e:	90 ef       	ldi	r25, 0xF0	; 240
+ 140:	97 bd       	out	0x27, r25	; 39
+ 142:	86 bd       	out	0x26, r24	; 38
+  
+// setup TCNT3 in normal mode to control the update rate 
+// heartbeat update frequency = (16,000,000)/(8 * 2^16) = 30 cycles/sec
+  //normal mode
+  TCCR3A = 0x00;
+ 144:	10 92 8b 00 	sts	0x008B, r1	; 0x80008b <__TEXT_REGION_LENGTH__+0x7e008b>
+  //use clk/8  (30hz)  
+  //TCCR3B |= (0 << CS12) | (1 << CS11) | (0 << CS10);
+  TCCR3B = 0b00000010;
+ 148:	82 e0       	ldi	r24, 0x02	; 2
+ 14a:	80 93 8a 00 	sts	0x008A, r24	; 0x80008a <__TEXT_REGION_LENGTH__+0x7e008a>
+  //no forced compare 
+  //TCCR3C |= (0 << FOC3A);
+  TCCR3C = 0x00;
+ 14e:	10 92 8c 00 	sts	0x008C, r1	; 0x80008c <__TEXT_REGION_LENGTH__+0x7e008c>
+  //enable timer 3 interrupt on TOV
+  //ETIMSK |= (1 << TOIE3);
+  ETIMSK = 0b00010000;
+ 152:	80 e1       	ldi	r24, 0x10	; 16
+ 154:	80 93 7d 00 	sts	0x007D, r24	; 0x80007d <__TEXT_REGION_LENGTH__+0x7e007d>
+
+  sei();  //set GIE
+ 158:	78 94       	sei
+ 15a:	ff cf       	rjmp	.-2      	; 0x15a <main+0x32>
+
+0000015c <_exit>:
+ 15c:	f8 94       	cli
+
+0000015e <__stop_program>:
+ 15e:	ff cf       	rjmp	.-2      	; 0x15e <__stop_program>

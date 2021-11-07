@@ -73,10 +73,16 @@ uint16_t current_num = 0;
 // what value to display
 static uint8_t barGraphDisplay = 0;
 
+// flags
 // determine if we are increment or decrement mode
 static uint8_t incDec2 = 0;
 static uint8_t incDec4 = 0;
 static uint8_t data = 0;
+static uint8_t colonDisplay = 0;
+
+// clock
+static uint8_t minutes = 0;
+static uint8_t hours = 0;
 
 // lab 2 functions
 int8_t chk_buttons(int button); // check what button is being pressed
@@ -86,12 +92,15 @@ void clearDecoder();
 void set_dec_to_7seg();
 void set_decoder();
 
-// lab 3 fucntions
+// lab 3 functions
 void barGraph();
 uint8_t encoderRead(uint8_t data, uint8_t knob);
 void spi_init(void);
 void tcnt0_init(void);
 ISR(TIMER0_OVF_vect);
+
+// lab4 functions
+void segclock();
 
 int main()
 {
@@ -129,10 +138,11 @@ int main()
 
         barGraph();
 
-        if (current_num > 1023)
-            current_num -= 1024;
+        // if (current_num > 1023)
+        //     current_num -= 1024;
 
-        segsum(current_num); // set each digit
+        // segsum(current_num); // set each digit
+        segclock(); // set each digit for the clock
         setDigit();         // setting the digit on display
     } //while
     return 0;
@@ -217,7 +227,8 @@ void segsum(uint16_t sum)
 
     segment_data[0] = sum % 10;
     segment_data[1] = (sum % 100) / 10;
-    segment_data[2] = 11; // doesn't turn on the colon, blank
+    // segment_data[2] = 11; // doesn't turn on the colon, blank
+    segment_data[2] = (colonDisplay == 1) ? 10 : 11;
     segment_data[3] = (sum % 1000) / 100;
     segment_data[4] = sum / 1000;
 
@@ -235,6 +246,20 @@ void segsum(uint16_t sum)
     }
 
 } //segment_sum
+
+//***********************************************************************************
+//                                segclock
+//takes two 8-bit binary values(hours and minutes) and places the appropriate 
+//equivalent 4 digit.
+//BCD segment code in the array segment_data for display.
+//array is loaded at exit as:  |digit3|digit2|colon|digit1|digit0|
+void segclock(){
+    segment_data[0] = minutes % 10;
+    segment_data[1] = minutes / 10;
+    segment_data[2] = (colonDisplay == 1) ? 10 : 11;
+    segment_data[3] = hours % 10;
+    segment_data[4] = hours / 10;
+}
 
 
 /***************************************************************/
@@ -292,7 +317,7 @@ void tcnt0_init(void){
 /******************************************************************************/
 ISR(TIMER0_OVF_vect){
     uint16_t i;
-    
+    static uint8_t count = 0, seconds;
     //insert loop demake lay for debounce
 
     // checking the push buttons 
@@ -349,6 +374,24 @@ ISR(TIMER0_OVF_vect){
             current_num -= 4;
         if (enc1 == 1 || enc2 == 1)
             current_num += 4;
+    }
+
+    // add a counter to determine one second 
+    count++;
+    if ((count % 128) == 0){
+        // 1 second has past
+        colonDisplay ^= 0x1; // blinking
+        seconds++;
+        if ((seconds % 60) == 0){
+            minutes++;
+            seconds = 0;
+            if ((minutes % 60) == 0){
+                hours++;
+                minutes = 0;
+                if (hours % 24 == 0)
+                    hours = 0;
+            }
+        }
     }
     
 }

@@ -1,0 +1,6 @@
+#!/bin/bash
+wget http://www.ece.orst.edu/~traylor/ece473/inclass_exercises/twi/thermometer/Makefile                   
+wget http://www.ece.orst.edu/~traylor/ece473/inclass_exercises/twi/thermometer/thermo3_skel.c
+wget http://www.ece.orst.edu/~traylor/ece473/inclass_exercises/twi/thermometer/hd44780.*                  
+wget http://www.ece.orst.edu/~traylor/ece473/inclass_exercises/twi/thermometer/twi_master.*
+wget http://www.ece.orst.edu/~traylor/ece473/inclass_exercises/twi/thermometer/lm73_functions.*           

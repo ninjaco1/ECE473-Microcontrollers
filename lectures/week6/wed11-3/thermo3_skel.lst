@@ -1,0 +1,2757 @@
+
+thermo3_skel.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000000  00800100  00000e12  00000ea6  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         00000e12  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          0000003c  00800100  00800100  00000ea6  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000ea6  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000ed8  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000080  00000000  00000000  00000f14  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00001fdd  00000000  00000000  00000f94  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 00000d6e  00000000  00000000  00002f71  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   00000c8d  00000000  00000000  00003cdf  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  000002dc  00000000  00000000  0000496c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    0000063c  00000000  00000000  00004c48  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    00001701  00000000  00000000  00005284  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000098  00000000  00000000  00006985  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 97 00 	jmp	0x12e	; 0x12e <__ctors_end>
+   4:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+   8:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+   c:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  10:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  14:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  18:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  1c:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  20:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  24:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  28:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  2c:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  30:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  34:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  38:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  3c:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  40:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  44:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  48:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  4c:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  50:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  54:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  58:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  5c:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  60:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  64:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  68:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  6c:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  70:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  74:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  78:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  7c:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  80:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  84:	0c 94 5c 05 	jmp	0xab8	; 0xab8 <__vector_33>
+  88:	0c 94 a9 00 	jmp	0x152	; 0x152 <__bad_interrupt>
+  8c:	9d 05       	cpc	r25, r13
+  8e:	74 05       	cpc	r23, r4
+  90:	74 05       	cpc	r23, r4
+  92:	74 05       	cpc	r23, r4
+  94:	74 05       	cpc	r23, r4
+  96:	74 05       	cpc	r23, r4
+  98:	74 05       	cpc	r23, r4
+  9a:	74 05       	cpc	r23, r4
+  9c:	9d 05       	cpc	r25, r13
+  9e:	74 05       	cpc	r23, r4
+  a0:	74 05       	cpc	r23, r4
+  a2:	74 05       	cpc	r23, r4
+  a4:	74 05       	cpc	r23, r4
+  a6:	74 05       	cpc	r23, r4
+  a8:	74 05       	cpc	r23, r4
+  aa:	74 05       	cpc	r23, r4
+  ac:	a7 05       	cpc	r26, r7
+  ae:	74 05       	cpc	r23, r4
+  b0:	74 05       	cpc	r23, r4
+  b2:	74 05       	cpc	r23, r4
+  b4:	74 05       	cpc	r23, r4
+  b6:	74 05       	cpc	r23, r4
+  b8:	74 05       	cpc	r23, r4
+  ba:	74 05       	cpc	r23, r4
+  bc:	74 05       	cpc	r23, r4
+  be:	74 05       	cpc	r23, r4
+  c0:	74 05       	cpc	r23, r4
+  c2:	74 05       	cpc	r23, r4
+  c4:	74 05       	cpc	r23, r4
+  c6:	74 05       	cpc	r23, r4
+  c8:	74 05       	cpc	r23, r4
+  ca:	74 05       	cpc	r23, r4
+  cc:	a7 05       	cpc	r26, r7
+  ce:	74 05       	cpc	r23, r4
+  d0:	74 05       	cpc	r23, r4
+  d2:	74 05       	cpc	r23, r4
+  d4:	74 05       	cpc	r23, r4
+  d6:	74 05       	cpc	r23, r4
+  d8:	74 05       	cpc	r23, r4
+  da:	74 05       	cpc	r23, r4
+  dc:	74 05       	cpc	r23, r4
+  de:	74 05       	cpc	r23, r4
+  e0:	74 05       	cpc	r23, r4
+  e2:	74 05       	cpc	r23, r4
+  e4:	74 05       	cpc	r23, r4
+  e6:	74 05       	cpc	r23, r4
+  e8:	74 05       	cpc	r23, r4
+  ea:	74 05       	cpc	r23, r4
+  ec:	be 05       	cpc	r27, r14
+  ee:	74 05       	cpc	r23, r4
+  f0:	74 05       	cpc	r23, r4
+  f2:	74 05       	cpc	r23, r4
+  f4:	74 05       	cpc	r23, r4
+  f6:	74 05       	cpc	r23, r4
+  f8:	74 05       	cpc	r23, r4
+  fa:	74 05       	cpc	r23, r4
+  fc:	c2 05       	cpc	r28, r2
+  fe:	74 05       	cpc	r23, r4
+ 100:	74 05       	cpc	r23, r4
+ 102:	74 05       	cpc	r23, r4
+ 104:	74 05       	cpc	r23, r4
+ 106:	74 05       	cpc	r23, r4
+ 108:	74 05       	cpc	r23, r4
+ 10a:	74 05       	cpc	r23, r4
+ 10c:	74 05       	cpc	r23, r4
+ 10e:	74 05       	cpc	r23, r4
+ 110:	74 05       	cpc	r23, r4
+ 112:	74 05       	cpc	r23, r4
+ 114:	74 05       	cpc	r23, r4
+ 116:	74 05       	cpc	r23, r4
+ 118:	74 05       	cpc	r23, r4
+ 11a:	74 05       	cpc	r23, r4
+ 11c:	d0 05       	cpc	r29, r0
+ 11e:	74 05       	cpc	r23, r4
+ 120:	74 05       	cpc	r23, r4
+ 122:	74 05       	cpc	r23, r4
+ 124:	74 05       	cpc	r23, r4
+ 126:	74 05       	cpc	r23, r4
+ 128:	74 05       	cpc	r23, r4
+ 12a:	74 05       	cpc	r23, r4
+ 12c:	8e 05       	cpc	r24, r14
+
+0000012e <__ctors_end>:
+ 12e:	11 24       	eor	r1, r1
+ 130:	1f be       	out	0x3f, r1	; 63
+ 132:	cf ef       	ldi	r28, 0xFF	; 255
+ 134:	d0 e1       	ldi	r29, 0x10	; 16
+ 136:	de bf       	out	0x3e, r29	; 62
+ 138:	cd bf       	out	0x3d, r28	; 61
+
+0000013a <__do_clear_bss>:
+ 13a:	21 e0       	ldi	r18, 0x01	; 1
+ 13c:	a0 e0       	ldi	r26, 0x00	; 0
+ 13e:	b1 e0       	ldi	r27, 0x01	; 1
+ 140:	01 c0       	rjmp	.+2      	; 0x144 <.do_clear_bss_start>
+
+00000142 <.do_clear_bss_loop>:
+ 142:	1d 92       	st	X+, r1
+
+00000144 <.do_clear_bss_start>:
+ 144:	ac 33       	cpi	r26, 0x3C	; 60
+ 146:	b2 07       	cpc	r27, r18
+ 148:	e1 f7       	brne	.-8      	; 0x142 <.do_clear_bss_loop>
+ 14a:	0e 94 1a 06 	call	0xc34	; 0xc34 <main>
+ 14e:	0c 94 07 07 	jmp	0xe0e	; 0xe0e <_exit>
+
+00000152 <__bad_interrupt>:
+ 152:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000156 <spi_init>:
+// external device specific initalizations.
+//********************************************************************
+void
+spi_init(void)
+{
+  DDRB |= 0x07; //Turn on SS, MOSI, SCLK
+ 156:	87 b3       	in	r24, 0x17	; 23
+ 158:	87 60       	ori	r24, 0x07	; 7
+ 15a:	87 bb       	out	0x17, r24	; 23
+  //mstr mode, sck=clk/2, cycle 1/2 phase, low polarity, MSB 1st,
+  //no interrupts, enable SPI, clk low initially, rising edge sample
+  SPCR = (1 << SPE) | (1 << MSTR);
+ 15c:	80 e5       	ldi	r24, 0x50	; 80
+ 15e:	8d b9       	out	0x0d, r24	; 13
+  SPSR = (1 << SPI2X); //SPI at 2x speed (8 MHz)
+ 160:	81 e0       	ldi	r24, 0x01	; 1
+ 162:	8e b9       	out	0x0e, r24	; 14
+ 164:	08 95       	ret
+
+00000166 <send_lcd>:
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 166:	91 e0       	ldi	r25, 0x01	; 1
+ 168:	81 11       	cpse	r24, r1
+ 16a:	01 c0       	rjmp	.+2      	; 0x16e <send_lcd+0x8>
+ 16c:	90 e0       	ldi	r25, 0x00	; 0
+ 16e:	9f b9       	out	0x0f, r25	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 170:	77 9b       	sbis	0x0e, 7	; 14
+ 172:	fe cf       	rjmp	.-4      	; 0x170 <send_lcd+0xa>
+  SPDR = byte;                        //send payload
+ 174:	6f b9       	out	0x0f, r22	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 176:	77 9b       	sbis	0x0e, 7	; 14
+ 178:	fe cf       	rjmp	.-4      	; 0x176 <send_lcd+0x10>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 17a:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 17e:	88 60       	ori	r24, 0x08	; 8
+ 180:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 184:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 188:	87 7f       	andi	r24, 0xF7	; 247
+ 18a:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 18e:	08 95       	ret
+
+00000190 <refresh_lcd>:
+//
+void refresh_lcd(char lcd_string_array[]) {
+
+  static uint8_t i=0;           // index into string array 
+
+ send_lcd(CHAR_BYTE,lcd_string_array[i]);
+ 190:	20 91 00 01 	lds	r18, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 194:	82 0f       	add	r24, r18
+ 196:	91 1d       	adc	r25, r1
+ 198:	fc 01       	movw	r30, r24
+ 19a:	80 81       	ld	r24, Z
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 19c:	91 e0       	ldi	r25, 0x01	; 1
+ 19e:	9f b9       	out	0x0f, r25	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 1a0:	77 9b       	sbis	0x0e, 7	; 14
+ 1a2:	fe cf       	rjmp	.-4      	; 0x1a0 <refresh_lcd+0x10>
+  SPDR = byte;                        //send payload
+ 1a4:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 1a6:	77 9b       	sbis	0x0e, 7	; 14
+ 1a8:	fe cf       	rjmp	.-4      	; 0x1a6 <refresh_lcd+0x16>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 1aa:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 1ae:	88 60       	ori	r24, 0x08	; 8
+ 1b0:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 1b4:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 1b8:	87 7f       	andi	r24, 0xF7	; 247
+ 1ba:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+void refresh_lcd(char lcd_string_array[]) {
+
+  static uint8_t i=0;           // index into string array 
+
+ send_lcd(CHAR_BYTE,lcd_string_array[i]);
+ i++;   //increment to next character
+ 1be:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 1c2:	8f 5f       	subi	r24, 0xFF	; 255
+ 1c4:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+ //delays are inserted to allow character to be written before moving
+ //the cursor to the next line.
+ if(i == 16){_delay_us(40); line2_col1();      } //goto line 2, 1st char 
+ 1c8:	80 31       	cpi	r24, 0x10	; 16
+ 1ca:	d9 f0       	breq	.+54     	; 0x202 <refresh_lcd+0x72>
+ if(i == 32){_delay_us(40); line1_col1(); i=0; } //goto line 1, 1st char 
+ 1cc:	80 32       	cpi	r24, 0x20	; 32
+ 1ce:	09 f0       	breq	.+2      	; 0x1d2 <refresh_lcd+0x42>
+ 1d0:	08 95       	ret
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 1d2:	85 ed       	ldi	r24, 0xD5	; 213
+ 1d4:	8a 95       	dec	r24
+ 1d6:	f1 f7       	brne	.-4      	; 0x1d4 <refresh_lcd+0x44>
+ 1d8:	00 00       	nop
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 1da:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 1dc:	77 9b       	sbis	0x0e, 7	; 14
+ 1de:	fe cf       	rjmp	.-4      	; 0x1dc <refresh_lcd+0x4c>
+  SPDR = byte;                        //send payload
+ 1e0:	80 e8       	ldi	r24, 0x80	; 128
+ 1e2:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 1e4:	77 9b       	sbis	0x0e, 7	; 14
+ 1e6:	fe cf       	rjmp	.-4      	; 0x1e4 <refresh_lcd+0x54>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 1e8:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 1ec:	88 60       	ori	r24, 0x08	; 8
+ 1ee:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 1f2:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 1f6:	87 7f       	andi	r24, 0xF7	; 247
+ 1f8:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ send_lcd(CHAR_BYTE,lcd_string_array[i]);
+ i++;   //increment to next character
+ //delays are inserted to allow character to be written before moving
+ //the cursor to the next line.
+ if(i == 16){_delay_us(40); line2_col1();      } //goto line 2, 1st char 
+ if(i == 32){_delay_us(40); line1_col1(); i=0; } //goto line 1, 1st char 
+ 1fc:	10 92 00 01 	sts	0x0100, r1	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 200:	08 95       	ret
+ 202:	f5 ed       	ldi	r31, 0xD5	; 213
+ 204:	fa 95       	dec	r31
+ 206:	f1 f7       	brne	.-4      	; 0x204 <refresh_lcd+0x74>
+ 208:	00 00       	nop
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 20a:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 20c:	77 9b       	sbis	0x0e, 7	; 14
+ 20e:	fe cf       	rjmp	.-4      	; 0x20c <refresh_lcd+0x7c>
+  SPDR = byte;                        //send payload
+ 210:	80 ec       	ldi	r24, 0xC0	; 192
+ 212:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 214:	77 9b       	sbis	0x0e, 7	; 14
+ 216:	fe cf       	rjmp	.-4      	; 0x214 <refresh_lcd+0x84>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 218:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 21c:	88 60       	ori	r24, 0x08	; 8
+ 21e:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 222:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 226:	87 7f       	andi	r24, 0xF7	; 247
+ 228:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 22c:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 230:	cd cf       	rjmp	.-102    	; 0x1cc <refresh_lcd+0x3c>
+
+00000232 <set_custom_character>:
+//address, such as send_lcd(CHAR_BYTE, 0x01, 1) or it can be insteretd into a string 
+//via a forward slash escape as in string2lcd("this is my music note \1")
+
+void set_custom_character(uint8_t data[], uint8_t address){
+    uint8_t i;
+    send_lcd(CMD_BYTE, 0x40 + (address << 3)); _delay_us(40);  //only needs 37uS
+ 232:	66 0f       	add	r22, r22
+ 234:	66 0f       	add	r22, r22
+ 236:	66 0f       	add	r22, r22
+ 238:	60 5c       	subi	r22, 0xC0	; 192
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 23a:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 23c:	77 9b       	sbis	0x0e, 7	; 14
+ 23e:	fe cf       	rjmp	.-4      	; 0x23c <set_custom_character+0xa>
+  SPDR = byte;                        //send payload
+ 240:	6f b9       	out	0x0f, r22	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 242:	77 9b       	sbis	0x0e, 7	; 14
+ 244:	fe cf       	rjmp	.-4      	; 0x242 <set_custom_character+0x10>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 246:	20 91 62 00 	lds	r18, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 24a:	28 60       	ori	r18, 0x08	; 8
+ 24c:	20 93 62 00 	sts	0x0062, r18	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 250:	20 91 62 00 	lds	r18, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 254:	27 7f       	andi	r18, 0xF7	; 247
+ 256:	20 93 62 00 	sts	0x0062, r18	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 25a:	25 ed       	ldi	r18, 0xD5	; 213
+ 25c:	2a 95       	dec	r18
+ 25e:	f1 f7       	brne	.-4      	; 0x25c <set_custom_character+0x2a>
+ 260:	00 00       	nop
+ 262:	fc 01       	movw	r30, r24
+ 264:	9c 01       	movw	r18, r24
+ 266:	28 5f       	subi	r18, 0xF8	; 248
+ 268:	3f 4f       	sbci	r19, 0xFF	; 255
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 26a:	91 e0       	ldi	r25, 0x01	; 1
+
+void set_custom_character(uint8_t data[], uint8_t address){
+    uint8_t i;
+    send_lcd(CMD_BYTE, 0x40 + (address << 3)); _delay_us(40);  //only needs 37uS
+    for(i=0; i<8; i++){
+      send_lcd(CHAR_BYTE, data[i]); _delay_us(40); //each char byte takes 37us to execute
+ 26c:	81 91       	ld	r24, Z+
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 26e:	9f b9       	out	0x0f, r25	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 270:	77 9b       	sbis	0x0e, 7	; 14
+ 272:	fe cf       	rjmp	.-4      	; 0x270 <set_custom_character+0x3e>
+  SPDR = byte;                        //send payload
+ 274:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 276:	77 9b       	sbis	0x0e, 7	; 14
+ 278:	fe cf       	rjmp	.-4      	; 0x276 <set_custom_character+0x44>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 27a:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 27e:	88 60       	ori	r24, 0x08	; 8
+ 280:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 284:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 288:	87 7f       	andi	r24, 0xF7	; 247
+ 28a:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 28e:	85 ed       	ldi	r24, 0xD5	; 213
+ 290:	8a 95       	dec	r24
+ 292:	f1 f7       	brne	.-4      	; 0x290 <set_custom_character+0x5e>
+ 294:	00 00       	nop
+//via a forward slash escape as in string2lcd("this is my music note \1")
+
+void set_custom_character(uint8_t data[], uint8_t address){
+    uint8_t i;
+    send_lcd(CMD_BYTE, 0x40 + (address << 3)); _delay_us(40);  //only needs 37uS
+    for(i=0; i<8; i++){
+ 296:	e2 17       	cp	r30, r18
+ 298:	f3 07       	cpc	r31, r19
+ 29a:	41 f7       	brne	.-48     	; 0x26c <set_custom_character+0x3a>
+      send_lcd(CHAR_BYTE, data[i]); _delay_us(40); //each char byte takes 37us to execute
+    }
+}
+ 29c:	08 95       	ret
+
+0000029e <set_cursor>:
+//                          set_cursor 
+//
+//Sets the cursor to an arbitrary potition on the screen, row is either 1 or 2
+//col is a number form 0-15, counting from left to right
+void set_cursor(uint8_t row, uint8_t col){
+    send_lcd(CMD_BYTE, 0x80 + col + ((row-1)*0x40));
+ 29e:	90 e4       	ldi	r25, 0x40	; 64
+ 2a0:	89 9f       	mul	r24, r25
+ 2a2:	60 0d       	add	r22, r0
+ 2a4:	11 24       	eor	r1, r1
+ 2a6:	60 5c       	subi	r22, 0xC0	; 192
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 2a8:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 2aa:	77 9b       	sbis	0x0e, 7	; 14
+ 2ac:	fe cf       	rjmp	.-4      	; 0x2aa <set_cursor+0xc>
+  SPDR = byte;                        //send payload
+ 2ae:	6f b9       	out	0x0f, r22	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 2b0:	77 9b       	sbis	0x0e, 7	; 14
+ 2b2:	fe cf       	rjmp	.-4      	; 0x2b0 <set_cursor+0x12>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 2b4:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 2b8:	88 60       	ori	r24, 0x08	; 8
+ 2ba:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 2be:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 2c2:	87 7f       	andi	r24, 0xF7	; 247
+ 2c4:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 2c8:	08 95       	ret
+
+000002ca <uint2lcd>:
+//not displayed.  
+//TODO: optimize by removing the mod operators
+//TODO: Should be renamed uint8_2lcd(). Also, implement a uint16_2lcd() function
+
+void uint2lcd(uint8_t number){
+    if  (number == 0)  {send_lcd(CHAR_BYTE, 0x30                ); }
+ 2ca:	81 11       	cpse	r24, r1
+ 2cc:	13 c0       	rjmp	.+38     	; 0x2f4 <uint2lcd+0x2a>
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 2ce:	81 e0       	ldi	r24, 0x01	; 1
+ 2d0:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 2d2:	77 9b       	sbis	0x0e, 7	; 14
+ 2d4:	fe cf       	rjmp	.-4      	; 0x2d2 <uint2lcd+0x8>
+  SPDR = byte;                        //send payload
+ 2d6:	80 e3       	ldi	r24, 0x30	; 48
+ 2d8:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 2da:	77 9b       	sbis	0x0e, 7	; 14
+ 2dc:	fe cf       	rjmp	.-4      	; 0x2da <uint2lcd+0x10>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 2de:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 2e2:	88 60       	ori	r24, 0x08	; 8
+ 2e4:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 2e8:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 2ec:	87 7f       	andi	r24, 0xF7	; 247
+ 2ee:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 2f2:	08 95       	ret
+//TODO: Should be renamed uint8_2lcd(). Also, implement a uint16_2lcd() function
+
+void uint2lcd(uint8_t number){
+    if  (number == 0)  {send_lcd(CHAR_BYTE, 0x30                ); }
+    else{
+      if(number >= 100){send_lcd(CHAR_BYTE, 0x30+number/100     ); }
+ 2f4:	84 36       	cpi	r24, 0x64	; 100
+ 2f6:	b0 f4       	brcc	.+44     	; 0x324 <uint2lcd+0x5a>
+      if(number >= 10) {send_lcd(CHAR_BYTE, 0x30+(number%100)/10); }
+ 2f8:	8a 30       	cpi	r24, 0x0A	; 10
+ 2fa:	60 f5       	brcc	.+88     	; 0x354 <uint2lcd+0x8a>
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 2fc:	91 e0       	ldi	r25, 0x01	; 1
+ 2fe:	9f b9       	out	0x0f, r25	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 300:	77 9b       	sbis	0x0e, 7	; 14
+ 302:	fe cf       	rjmp	.-4      	; 0x300 <uint2lcd+0x36>
+void uint2lcd(uint8_t number){
+    if  (number == 0)  {send_lcd(CHAR_BYTE, 0x30                ); }
+    else{
+      if(number >= 100){send_lcd(CHAR_BYTE, 0x30+number/100     ); }
+      if(number >= 10) {send_lcd(CHAR_BYTE, 0x30+(number%100)/10); }
+      if(number >= 1)  {send_lcd(CHAR_BYTE, 0x30+(number%10)    ); }
+ 304:	9d ec       	ldi	r25, 0xCD	; 205
+ 306:	89 9f       	mul	r24, r25
+ 308:	91 2d       	mov	r25, r1
+ 30a:	11 24       	eor	r1, r1
+ 30c:	96 95       	lsr	r25
+ 30e:	96 95       	lsr	r25
+ 310:	96 95       	lsr	r25
+ 312:	2a e0       	ldi	r18, 0x0A	; 10
+ 314:	92 9f       	mul	r25, r18
+ 316:	80 19       	sub	r24, r0
+ 318:	11 24       	eor	r1, r1
+ 31a:	80 5d       	subi	r24, 0xD0	; 208
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+  SPDR = byte;                        //send payload
+ 31c:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 31e:	77 9b       	sbis	0x0e, 7	; 14
+ 320:	fe cf       	rjmp	.-4      	; 0x31e <uint2lcd+0x54>
+ 322:	dd cf       	rjmp	.-70     	; 0x2de <uint2lcd+0x14>
+//TODO: Should be renamed uint8_2lcd(). Also, implement a uint16_2lcd() function
+
+void uint2lcd(uint8_t number){
+    if  (number == 0)  {send_lcd(CHAR_BYTE, 0x30                ); }
+    else{
+      if(number >= 100){send_lcd(CHAR_BYTE, 0x30+number/100     ); }
+ 324:	99 e2       	ldi	r25, 0x29	; 41
+ 326:	89 9f       	mul	r24, r25
+ 328:	91 2d       	mov	r25, r1
+ 32a:	11 24       	eor	r1, r1
+ 32c:	92 95       	swap	r25
+ 32e:	9f 70       	andi	r25, 0x0F	; 15
+ 330:	90 5d       	subi	r25, 0xD0	; 208
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 332:	21 e0       	ldi	r18, 0x01	; 1
+ 334:	2f b9       	out	0x0f, r18	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 336:	77 9b       	sbis	0x0e, 7	; 14
+ 338:	fe cf       	rjmp	.-4      	; 0x336 <uint2lcd+0x6c>
+  SPDR = byte;                        //send payload
+ 33a:	9f b9       	out	0x0f, r25	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 33c:	77 9b       	sbis	0x0e, 7	; 14
+ 33e:	fe cf       	rjmp	.-4      	; 0x33c <uint2lcd+0x72>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 340:	90 91 62 00 	lds	r25, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 344:	98 60       	ori	r25, 0x08	; 8
+ 346:	90 93 62 00 	sts	0x0062, r25	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 34a:	90 91 62 00 	lds	r25, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 34e:	97 7f       	andi	r25, 0xF7	; 247
+ 350:	90 93 62 00 	sts	0x0062, r25	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+
+void uint2lcd(uint8_t number){
+    if  (number == 0)  {send_lcd(CHAR_BYTE, 0x30                ); }
+    else{
+      if(number >= 100){send_lcd(CHAR_BYTE, 0x30+number/100     ); }
+      if(number >= 10) {send_lcd(CHAR_BYTE, 0x30+(number%100)/10); }
+ 354:	99 e2       	ldi	r25, 0x29	; 41
+ 356:	89 9f       	mul	r24, r25
+ 358:	91 2d       	mov	r25, r1
+ 35a:	11 24       	eor	r1, r1
+ 35c:	92 95       	swap	r25
+ 35e:	9f 70       	andi	r25, 0x0F	; 15
+ 360:	38 2f       	mov	r19, r24
+ 362:	24 e6       	ldi	r18, 0x64	; 100
+ 364:	92 9f       	mul	r25, r18
+ 366:	30 19       	sub	r19, r0
+ 368:	11 24       	eor	r1, r1
+ 36a:	2d ec       	ldi	r18, 0xCD	; 205
+ 36c:	32 9f       	mul	r19, r18
+ 36e:	91 2d       	mov	r25, r1
+ 370:	11 24       	eor	r1, r1
+ 372:	96 95       	lsr	r25
+ 374:	96 95       	lsr	r25
+ 376:	96 95       	lsr	r25
+ 378:	90 5d       	subi	r25, 0xD0	; 208
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 37a:	21 e0       	ldi	r18, 0x01	; 1
+ 37c:	2f b9       	out	0x0f, r18	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 37e:	77 9b       	sbis	0x0e, 7	; 14
+ 380:	fe cf       	rjmp	.-4      	; 0x37e <uint2lcd+0xb4>
+  SPDR = byte;                        //send payload
+ 382:	9f b9       	out	0x0f, r25	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 384:	77 9b       	sbis	0x0e, 7	; 14
+ 386:	fe cf       	rjmp	.-4      	; 0x384 <uint2lcd+0xba>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 388:	90 91 62 00 	lds	r25, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 38c:	98 60       	ori	r25, 0x08	; 8
+ 38e:	90 93 62 00 	sts	0x0062, r25	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 392:	90 91 62 00 	lds	r25, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 396:	97 7f       	andi	r25, 0xF7	; 247
+ 398:	90 93 62 00 	sts	0x0062, r25	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 39c:	af cf       	rjmp	.-162    	; 0x2fc <uint2lcd+0x32>
+
+0000039e <int2lcd>:
+//Takes a 8bit signed and displays it in base ten on the LCD. Leading 0's are 
+//not displayed.
+//
+void int2lcd(int8_t number){
+    //if < 0, print minus sign, then take 2's complement of number and display
+    if(number < 0){send_lcd(CHAR_BYTE, '-'); _delay_us(40); uint2lcd(~number+1);}  
+ 39e:	87 ff       	sbrs	r24, 7
+    else          {uint2lcd(number);                                            }
+ 3a0:	0c 94 65 01 	jmp	0x2ca	; 0x2ca <uint2lcd>
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 3a4:	91 e0       	ldi	r25, 0x01	; 1
+ 3a6:	9f b9       	out	0x0f, r25	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 3a8:	77 9b       	sbis	0x0e, 7	; 14
+ 3aa:	fe cf       	rjmp	.-4      	; 0x3a8 <int2lcd+0xa>
+  SPDR = byte;                        //send payload
+ 3ac:	9d e2       	ldi	r25, 0x2D	; 45
+ 3ae:	9f b9       	out	0x0f, r25	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 3b0:	77 9b       	sbis	0x0e, 7	; 14
+ 3b2:	fe cf       	rjmp	.-4      	; 0x3b0 <int2lcd+0x12>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 3b4:	90 91 62 00 	lds	r25, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 3b8:	98 60       	ori	r25, 0x08	; 8
+ 3ba:	90 93 62 00 	sts	0x0062, r25	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 3be:	90 91 62 00 	lds	r25, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 3c2:	97 7f       	andi	r25, 0xF7	; 247
+ 3c4:	90 93 62 00 	sts	0x0062, r25	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 3c8:	95 ed       	ldi	r25, 0xD5	; 213
+ 3ca:	9a 95       	dec	r25
+ 3cc:	f1 f7       	brne	.-4      	; 0x3ca <int2lcd+0x2c>
+ 3ce:	00 00       	nop
+//Takes a 8bit signed and displays it in base ten on the LCD. Leading 0's are 
+//not displayed.
+//
+void int2lcd(int8_t number){
+    //if < 0, print minus sign, then take 2's complement of number and display
+    if(number < 0){send_lcd(CHAR_BYTE, '-'); _delay_us(40); uint2lcd(~number+1);}  
+ 3d0:	81 95       	neg	r24
+ 3d2:	0c 94 65 01 	jmp	0x2ca	; 0x2ca <uint2lcd>
+
+000003d6 <cursor_on>:
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 3d6:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 3d8:	77 9b       	sbis	0x0e, 7	; 14
+ 3da:	fe cf       	rjmp	.-4      	; 0x3d8 <cursor_on+0x2>
+  SPDR = byte;                        //send payload
+ 3dc:	8e e0       	ldi	r24, 0x0E	; 14
+ 3de:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 3e0:	77 9b       	sbis	0x0e, 7	; 14
+ 3e2:	fe cf       	rjmp	.-4      	; 0x3e0 <cursor_on+0xa>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 3e4:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 3e8:	88 60       	ori	r24, 0x08	; 8
+ 3ea:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 3ee:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 3f2:	87 7f       	andi	r24, 0xF7	; 247
+ 3f4:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 3f8:	08 95       	ret
+
+000003fa <cursor_off>:
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 3fa:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 3fc:	77 9b       	sbis	0x0e, 7	; 14
+ 3fe:	fe cf       	rjmp	.-4      	; 0x3fc <cursor_off+0x2>
+  SPDR = byte;                        //send payload
+ 400:	8c e0       	ldi	r24, 0x0C	; 12
+ 402:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 404:	77 9b       	sbis	0x0e, 7	; 14
+ 406:	fe cf       	rjmp	.-4      	; 0x404 <__LOCK_REGION_LENGTH__+0x4>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 408:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 40c:	88 60       	ori	r24, 0x08	; 8
+ 40e:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 412:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 416:	87 7f       	andi	r24, 0xF7	; 247
+ 418:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 41c:	08 95       	ret
+
+0000041e <shift_right>:
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 41e:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 420:	77 9b       	sbis	0x0e, 7	; 14
+ 422:	fe cf       	rjmp	.-4      	; 0x420 <shift_right+0x2>
+  SPDR = byte;                        //send payload
+ 424:	8e e1       	ldi	r24, 0x1E	; 30
+ 426:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 428:	77 9b       	sbis	0x0e, 7	; 14
+ 42a:	fe cf       	rjmp	.-4      	; 0x428 <shift_right+0xa>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 42c:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 430:	88 60       	ori	r24, 0x08	; 8
+ 432:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 436:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 43a:	87 7f       	andi	r24, 0xF7	; 247
+ 43c:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 440:	08 95       	ret
+
+00000442 <shift_left>:
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 442:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 444:	77 9b       	sbis	0x0e, 7	; 14
+ 446:	fe cf       	rjmp	.-4      	; 0x444 <shift_left+0x2>
+  SPDR = byte;                        //send payload
+ 448:	88 e1       	ldi	r24, 0x18	; 24
+ 44a:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 44c:	77 9b       	sbis	0x0e, 7	; 14
+ 44e:	fe cf       	rjmp	.-4      	; 0x44c <shift_left+0xa>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 450:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 454:	88 60       	ori	r24, 0x08	; 8
+ 456:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 45a:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 45e:	87 7f       	andi	r24, 0xF7	; 247
+ 460:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 464:	08 95       	ret
+
+00000466 <strobe_lcd>:
+ 466:	e2 e6       	ldi	r30, 0x62	; 98
+ 468:	f0 e0       	ldi	r31, 0x00	; 0
+ 46a:	80 81       	ld	r24, Z
+ 46c:	88 60       	ori	r24, 0x08	; 8
+ 46e:	80 83       	st	Z, r24
+ 470:	80 81       	ld	r24, Z
+ 472:	87 7f       	andi	r24, 0xF7	; 247
+ 474:	80 83       	st	Z, r24
+ 476:	08 95       	ret
+
+00000478 <clear_display>:
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 478:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 47a:	77 9b       	sbis	0x0e, 7	; 14
+ 47c:	fe cf       	rjmp	.-4      	; 0x47a <clear_display+0x2>
+  SPDR = byte;                        //send payload
+ 47e:	81 e0       	ldi	r24, 0x01	; 1
+ 480:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 482:	77 9b       	sbis	0x0e, 7	; 14
+ 484:	fe cf       	rjmp	.-4      	; 0x482 <clear_display+0xa>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 486:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 48a:	88 60       	ori	r24, 0x08	; 8
+ 48c:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 490:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 494:	87 7f       	andi	r24, 0xF7	; 247
+ 496:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 49a:	8f e1       	ldi	r24, 0x1F	; 31
+ 49c:	9c e1       	ldi	r25, 0x1C	; 28
+ 49e:	01 97       	sbiw	r24, 0x01	; 1
+ 4a0:	f1 f7       	brne	.-4      	; 0x49e <clear_display+0x26>
+ 4a2:	00 c0       	rjmp	.+0      	; 0x4a4 <clear_display+0x2c>
+ 4a4:	00 00       	nop
+ 4a6:	08 95       	ret
+
+000004a8 <cursor_home>:
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 4a8:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 4aa:	77 9b       	sbis	0x0e, 7	; 14
+ 4ac:	fe cf       	rjmp	.-4      	; 0x4aa <cursor_home+0x2>
+  SPDR = byte;                        //send payload
+ 4ae:	82 e0       	ldi	r24, 0x02	; 2
+ 4b0:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 4b2:	77 9b       	sbis	0x0e, 7	; 14
+ 4b4:	fe cf       	rjmp	.-4      	; 0x4b2 <cursor_home+0xa>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 4b6:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 4ba:	88 60       	ori	r24, 0x08	; 8
+ 4bc:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 4c0:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 4c4:	87 7f       	andi	r24, 0xF7	; 247
+ 4c6:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 4ca:	8f e6       	ldi	r24, 0x6F	; 111
+ 4cc:	97 e1       	ldi	r25, 0x17	; 23
+ 4ce:	01 97       	sbiw	r24, 0x01	; 1
+ 4d0:	f1 f7       	brne	.-4      	; 0x4ce <cursor_home+0x26>
+ 4d2:	00 c0       	rjmp	.+0      	; 0x4d4 <cursor_home+0x2c>
+ 4d4:	00 00       	nop
+ 4d6:	08 95       	ret
+
+000004d8 <line2_col1>:
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 4d8:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 4da:	77 9b       	sbis	0x0e, 7	; 14
+ 4dc:	fe cf       	rjmp	.-4      	; 0x4da <line2_col1+0x2>
+  SPDR = byte;                        //send payload
+ 4de:	80 ec       	ldi	r24, 0xC0	; 192
+ 4e0:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 4e2:	77 9b       	sbis	0x0e, 7	; 14
+ 4e4:	fe cf       	rjmp	.-4      	; 0x4e2 <line2_col1+0xa>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 4e6:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 4ea:	88 60       	ori	r24, 0x08	; 8
+ 4ec:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 4f0:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 4f4:	87 7f       	andi	r24, 0xF7	; 247
+ 4f6:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 4fa:	08 95       	ret
+
+000004fc <line1_col1>:
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 4fc:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 4fe:	77 9b       	sbis	0x0e, 7	; 14
+ 500:	fe cf       	rjmp	.-4      	; 0x4fe <line1_col1+0x2>
+  SPDR = byte;                        //send payload
+ 502:	80 e8       	ldi	r24, 0x80	; 128
+ 504:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 506:	77 9b       	sbis	0x0e, 7	; 14
+ 508:	fe cf       	rjmp	.-4      	; 0x506 <line1_col1+0xa>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 50a:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 50e:	88 60       	ori	r24, 0x08	; 8
+ 510:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 514:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 518:	87 7f       	andi	r24, 0xF7	; 247
+ 51a:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 51e:	08 95       	ret
+
+00000520 <fill_spaces>:
+
+//-----------------------------------------------------------------------------
+//                          fill_spaces   
+//
+//Fill an entire line with spaces.
+void fill_spaces(void){
+ 520:	90 e1       	ldi	r25, 0x10	; 16
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 522:	31 e0       	ldi	r19, 0x01	; 1
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+  SPDR = byte;                        //send payload
+ 524:	20 e2       	ldi	r18, 0x20	; 32
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 526:	3f b9       	out	0x0f, r19	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 528:	77 9b       	sbis	0x0e, 7	; 14
+ 52a:	fe cf       	rjmp	.-4      	; 0x528 <fill_spaces+0x8>
+  SPDR = byte;                        //send payload
+ 52c:	2f b9       	out	0x0f, r18	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 52e:	77 9b       	sbis	0x0e, 7	; 14
+ 530:	fe cf       	rjmp	.-4      	; 0x52e <fill_spaces+0xe>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 532:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 536:	88 60       	ori	r24, 0x08	; 8
+ 538:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 53c:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 540:	87 7f       	andi	r24, 0xF7	; 247
+ 542:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 546:	85 ed       	ldi	r24, 0xD5	; 213
+ 548:	8a 95       	dec	r24
+ 54a:	f1 f7       	brne	.-4      	; 0x548 <fill_spaces+0x28>
+ 54c:	00 00       	nop
+ 54e:	91 50       	subi	r25, 0x01	; 1
+//                          fill_spaces   
+//
+//Fill an entire line with spaces.
+void fill_spaces(void){
+	uint8_t i;
+	for (i=0; i<=(NUM_LCD_CHARS-1); i++){
+ 550:	51 f7       	brne	.-44     	; 0x526 <fill_spaces+0x6>
+		send_lcd(CHAR_BYTE, ' '); 
+                _delay_us(40);  //40us wait between characters
+	}
+}  
+ 552:	08 95       	ret
+
+00000554 <char2lcd>:
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 554:	91 e0       	ldi	r25, 0x01	; 1
+ 556:	9f b9       	out	0x0f, r25	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 558:	77 9b       	sbis	0x0e, 7	; 14
+ 55a:	fe cf       	rjmp	.-4      	; 0x558 <char2lcd+0x4>
+  SPDR = byte;                        //send payload
+ 55c:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 55e:	77 9b       	sbis	0x0e, 7	; 14
+ 560:	fe cf       	rjmp	.-4      	; 0x55e <char2lcd+0xa>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 562:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 566:	88 60       	ori	r24, 0x08	; 8
+ 568:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 56c:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 570:	87 7f       	andi	r24, 0xF7	; 247
+ 572:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 576:	08 95       	ret
+
+00000578 <string2lcd>:
+
+//----------------------------------------------------------------------------
+//                            string2lcd
+//                            
+//Send a ascii string to the LCD.
+void string2lcd(char *lcd_str){ 
+ 578:	fc 01       	movw	r30, r24
+  uint8_t i;
+  for (i=0; i<=(strlen(lcd_str)-1); i++){send_lcd(CHAR_BYTE, lcd_str[i]);
+ 57a:	40 e0       	ldi	r20, 0x00	; 0
+ 57c:	50 e0       	ldi	r21, 0x00	; 0
+ 57e:	60 e0       	ldi	r22, 0x00	; 0
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 580:	71 e0       	ldi	r23, 0x01	; 1
+//                            string2lcd
+//                            
+//Send a ascii string to the LCD.
+void string2lcd(char *lcd_str){ 
+  uint8_t i;
+  for (i=0; i<=(strlen(lcd_str)-1); i++){send_lcd(CHAR_BYTE, lcd_str[i]);
+ 582:	df 01       	movw	r26, r30
+ 584:	a4 0f       	add	r26, r20
+ 586:	b5 1f       	adc	r27, r21
+ 588:	8c 91       	ld	r24, X
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 58a:	7f b9       	out	0x0f, r23	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 58c:	77 9b       	sbis	0x0e, 7	; 14
+ 58e:	fe cf       	rjmp	.-4      	; 0x58c <string2lcd+0x14>
+  SPDR = byte;                        //send payload
+ 590:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 592:	77 9b       	sbis	0x0e, 7	; 14
+ 594:	fe cf       	rjmp	.-4      	; 0x592 <string2lcd+0x1a>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 596:	90 91 62 00 	lds	r25, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 59a:	98 60       	ori	r25, 0x08	; 8
+ 59c:	90 93 62 00 	sts	0x0062, r25	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 5a0:	90 91 62 00 	lds	r25, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 5a4:	97 7f       	andi	r25, 0xF7	; 247
+ 5a6:	90 93 62 00 	sts	0x0062, r25	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 5aa:	85 ed       	ldi	r24, 0xD5	; 213
+ 5ac:	8a 95       	dec	r24
+ 5ae:	f1 f7       	brne	.-4      	; 0x5ac <string2lcd+0x34>
+ 5b0:	00 00       	nop
+//                            string2lcd
+//                            
+//Send a ascii string to the LCD.
+void string2lcd(char *lcd_str){ 
+  uint8_t i;
+  for (i=0; i<=(strlen(lcd_str)-1); i++){send_lcd(CHAR_BYTE, lcd_str[i]);
+ 5b2:	6f 5f       	subi	r22, 0xFF	; 255
+ 5b4:	46 2f       	mov	r20, r22
+ 5b6:	50 e0       	ldi	r21, 0x00	; 0
+ 5b8:	df 01       	movw	r26, r30
+ 5ba:	0d 90       	ld	r0, X+
+ 5bc:	00 20       	and	r0, r0
+ 5be:	e9 f7       	brne	.-6      	; 0x5ba <string2lcd+0x42>
+ 5c0:	9d 01       	movw	r18, r26
+ 5c2:	2e 1b       	sub	r18, r30
+ 5c4:	3f 0b       	sbc	r19, r31
+ 5c6:	22 50       	subi	r18, 0x02	; 2
+ 5c8:	31 09       	sbc	r19, r1
+ 5ca:	24 17       	cp	r18, r20
+ 5cc:	35 07       	cpc	r19, r21
+ 5ce:	c8 f6       	brcc	.-78     	; 0x582 <string2lcd+0xa>
+  _delay_us(40);  //execution takes 37us per character
+  }                  
+} 
+ 5d0:	08 95       	ret
+
+000005d2 <lcd_init>:
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 5d2:	8f ef       	ldi	r24, 0xFF	; 255
+ 5d4:	99 ef       	ldi	r25, 0xF9	; 249
+ 5d6:	01 97       	sbiw	r24, 0x01	; 1
+ 5d8:	f1 f7       	brne	.-4      	; 0x5d6 <lcd_init+0x4>
+ 5da:	00 c0       	rjmp	.+0      	; 0x5dc <lcd_init+0xa>
+ 5dc:	00 00       	nop
+//
+void lcd_init(void){
+  _delay_ms(16);      //power up delay
+#if SPI_MODE==1       //assumption is that the SPI port is intialized
+  //TODO: kludge alert! setting of DDRF should not be here, but is probably harmless.
+  DDRF=0x08;          //port F bit 3 is enable for LCD in SPI mode
+ 5de:	88 e0       	ldi	r24, 0x08	; 8
+ 5e0:	80 93 61 00 	sts	0x0061, r24	; 0x800061 <__TEXT_REGION_LENGTH__+0x7e0061>
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 5e4:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 5e6:	77 9b       	sbis	0x0e, 7	; 14
+ 5e8:	fe cf       	rjmp	.-4      	; 0x5e6 <lcd_init+0x14>
+  SPDR = byte;                        //send payload
+ 5ea:	80 e3       	ldi	r24, 0x30	; 48
+ 5ec:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 5ee:	77 9b       	sbis	0x0e, 7	; 14
+ 5f0:	fe cf       	rjmp	.-4      	; 0x5ee <lcd_init+0x1c>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 5f2:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 5f6:	88 60       	ori	r24, 0x08	; 8
+ 5f8:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 5fc:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 600:	87 7f       	andi	r24, 0xF7	; 247
+ 602:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 606:	8f e5       	ldi	r24, 0x5F	; 95
+ 608:	9d e6       	ldi	r25, 0x6D	; 109
+ 60a:	01 97       	sbiw	r24, 0x01	; 1
+ 60c:	f1 f7       	brne	.-4      	; 0x60a <lcd_init+0x38>
+ 60e:	00 c0       	rjmp	.+0      	; 0x610 <lcd_init+0x3e>
+ 610:	00 00       	nop
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 612:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 614:	77 9b       	sbis	0x0e, 7	; 14
+ 616:	fe cf       	rjmp	.-4      	; 0x614 <lcd_init+0x42>
+  SPDR = byte;                        //send payload
+ 618:	80 e3       	ldi	r24, 0x30	; 48
+ 61a:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 61c:	77 9b       	sbis	0x0e, 7	; 14
+ 61e:	fe cf       	rjmp	.-4      	; 0x61c <lcd_init+0x4a>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 620:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 624:	88 60       	ori	r24, 0x08	; 8
+ 626:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 62a:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 62e:	87 7f       	andi	r24, 0xF7	; 247
+ 630:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 634:	8f e5       	ldi	r24, 0x5F	; 95
+ 636:	9d e6       	ldi	r25, 0x6D	; 109
+ 638:	01 97       	sbiw	r24, 0x01	; 1
+ 63a:	f1 f7       	brne	.-4      	; 0x638 <lcd_init+0x66>
+ 63c:	00 c0       	rjmp	.+0      	; 0x63e <lcd_init+0x6c>
+ 63e:	00 00       	nop
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 640:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 642:	77 9b       	sbis	0x0e, 7	; 14
+ 644:	fe cf       	rjmp	.-4      	; 0x642 <lcd_init+0x70>
+  SPDR = byte;                        //send payload
+ 646:	80 e3       	ldi	r24, 0x30	; 48
+ 648:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 64a:	77 9b       	sbis	0x0e, 7	; 14
+ 64c:	fe cf       	rjmp	.-4      	; 0x64a <lcd_init+0x78>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 64e:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 652:	88 60       	ori	r24, 0x08	; 8
+ 654:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 658:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 65c:	87 7f       	andi	r24, 0xF7	; 247
+ 65e:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 662:	8f e5       	ldi	r24, 0x5F	; 95
+ 664:	9d e6       	ldi	r25, 0x6D	; 109
+ 666:	01 97       	sbiw	r24, 0x01	; 1
+ 668:	f1 f7       	brne	.-4      	; 0x666 <lcd_init+0x94>
+ 66a:	00 c0       	rjmp	.+0      	; 0x66c <lcd_init+0x9a>
+ 66c:	00 00       	nop
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 66e:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 670:	77 9b       	sbis	0x0e, 7	; 14
+ 672:	fe cf       	rjmp	.-4      	; 0x670 <lcd_init+0x9e>
+  SPDR = byte;                        //send payload
+ 674:	88 e3       	ldi	r24, 0x38	; 56
+ 676:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 678:	77 9b       	sbis	0x0e, 7	; 14
+ 67a:	fe cf       	rjmp	.-4      	; 0x678 <lcd_init+0xa6>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 67c:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 680:	88 60       	ori	r24, 0x08	; 8
+ 682:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 686:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 68a:	87 7f       	andi	r24, 0xF7	; 247
+ 68c:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 690:	8f e1       	ldi	r24, 0x1F	; 31
+ 692:	9e e4       	ldi	r25, 0x4E	; 78
+ 694:	01 97       	sbiw	r24, 0x01	; 1
+ 696:	f1 f7       	brne	.-4      	; 0x694 <lcd_init+0xc2>
+ 698:	00 c0       	rjmp	.+0      	; 0x69a <lcd_init+0xc8>
+ 69a:	00 00       	nop
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 69c:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 69e:	77 9b       	sbis	0x0e, 7	; 14
+ 6a0:	fe cf       	rjmp	.-4      	; 0x69e <lcd_init+0xcc>
+  SPDR = byte;                        //send payload
+ 6a2:	88 e0       	ldi	r24, 0x08	; 8
+ 6a4:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 6a6:	77 9b       	sbis	0x0e, 7	; 14
+ 6a8:	fe cf       	rjmp	.-4      	; 0x6a6 <lcd_init+0xd4>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 6aa:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 6ae:	88 60       	ori	r24, 0x08	; 8
+ 6b0:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 6b4:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 6b8:	87 7f       	andi	r24, 0xF7	; 247
+ 6ba:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 6be:	8f e1       	ldi	r24, 0x1F	; 31
+ 6c0:	9e e4       	ldi	r25, 0x4E	; 78
+ 6c2:	01 97       	sbiw	r24, 0x01	; 1
+ 6c4:	f1 f7       	brne	.-4      	; 0x6c2 <lcd_init+0xf0>
+ 6c6:	00 c0       	rjmp	.+0      	; 0x6c8 <lcd_init+0xf6>
+ 6c8:	00 00       	nop
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 6ca:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 6cc:	77 9b       	sbis	0x0e, 7	; 14
+ 6ce:	fe cf       	rjmp	.-4      	; 0x6cc <lcd_init+0xfa>
+  SPDR = byte;                        //send payload
+ 6d0:	81 e0       	ldi	r24, 0x01	; 1
+ 6d2:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 6d4:	77 9b       	sbis	0x0e, 7	; 14
+ 6d6:	fe cf       	rjmp	.-4      	; 0x6d4 <lcd_init+0x102>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 6d8:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 6dc:	88 60       	ori	r24, 0x08	; 8
+ 6de:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 6e2:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 6e6:	87 7f       	andi	r24, 0xF7	; 247
+ 6e8:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 6ec:	8f e1       	ldi	r24, 0x1F	; 31
+ 6ee:	9e e4       	ldi	r25, 0x4E	; 78
+ 6f0:	01 97       	sbiw	r24, 0x01	; 1
+ 6f2:	f1 f7       	brne	.-4      	; 0x6f0 <lcd_init+0x11e>
+ 6f4:	00 c0       	rjmp	.+0      	; 0x6f6 <lcd_init+0x124>
+ 6f6:	00 00       	nop
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 6f8:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 6fa:	77 9b       	sbis	0x0e, 7	; 14
+ 6fc:	fe cf       	rjmp	.-4      	; 0x6fa <lcd_init+0x128>
+  SPDR = byte;                        //send payload
+ 6fe:	86 e0       	ldi	r24, 0x06	; 6
+ 700:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 702:	77 9b       	sbis	0x0e, 7	; 14
+ 704:	fe cf       	rjmp	.-4      	; 0x702 <lcd_init+0x130>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 706:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 70a:	88 60       	ori	r24, 0x08	; 8
+ 70c:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 710:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 714:	87 7f       	andi	r24, 0xF7	; 247
+ 716:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 71a:	8f e1       	ldi	r24, 0x1F	; 31
+ 71c:	9e e4       	ldi	r25, 0x4E	; 78
+ 71e:	01 97       	sbiw	r24, 0x01	; 1
+ 720:	f1 f7       	brne	.-4      	; 0x71e <lcd_init+0x14c>
+ 722:	00 c0       	rjmp	.+0      	; 0x724 <lcd_init+0x152>
+ 724:	00 00       	nop
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 726:	1f b8       	out	0x0f, r1	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 728:	77 9b       	sbis	0x0e, 7	; 14
+ 72a:	fe cf       	rjmp	.-4      	; 0x728 <lcd_init+0x156>
+  SPDR = byte;                        //send payload
+ 72c:	8c e0       	ldi	r24, 0x0C	; 12
+ 72e:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 730:	77 9b       	sbis	0x0e, 7	; 14
+ 732:	fe cf       	rjmp	.-4      	; 0x730 <lcd_init+0x15e>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 734:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 738:	88 60       	ori	r24, 0x08	; 8
+ 73a:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 73e:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 742:	87 7f       	andi	r24, 0xF7	; 247
+ 744:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 748:	8f e1       	ldi	r24, 0x1F	; 31
+ 74a:	9e e4       	ldi	r25, 0x4E	; 78
+ 74c:	01 97       	sbiw	r24, 0x01	; 1
+ 74e:	f1 f7       	brne	.-4      	; 0x74c <lcd_init+0x17a>
+ 750:	00 c0       	rjmp	.+0      	; 0x752 <lcd_init+0x180>
+ 752:	00 00       	nop
+ 754:	08 95       	ret
+
+00000756 <lcd_int32>:
+void  lcd_int32(int32_t l,          //number to display
+                uint8_t fieldwidth, //width of the field for display
+                uint8_t decpos,     //0 if no decimal point, otherwise
+                uint8_t bSigned,    //non-zero if the number should be treated as signed 
+                uint8_t bZeroFill)  //non-zero if a specified fieldwidth is to be zero filled
+{
+ 756:	4f 92       	push	r4
+ 758:	5f 92       	push	r5
+ 75a:	6f 92       	push	r6
+ 75c:	7f 92       	push	r7
+ 75e:	8f 92       	push	r8
+ 760:	9f 92       	push	r9
+ 762:	af 92       	push	r10
+ 764:	bf 92       	push	r11
+ 766:	cf 92       	push	r12
+ 768:	df 92       	push	r13
+ 76a:	ef 92       	push	r14
+ 76c:	ff 92       	push	r15
+ 76e:	0f 93       	push	r16
+ 770:	1f 93       	push	r17
+ 772:	cf 93       	push	r28
+ 774:	df 93       	push	r29
+ 776:	cd b7       	in	r28, 0x3d	; 61
+ 778:	de b7       	in	r29, 0x3e	; 62
+ 77a:	69 97       	sbiw	r28, 0x19	; 25
+ 77c:	0f b6       	in	r0, 0x3f	; 63
+ 77e:	f8 94       	cli
+ 780:	de bf       	out	0x3e, r29	; 62
+ 782:	0f be       	out	0x3f, r0	; 63
+ 784:	cd bf       	out	0x3d, r28	; 61
+ 786:	14 2f       	mov	r17, r20
+ 788:	42 2e       	mov	r4, r18
+ 78a:	5e 2c       	mov	r5, r14
+      char    fillch;
+      ldiv_t  qr;
+
+      qr.quot = l; // initialize the quotient 
+
+      if (bSigned){
+ 78c:	00 23       	and	r16, r16
+ 78e:	79 f0       	breq	.+30     	; 0x7ae <lcd_int32+0x58>
+        bSigned = (qr.quot<0);
+ 790:	6b 01       	movw	r12, r22
+ 792:	7c 01       	movw	r14, r24
+ 794:	cc 24       	eor	r12, r12
+ 796:	f7 fc       	sbrc	r15, 7
+ 798:	c3 94       	inc	r12
+ 79a:	dd 24       	eor	r13, r13
+ 79c:	ee 24       	eor	r14, r14
+ 79e:	ff 24       	eor	r15, r15
+ 7a0:	0c 2d       	mov	r16, r12
+        qr.quot = labs(qr.quot);
+ 7a2:	6b 01       	movw	r12, r22
+ 7a4:	7c 01       	movw	r14, r24
+ 7a6:	97 fd       	sbrc	r25, 7
+ 7a8:	a3 c0       	rjmp	.+326    	; 0x8f0 <lcd_int32+0x19a>
+ 7aa:	c7 01       	movw	r24, r14
+ 7ac:	b6 01       	movw	r22, r12
+      }
+
+      // convert the digits to the right of the decimal point 
+      if (decpos){
+ 7ae:	44 20       	and	r4, r4
+ 7b0:	09 f4       	brne	.+2      	; 0x7b4 <lcd_int32+0x5e>
+ 7b2:	96 c0       	rjmp	.+300    	; 0x8e0 <lcd_int32+0x18a>
+ 7b4:	9e 01       	movw	r18, r28
+ 7b6:	2f 5f       	subi	r18, 0xFF	; 255
+ 7b8:	3f 4f       	sbci	r19, 0xFF	; 255
+ 7ba:	59 01       	movw	r10, r18
+ 7bc:	49 01       	movw	r8, r18
+ 7be:	66 24       	eor	r6, r6
+ 7c0:	6a 94       	dec	r6
+ 7c2:	64 0c       	add	r6, r4
+ 7c4:	71 2c       	mov	r7, r1
+ 7c6:	3f ef       	ldi	r19, 0xFF	; 255
+ 7c8:	63 1a       	sub	r6, r19
+ 7ca:	73 0a       	sbc	r7, r19
+ 7cc:	6a 0c       	add	r6, r10
+ 7ce:	7b 1c       	adc	r7, r11
+        for (; decpos ; decpos--){
+          qr = ldiv(qr.quot, 10);
+ 7d0:	2a e0       	ldi	r18, 0x0A	; 10
+ 7d2:	30 e0       	ldi	r19, 0x00	; 0
+ 7d4:	40 e0       	ldi	r20, 0x00	; 0
+ 7d6:	50 e0       	ldi	r21, 0x00	; 0
+ 7d8:	0e 94 74 06 	call	0xce8	; 0xce8 <__divmodsi4>
+ 7dc:	e6 2f       	mov	r30, r22
+ 7de:	2a 8b       	std	Y+18, r18	; 0x12
+ 7e0:	3b 8b       	std	Y+19, r19	; 0x13
+ 7e2:	4c 8b       	std	Y+20, r20	; 0x14
+ 7e4:	5d 8b       	std	Y+21, r21	; 0x15
+ 7e6:	6a 89       	ldd	r22, Y+18	; 0x12
+ 7e8:	7b 89       	ldd	r23, Y+19	; 0x13
+ 7ea:	8c 89       	ldd	r24, Y+20	; 0x14
+ 7ec:	9d 89       	ldd	r25, Y+21	; 0x15
+          sline[i++] = qr.rem + '0';
+ 7ee:	20 e3       	ldi	r18, 0x30	; 48
+ 7f0:	2e 0f       	add	r18, r30
+ 7f2:	f4 01       	movw	r30, r8
+ 7f4:	21 93       	st	Z+, r18
+ 7f6:	4f 01       	movw	r8, r30
+        qr.quot = labs(qr.quot);
+      }
+
+      // convert the digits to the right of the decimal point 
+      if (decpos){
+        for (; decpos ; decpos--){
+ 7f8:	6e 16       	cp	r6, r30
+ 7fa:	7f 06       	cpc	r7, r31
+ 7fc:	49 f7       	brne	.-46     	; 0x7d0 <lcd_int32+0x7a>
+          qr = ldiv(qr.quot, 10);
+          sline[i++] = qr.rem + '0';
+        }
+        sline[i++] = '.';
+ 7fe:	99 24       	eor	r9, r9
+ 800:	93 94       	inc	r9
+ 802:	94 0c       	add	r9, r4
+ 804:	f5 01       	movw	r30, r10
+ 806:	e4 0d       	add	r30, r4
+ 808:	f1 1d       	adc	r31, r1
+ 80a:	2e e2       	ldi	r18, 0x2E	; 46
+ 80c:	20 83       	st	Z, r18
+      }
+
+      // convert the digits to the left of the decimal point 
+      do{
+          qr = ldiv(qr.quot, 10);
+ 80e:	2a e0       	ldi	r18, 0x0A	; 10
+ 810:	30 e0       	ldi	r19, 0x00	; 0
+ 812:	40 e0       	ldi	r20, 0x00	; 0
+ 814:	50 e0       	ldi	r21, 0x00	; 0
+ 816:	0e 94 74 06 	call	0xce8	; 0xce8 <__divmodsi4>
+ 81a:	e6 2f       	mov	r30, r22
+ 81c:	2a 8b       	std	Y+18, r18	; 0x12
+ 81e:	3b 8b       	std	Y+19, r19	; 0x13
+ 820:	4c 8b       	std	Y+20, r20	; 0x14
+ 822:	5d 8b       	std	Y+21, r21	; 0x15
+ 824:	6e 8b       	std	Y+22, r22	; 0x16
+ 826:	7f 8b       	std	Y+23, r23	; 0x17
+ 828:	88 8f       	std	Y+24, r24	; 0x18
+ 82a:	99 8f       	std	Y+25, r25	; 0x19
+ 82c:	6a 89       	ldd	r22, Y+18	; 0x12
+ 82e:	7b 89       	ldd	r23, Y+19	; 0x13
+ 830:	8c 89       	ldd	r24, Y+20	; 0x14
+ 832:	9d 89       	ldd	r25, Y+21	; 0x15
+          sline[i++] = qr.rem + '0';
+ 834:	31 e0       	ldi	r19, 0x01	; 1
+ 836:	39 0d       	add	r19, r9
+ 838:	d5 01       	movw	r26, r10
+ 83a:	a9 0d       	add	r26, r9
+ 83c:	b1 1d       	adc	r27, r1
+ 83e:	e0 5d       	subi	r30, 0xD0	; 208
+ 840:	ec 93       	st	X, r30
+ 842:	93 2e       	mov	r9, r19
+        }while(qr.quot);
+ 844:	61 15       	cp	r22, r1
+ 846:	71 05       	cpc	r23, r1
+ 848:	81 05       	cpc	r24, r1
+ 84a:	91 05       	cpc	r25, r1
+ 84c:	01 f7       	brne	.-64     	; 0x80e <lcd_int32+0xb8>
+
+      // fill the whole field if a width was specified
+      if (fieldwidth){
+ 84e:	11 23       	and	r17, r17
+ 850:	61 f0       	breq	.+24     	; 0x86a <lcd_int32+0x114>
+        fillch = bZeroFill? '0': ' '; // determine the fill character
+ 852:	51 10       	cpse	r5, r1
+ 854:	4b c0       	rjmp	.+150    	; 0x8ec <lcd_int32+0x196>
+ 856:	90 e2       	ldi	r25, 0x20	; 32
+        for (; i<fieldwidth ; ){sline[i++] = fillch;}
+ 858:	31 17       	cp	r19, r17
+ 85a:	38 f4       	brcc	.+14     	; 0x86a <lcd_int32+0x114>
+ 85c:	f5 01       	movw	r30, r10
+ 85e:	e3 0f       	add	r30, r19
+ 860:	f1 1d       	adc	r31, r1
+ 862:	90 83       	st	Z, r25
+ 864:	3f 5f       	subi	r19, 0xFF	; 255
+ 866:	13 13       	cpse	r17, r19
+ 868:	f9 cf       	rjmp	.-14     	; 0x85c <lcd_int32+0x106>
+      }
+
+      // output the sign, if we need to
+      if (bSigned){sline[i++] = '-';}
+ 86a:	00 23       	and	r16, r16
+ 86c:	31 f0       	breq	.+12     	; 0x87a <lcd_int32+0x124>
+ 86e:	f5 01       	movw	r30, r10
+ 870:	e3 0f       	add	r30, r19
+ 872:	f1 1d       	adc	r31, r1
+ 874:	9d e2       	ldi	r25, 0x2D	; 45
+ 876:	90 83       	st	Z, r25
+ 878:	3f 5f       	subi	r19, 0xFF	; 255
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 87a:	21 e0       	ldi	r18, 0x01	; 1
+
+      // output the sign, if we need to
+      if (bSigned){sline[i++] = '-';}
+
+      // now output the formatted number
+      do{send_lcd(CHAR_BYTE, sline[--i]); _delay_us(40);} while(i);
+ 87c:	31 50       	subi	r19, 0x01	; 1
+ 87e:	f5 01       	movw	r30, r10
+ 880:	e3 0f       	add	r30, r19
+ 882:	f1 1d       	adc	r31, r1
+ 884:	90 81       	ld	r25, Z
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ 886:	2f b9       	out	0x0f, r18	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 888:	77 9b       	sbis	0x0e, 7	; 14
+ 88a:	fe cf       	rjmp	.-4      	; 0x888 <lcd_int32+0x132>
+  SPDR = byte;                        //send payload
+ 88c:	9f b9       	out	0x0f, r25	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ 88e:	77 9b       	sbis	0x0e, 7	; 14
+ 890:	fe cf       	rjmp	.-4      	; 0x88e <lcd_int32+0x138>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ 892:	90 91 62 00 	lds	r25, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 896:	98 60       	ori	r25, 0x08	; 8
+ 898:	90 93 62 00 	sts	0x0062, r25	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 89c:	90 91 62 00 	lds	r25, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ 8a0:	97 7f       	andi	r25, 0xF7	; 247
+ 8a2:	90 93 62 00 	sts	0x0062, r25	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 8a6:	85 ed       	ldi	r24, 0xD5	; 213
+ 8a8:	8a 95       	dec	r24
+ 8aa:	f1 f7       	brne	.-4      	; 0x8a8 <lcd_int32+0x152>
+ 8ac:	00 00       	nop
+
+      // output the sign, if we need to
+      if (bSigned){sline[i++] = '-';}
+
+      // now output the formatted number
+      do{send_lcd(CHAR_BYTE, sline[--i]); _delay_us(40);} while(i);
+ 8ae:	31 11       	cpse	r19, r1
+ 8b0:	e5 cf       	rjmp	.-54     	; 0x87c <lcd_int32+0x126>
+
+}
+ 8b2:	69 96       	adiw	r28, 0x19	; 25
+ 8b4:	0f b6       	in	r0, 0x3f	; 63
+ 8b6:	f8 94       	cli
+ 8b8:	de bf       	out	0x3e, r29	; 62
+ 8ba:	0f be       	out	0x3f, r0	; 63
+ 8bc:	cd bf       	out	0x3d, r28	; 61
+ 8be:	df 91       	pop	r29
+ 8c0:	cf 91       	pop	r28
+ 8c2:	1f 91       	pop	r17
+ 8c4:	0f 91       	pop	r16
+ 8c6:	ff 90       	pop	r15
+ 8c8:	ef 90       	pop	r14
+ 8ca:	df 90       	pop	r13
+ 8cc:	cf 90       	pop	r12
+ 8ce:	bf 90       	pop	r11
+ 8d0:	af 90       	pop	r10
+ 8d2:	9f 90       	pop	r9
+ 8d4:	8f 90       	pop	r8
+ 8d6:	7f 90       	pop	r7
+ 8d8:	6f 90       	pop	r6
+ 8da:	5f 90       	pop	r5
+ 8dc:	4f 90       	pop	r4
+ 8de:	08 95       	ret
+                uint8_t decpos,     //0 if no decimal point, otherwise
+                uint8_t bSigned,    //non-zero if the number should be treated as signed 
+                uint8_t bZeroFill)  //non-zero if a specified fieldwidth is to be zero filled
+{
+      char    sline[NUM_LCD_CHARS+1];
+      uint8_t i=0;
+ 8e0:	91 2c       	mov	r9, r1
+ 8e2:	9e 01       	movw	r18, r28
+ 8e4:	2f 5f       	subi	r18, 0xFF	; 255
+ 8e6:	3f 4f       	sbci	r19, 0xFF	; 255
+ 8e8:	59 01       	movw	r10, r18
+ 8ea:	91 cf       	rjmp	.-222    	; 0x80e <lcd_int32+0xb8>
+          sline[i++] = qr.rem + '0';
+        }while(qr.quot);
+
+      // fill the whole field if a width was specified
+      if (fieldwidth){
+        fillch = bZeroFill? '0': ' '; // determine the fill character
+ 8ec:	90 e3       	ldi	r25, 0x30	; 48
+ 8ee:	b4 cf       	rjmp	.-152    	; 0x858 <lcd_int32+0x102>
+
+      qr.quot = l; // initialize the quotient 
+
+      if (bSigned){
+        bSigned = (qr.quot<0);
+        qr.quot = labs(qr.quot);
+ 8f0:	f0 94       	com	r15
+ 8f2:	e0 94       	com	r14
+ 8f4:	d0 94       	com	r13
+ 8f6:	c0 94       	com	r12
+ 8f8:	c1 1c       	adc	r12, r1
+ 8fa:	d1 1c       	adc	r13, r1
+ 8fc:	e1 1c       	adc	r14, r1
+ 8fe:	f1 1c       	adc	r15, r1
+ 900:	54 cf       	rjmp	.-344    	; 0x7aa <lcd_int32+0x54>
+
+00000902 <lcd_int16>:
+//**************************************************************************************
+void    lcd_int16(int16_t l, 
+                  uint8_t fieldwidth, 
+                  uint8_t decpos, 
+                  uint8_t bZeroFill)
+{
+ 902:	5f 92       	push	r5
+ 904:	6f 92       	push	r6
+ 906:	7f 92       	push	r7
+ 908:	8f 92       	push	r8
+ 90a:	9f 92       	push	r9
+ 90c:	af 92       	push	r10
+ 90e:	bf 92       	push	r11
+ 910:	cf 92       	push	r12
+ 912:	df 92       	push	r13
+ 914:	ef 92       	push	r14
+ 916:	ff 92       	push	r15
+ 918:	0f 93       	push	r16
+ 91a:	1f 93       	push	r17
+ 91c:	cf 93       	push	r28
+ 91e:	df 93       	push	r29
+ 920:	cd b7       	in	r28, 0x3d	; 61
+ 922:	de b7       	in	r29, 0x3e	; 62
+ 924:	61 97       	sbiw	r28, 0x11	; 17
+ 926:	0f b6       	in	r0, 0x3f	; 63
+ 928:	f8 94       	cli
+ 92a:	de bf       	out	0x3e, r29	; 62
+ 92c:	0f be       	out	0x3f, r0	; 63
+ 92e:	cd bf       	out	0x3d, r28	; 61
+ 930:	5c 01       	movw	r10, r24
+ 932:	96 2e       	mov	r9, r22
+ 934:	54 2e       	mov	r5, r20
+ 936:	62 2e       	mov	r6, r18
+        uint8_t bSigned;
+
+        // initialize the quotient 
+        qr.quot = l;
+
+        if ( (bSigned=(qr.quot<0)) )
+ 938:	8b 2c       	mov	r8, r11
+ 93a:	88 1c       	adc	r8, r8
+ 93c:	88 24       	eor	r8, r8
+ 93e:	88 1c       	adc	r8, r8
+ 940:	78 2c       	mov	r7, r8
+ 942:	9c 01       	movw	r18, r24
+ 944:	97 fd       	sbrc	r25, 7
+ 946:	9d c0       	rjmp	.+314    	; 0xa82 <lcd_int16+0x180>
+                qr.quot = -qr.quot;
+
+        // convert the digits to the right of the decimal point 
+        if (decpos){
+ 948:	55 20       	and	r5, r5
+ 94a:	09 f4       	brne	.+2      	; 0x94e <lcd_int16+0x4c>
+ 94c:	8e c0       	rjmp	.+284    	; 0xa6a <lcd_int16+0x168>
+ 94e:	8e 01       	movw	r16, r28
+ 950:	0f 5f       	subi	r16, 0xFF	; 255
+ 952:	1f 4f       	sbci	r17, 0xFF	; 255
+ 954:	78 01       	movw	r14, r16
+ 956:	cc 24       	eor	r12, r12
+ 958:	ca 94       	dec	r12
+ 95a:	c5 0c       	add	r12, r5
+ 95c:	d1 2c       	mov	r13, r1
+ 95e:	8f ef       	ldi	r24, 0xFF	; 255
+ 960:	c8 1a       	sub	r12, r24
+ 962:	d8 0a       	sbc	r13, r24
+ 964:	c0 0e       	add	r12, r16
+ 966:	d1 1e       	adc	r13, r17
+          for (; decpos ; decpos--){
+            qr = div(qr.quot, 10);
+ 968:	6a e0       	ldi	r22, 0x0A	; 10
+ 96a:	70 e0       	ldi	r23, 0x00	; 0
+ 96c:	c9 01       	movw	r24, r18
+ 96e:	0e 94 60 06 	call	0xcc0	; 0xcc0 <__divmodhi4>
+ 972:	46 2f       	mov	r20, r22
+ 974:	24 2f       	mov	r18, r20
+ 976:	37 2f       	mov	r19, r23
+            sline[i++] = qr.rem + '0';
+ 978:	80 5d       	subi	r24, 0xD0	; 208
+ 97a:	f7 01       	movw	r30, r14
+ 97c:	81 93       	st	Z+, r24
+ 97e:	7f 01       	movw	r14, r30
+        if ( (bSigned=(qr.quot<0)) )
+                qr.quot = -qr.quot;
+
+        // convert the digits to the right of the decimal point 
+        if (decpos){
+          for (; decpos ; decpos--){
+ 980:	ec 15       	cp	r30, r12
+ 982:	fd 05       	cpc	r31, r13
+ 984:	89 f7       	brne	.-30     	; 0x968 <lcd_int16+0x66>
+            qr = div(qr.quot, 10);
+            sline[i++] = qr.rem + '0';
+          }
+          sline[i++] = '.';
+ 986:	ff 24       	eor	r15, r15
+ 988:	f3 94       	inc	r15
+ 98a:	f5 0c       	add	r15, r5
+ 98c:	f8 01       	movw	r30, r16
+ 98e:	e5 0d       	add	r30, r5
+ 990:	f1 1d       	adc	r31, r1
+ 992:	8e e2       	ldi	r24, 0x2E	; 46
+ 994:	80 83       	st	Z, r24
+ 996:	01 c0       	rjmp	.+2      	; 0x99a <lcd_int16+0x98>
+
+        // convert the digits to the left of the decimal point 
+        do
+        {
+                qr = div(qr.quot, 10);
+                sline[i++] = qr.rem + '0';
+ 998:	f9 2e       	mov	r15, r25
+        }
+
+        // convert the digits to the left of the decimal point 
+        do
+        {
+                qr = div(qr.quot, 10);
+ 99a:	6a e0       	ldi	r22, 0x0A	; 10
+ 99c:	70 e0       	ldi	r23, 0x00	; 0
+ 99e:	c9 01       	movw	r24, r18
+ 9a0:	0e 94 60 06 	call	0xcc0	; 0xcc0 <__divmodhi4>
+ 9a4:	46 2f       	mov	r20, r22
+ 9a6:	24 2f       	mov	r18, r20
+ 9a8:	37 2f       	mov	r19, r23
+                sline[i++] = qr.rem + '0';
+ 9aa:	91 e0       	ldi	r25, 0x01	; 1
+ 9ac:	9f 0d       	add	r25, r15
+ 9ae:	f8 01       	movw	r30, r16
+ 9b0:	ef 0d       	add	r30, r15
+ 9b2:	f1 1d       	adc	r31, r1
+ 9b4:	80 5d       	subi	r24, 0xD0	; 208
+ 9b6:	80 83       	st	Z, r24
+        }
+        while(qr.quot);
+ 9b8:	21 15       	cp	r18, r1
+ 9ba:	31 05       	cpc	r19, r1
+ 9bc:	69 f7       	brne	.-38     	; 0x998 <lcd_int16+0x96>
+
+        // add the sign now if we don't pad the number with zeros 
+        if (!bZeroFill && bSigned)
+ 9be:	61 10       	cpse	r6, r1
+ 9c0:	59 c0       	rjmp	.+178    	; 0xa74 <lcd_int16+0x172>
+ 9c2:	b7 fc       	sbrc	r11, 7
+ 9c4:	63 c0       	rjmp	.+198    	; 0xa8c <lcd_int16+0x18a>
+                sline[i++] = '-';
+                bSigned = 0;
+        }
+
+        // fill the whole field if a width was specified 
+        if (fieldwidth){
+ 9c6:	99 20       	and	r9, r9
+ 9c8:	b1 f0       	breq	.+44     	; 0x9f6 <lcd_int16+0xf4>
+ 9ca:	68 2d       	mov	r22, r8
+ 9cc:	70 e0       	ldi	r23, 0x00	; 0
+          // determine the fill character 
+          fillch = bZeroFill? '0': ' ';
+ 9ce:	80 e2       	ldi	r24, 0x20	; 32
+          for (; i<(fieldwidth-bSigned) ; ){ sline[i++] = fillch;}
+ 9d0:	29 2f       	mov	r18, r25
+ 9d2:	30 e0       	ldi	r19, 0x00	; 0
+ 9d4:	49 2d       	mov	r20, r9
+ 9d6:	50 e0       	ldi	r21, 0x00	; 0
+ 9d8:	46 1b       	sub	r20, r22
+ 9da:	57 0b       	sbc	r21, r23
+ 9dc:	24 17       	cp	r18, r20
+ 9de:	35 07       	cpc	r19, r21
+ 9e0:	54 f4       	brge	.+20     	; 0x9f6 <lcd_int16+0xf4>
+ 9e2:	9f 5f       	subi	r25, 0xFF	; 255
+ 9e4:	f8 01       	movw	r30, r16
+ 9e6:	e2 0f       	add	r30, r18
+ 9e8:	f3 1f       	adc	r31, r19
+ 9ea:	80 83       	st	Z, r24
+ 9ec:	29 2f       	mov	r18, r25
+ 9ee:	30 e0       	ldi	r19, 0x00	; 0
+ 9f0:	24 17       	cp	r18, r20
+ 9f2:	35 07       	cpc	r19, r21
+ 9f4:	b4 f3       	brlt	.-20     	; 0x9e2 <lcd_int16+0xe0>
+        }
+
+        // output the sign, if we need to 
+        if (bSigned){sline[i++] = '-';}
+ 9f6:	77 20       	and	r7, r7
+ 9f8:	31 f0       	breq	.+12     	; 0xa06 <lcd_int16+0x104>
+ 9fa:	f8 01       	movw	r30, r16
+ 9fc:	e9 0f       	add	r30, r25
+ 9fe:	f1 1d       	adc	r31, r1
+ a00:	8d e2       	ldi	r24, 0x2D	; 45
+ a02:	80 83       	st	Z, r24
+ a04:	9f 5f       	subi	r25, 0xFF	; 255
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ a06:	21 e0       	ldi	r18, 0x01	; 1
+
+        // output the sign, if we need to 
+        if (bSigned){sline[i++] = '-';}
+
+        // now output the formatted number 
+            do{send_lcd(CHAR_BYTE, sline[--i]); _delay_us(40);} while(i);
+ a08:	91 50       	subi	r25, 0x01	; 1
+ a0a:	f8 01       	movw	r30, r16
+ a0c:	e9 0f       	add	r30, r25
+ a0e:	f1 1d       	adc	r31, r1
+ a10:	80 81       	ld	r24, Z
+// Commnads that require more time have delays built in for them.
+//
+void send_lcd(uint8_t cmd_or_char, uint8_t byte){
+
+#if SPI_MODE==1
+  SPDR = (cmd_or_char)? 0x01 : 0x00;  //send the proper value for intent
+ a12:	2f b9       	out	0x0f, r18	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ a14:	77 9b       	sbis	0x0e, 7	; 14
+ a16:	fe cf       	rjmp	.-4      	; 0xa14 <lcd_int16+0x112>
+  SPDR = byte;                        //send payload
+ a18:	8f b9       	out	0x0f, r24	; 15
+  while (bit_is_clear(SPSR,SPIF)){}   //wait till byte is sent out
+ a1a:	77 9b       	sbis	0x0e, 7	; 14
+ a1c:	fe cf       	rjmp	.-4      	; 0xa1a <lcd_int16+0x118>
+//pulse width for a 4 Mhz clock.
+//TODO: make number of nops executed dependent on F_CPU, not hardcoded
+//
+void strobe_lcd(void){ 
+#if SPI_MODE==1
+ PORTF |=  0x08; PORTF &= ~0x08; //toggle port F bit 3, LCD strobe trigger
+ a1e:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ a22:	88 60       	ori	r24, 0x08	; 8
+ a24:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ a28:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ a2c:	87 7f       	andi	r24, 0xF7	; 247
+ a2e:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+ a32:	f5 ed       	ldi	r31, 0xD5	; 213
+ a34:	fa 95       	dec	r31
+ a36:	f1 f7       	brne	.-4      	; 0xa34 <lcd_int16+0x132>
+ a38:	00 00       	nop
+
+        // output the sign, if we need to 
+        if (bSigned){sline[i++] = '-';}
+
+        // now output the formatted number 
+            do{send_lcd(CHAR_BYTE, sline[--i]); _delay_us(40);} while(i);
+ a3a:	91 11       	cpse	r25, r1
+ a3c:	e5 cf       	rjmp	.-54     	; 0xa08 <lcd_int16+0x106>
+}
+ a3e:	61 96       	adiw	r28, 0x11	; 17
+ a40:	0f b6       	in	r0, 0x3f	; 63
+ a42:	f8 94       	cli
+ a44:	de bf       	out	0x3e, r29	; 62
+ a46:	0f be       	out	0x3f, r0	; 63
+ a48:	cd bf       	out	0x3d, r28	; 61
+ a4a:	df 91       	pop	r29
+ a4c:	cf 91       	pop	r28
+ a4e:	1f 91       	pop	r17
+ a50:	0f 91       	pop	r16
+ a52:	ff 90       	pop	r15
+ a54:	ef 90       	pop	r14
+ a56:	df 90       	pop	r13
+ a58:	cf 90       	pop	r12
+ a5a:	bf 90       	pop	r11
+ a5c:	af 90       	pop	r10
+ a5e:	9f 90       	pop	r9
+ a60:	8f 90       	pop	r8
+ a62:	7f 90       	pop	r7
+ a64:	6f 90       	pop	r6
+ a66:	5f 90       	pop	r5
+ a68:	08 95       	ret
+                  uint8_t fieldwidth, 
+                  uint8_t decpos, 
+                  uint8_t bZeroFill)
+{
+        char    sline[NUM_LCD_CHARS+1];
+        uint8_t i=0;
+ a6a:	f1 2c       	mov	r15, r1
+ a6c:	8e 01       	movw	r16, r28
+ a6e:	0f 5f       	subi	r16, 0xFF	; 255
+ a70:	1f 4f       	sbci	r17, 0xFF	; 255
+ a72:	93 cf       	rjmp	.-218    	; 0x99a <lcd_int16+0x98>
+                sline[i++] = '-';
+                bSigned = 0;
+        }
+
+        // fill the whole field if a width was specified 
+        if (fieldwidth){
+ a74:	99 20       	and	r9, r9
+ a76:	09 f4       	brne	.+2      	; 0xa7a <lcd_int16+0x178>
+ a78:	be cf       	rjmp	.-132    	; 0x9f6 <lcd_int16+0xf4>
+ a7a:	68 2d       	mov	r22, r8
+ a7c:	70 e0       	ldi	r23, 0x00	; 0
+          // determine the fill character 
+          fillch = bZeroFill? '0': ' ';
+ a7e:	80 e3       	ldi	r24, 0x30	; 48
+ a80:	a7 cf       	rjmp	.-178    	; 0x9d0 <lcd_int16+0xce>
+ a82:	22 27       	eor	r18, r18
+ a84:	33 27       	eor	r19, r19
+ a86:	28 1b       	sub	r18, r24
+ a88:	39 0b       	sbc	r19, r25
+ a8a:	5e cf       	rjmp	.-324    	; 0x948 <lcd_int16+0x46>
+        while(qr.quot);
+
+        // add the sign now if we don't pad the number with zeros 
+        if (!bZeroFill && bSigned)
+        {
+                sline[i++] = '-';
+ a8c:	f3 94       	inc	r15
+ a8e:	f3 94       	inc	r15
+ a90:	f8 01       	movw	r30, r16
+ a92:	e9 0f       	add	r30, r25
+ a94:	f1 1d       	adc	r31, r1
+ a96:	8d e2       	ldi	r24, 0x2D	; 45
+ a98:	80 83       	st	Z, r24
+                bSigned = 0;
+        }
+
+        // fill the whole field if a width was specified 
+        if (fieldwidth){
+ a9a:	99 20       	and	r9, r9
+ a9c:	59 f0       	breq	.+22     	; 0xab4 <lcd_int16+0x1b2>
+          // determine the fill character 
+          fillch = bZeroFill? '0': ' ';
+          for (; i<(fieldwidth-bSigned) ; ){ sline[i++] = fillch;}
+ a9e:	2f 2d       	mov	r18, r15
+ aa0:	30 e0       	ldi	r19, 0x00	; 0
+ aa2:	49 2d       	mov	r20, r9
+ aa4:	50 e0       	ldi	r21, 0x00	; 0
+ aa6:	24 17       	cp	r18, r20
+ aa8:	35 07       	cpc	r19, r21
+ aaa:	24 f4       	brge	.+8      	; 0xab4 <lcd_int16+0x1b2>
+        while(qr.quot);
+
+        // add the sign now if we don't pad the number with zeros 
+        if (!bZeroFill && bSigned)
+        {
+                sline[i++] = '-';
+ aac:	9f 2d       	mov	r25, r15
+                bSigned = 0;
+ aae:	71 2c       	mov	r7, r1
+        }
+
+        // fill the whole field if a width was specified 
+        if (fieldwidth){
+          // determine the fill character 
+          fillch = bZeroFill? '0': ' ';
+ ab0:	80 e2       	ldi	r24, 0x20	; 32
+ ab2:	97 cf       	rjmp	.-210    	; 0x9e2 <lcd_int16+0xe0>
+        while(qr.quot);
+
+        // add the sign now if we don't pad the number with zeros 
+        if (!bZeroFill && bSigned)
+        {
+                sline[i++] = '-';
+ ab4:	9f 2d       	mov	r25, r15
+ ab6:	a7 cf       	rjmp	.-178    	; 0xa06 <lcd_int16+0x104>
+
+00000ab8 <__vector_33>:
+
+//****************************************************************************
+//This is the TWI ISR. Different actions are taken depending upon the value
+//of the TWI status register TWSR.
+//****************************************************************************/
+ISR(TWI_vect){
+ ab8:	1f 92       	push	r1
+ aba:	0f 92       	push	r0
+ abc:	0f b6       	in	r0, 0x3f	; 63
+ abe:	0f 92       	push	r0
+ ac0:	11 24       	eor	r1, r1
+ ac2:	0b b6       	in	r0, 0x3b	; 59
+ ac4:	0f 92       	push	r0
+ ac6:	2f 93       	push	r18
+ ac8:	3f 93       	push	r19
+ aca:	8f 93       	push	r24
+ acc:	9f 93       	push	r25
+ ace:	af 93       	push	r26
+ ad0:	bf 93       	push	r27
+ ad2:	ef 93       	push	r30
+ ad4:	ff 93       	push	r31
+  static uint8_t twi_buf_ptr;  //index into the buffer being used 
+
+  switch (TWSR) {
+ ad6:	e0 91 71 00 	lds	r30, 0x0071	; 0x800071 <__TEXT_REGION_LENGTH__+0x7e0071>
+ ada:	8e 2f       	mov	r24, r30
+ adc:	90 e0       	ldi	r25, 0x00	; 0
+ ade:	fc 01       	movw	r30, r24
+ ae0:	38 97       	sbiw	r30, 0x08	; 8
+ ae2:	e1 35       	cpi	r30, 0x51	; 81
+ ae4:	f1 05       	cpc	r31, r1
+ ae6:	b0 f0       	brcs	.+44     	; 0xb14 <__vector_33+0x5c>
+      break;      
+    case TW_MT_ARB_LOST:                //Arbitration lost 
+      TWCR = TWCR_START;                //initiate RESTART 
+      break;
+    default:                            //Error occured, save TWSR 
+      twi_state = TWSR;         
+ ae8:	80 91 71 00 	lds	r24, 0x0071	; 0x800071 <__TEXT_REGION_LENGTH__+0x7e0071>
+ aec:	80 93 37 01 	sts	0x0137, r24	; 0x800137 <twi_state>
+      TWCR = TWCR_RST;                  //Reset TWI, disable interupts 
+ af0:	84 e0       	ldi	r24, 0x04	; 4
+ af2:	80 93 74 00 	sts	0x0074, r24	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+  }//switch
+}//TWI_isr
+ af6:	ff 91       	pop	r31
+ af8:	ef 91       	pop	r30
+ afa:	bf 91       	pop	r27
+ afc:	af 91       	pop	r26
+ afe:	9f 91       	pop	r25
+ b00:	8f 91       	pop	r24
+ b02:	3f 91       	pop	r19
+ b04:	2f 91       	pop	r18
+ b06:	0f 90       	pop	r0
+ b08:	0b be       	out	0x3b, r0	; 59
+ b0a:	0f 90       	pop	r0
+ b0c:	0f be       	out	0x3f, r0	; 63
+ b0e:	0f 90       	pop	r0
+ b10:	1f 90       	pop	r1
+ b12:	18 95       	reti
+//of the TWI status register TWSR.
+//****************************************************************************/
+ISR(TWI_vect){
+  static uint8_t twi_buf_ptr;  //index into the buffer being used 
+
+  switch (TWSR) {
+ b14:	ea 5b       	subi	r30, 0xBA	; 186
+ b16:	ff 4f       	sbci	r31, 0xFF	; 255
+ b18:	0c 94 93 06 	jmp	0xd26	; 0xd26 <__tablejump2__>
+    case TW_MR_SLA_ACK:                 //SLA+R xmitted and ACK rcvd
+      if (twi_buf_ptr < (twi_msg_size-1)){TWCR = TWCR_RACK;}  //ACK each byte
+      else                               {TWCR = TWCR_RNACK;} //NACK last byte 
+      break; 
+    case TW_MR_DATA_NACK: //Data byte was rcvd and NACK xmitted
+      twi_buf[twi_buf_ptr] = TWDR;      //save last byte to buffer
+ b1c:	80 91 01 01 	lds	r24, 0x0101	; 0x800101 <twi_buf_ptr.1780>
+ b20:	e0 91 38 01 	lds	r30, 0x0138	; 0x800138 <twi_buf>
+ b24:	f0 91 39 01 	lds	r31, 0x0139	; 0x800139 <twi_buf+0x1>
+ b28:	e8 0f       	add	r30, r24
+ b2a:	f1 1d       	adc	r31, r1
+ b2c:	80 91 73 00 	lds	r24, 0x0073	; 0x800073 <__TEXT_REGION_LENGTH__+0x7e0073>
+ b30:	80 83       	st	Z, r24
+      TWCR = TWCR_STOP;                 //initiate a STOP
+ b32:	84 e9       	ldi	r24, 0x94	; 148
+ b34:	80 93 74 00 	sts	0x0074, r24	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+      break;      
+ b38:	de cf       	rjmp	.-68     	; 0xaf6 <__vector_33+0x3e>
+  static uint8_t twi_buf_ptr;  //index into the buffer being used 
+
+  switch (TWSR) {
+    case TW_START:          //START has been xmitted, fall thorough
+    case TW_REP_START:      //Repeated START was xmitted
+      TWDR = twi_bus_addr;  //load up the twi bus address
+ b3a:	80 91 3a 01 	lds	r24, 0x013A	; 0x80013a <twi_bus_addr>
+ b3e:	80 93 73 00 	sts	0x0073, r24	; 0x800073 <__TEXT_REGION_LENGTH__+0x7e0073>
+      twi_buf_ptr = 0;      //initalize buffer pointer 
+ b42:	10 92 01 01 	sts	0x0101, r1	; 0x800101 <twi_buf_ptr.1780>
+      TWCR = TWCR_SEND;     //send SLA+RW
+ b46:	85 e8       	ldi	r24, 0x85	; 133
+ b48:	80 93 74 00 	sts	0x0074, r24	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+      break;
+ b4c:	d4 cf       	rjmp	.-88     	; 0xaf6 <__vector_33+0x3e>
+    case TW_MT_SLA_ACK:     //SLA+W was xmitted and ACK rcvd, fall through 
+    case TW_MT_DATA_ACK:                //Data byte was xmitted and ACK rcvd
+      if (twi_buf_ptr < twi_msg_size){  //send data till done
+ b4e:	80 91 01 01 	lds	r24, 0x0101	; 0x800101 <twi_buf_ptr.1780>
+ b52:	90 91 3b 01 	lds	r25, 0x013B	; 0x80013b <twi_msg_size>
+ b56:	89 17       	cp	r24, r25
+ b58:	60 f7       	brcc	.-40     	; 0xb32 <__vector_33+0x7a>
+        TWDR = twi_buf[twi_buf_ptr++];  //load next and postincrement index
+ b5a:	e0 91 38 01 	lds	r30, 0x0138	; 0x800138 <twi_buf>
+ b5e:	f0 91 39 01 	lds	r31, 0x0139	; 0x800139 <twi_buf+0x1>
+ b62:	91 e0       	ldi	r25, 0x01	; 1
+ b64:	98 0f       	add	r25, r24
+ b66:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <twi_buf_ptr.1780>
+ b6a:	e8 0f       	add	r30, r24
+ b6c:	f1 1d       	adc	r31, r1
+ b6e:	80 81       	ld	r24, Z
+ b70:	80 93 73 00 	sts	0x0073, r24	; 0x800073 <__TEXT_REGION_LENGTH__+0x7e0073>
+        TWCR = TWCR_SEND;               //send next byte 
+ b74:	85 e8       	ldi	r24, 0x85	; 133
+ b76:	80 93 74 00 	sts	0x0074, r24	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+ b7a:	bd cf       	rjmp	.-134    	; 0xaf6 <__vector_33+0x3e>
+    case TW_MR_DATA_NACK: //Data byte was rcvd and NACK xmitted
+      twi_buf[twi_buf_ptr] = TWDR;      //save last byte to buffer
+      TWCR = TWCR_STOP;                 //initiate a STOP
+      break;      
+    case TW_MT_ARB_LOST:                //Arbitration lost 
+      TWCR = TWCR_START;                //initiate RESTART 
+ b7c:	85 ea       	ldi	r24, 0xA5	; 165
+ b7e:	80 93 74 00 	sts	0x0074, r24	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+      break;
+ b82:	b9 cf       	rjmp	.-142    	; 0xaf6 <__vector_33+0x3e>
+ b84:	20 91 01 01 	lds	r18, 0x0101	; 0x800101 <twi_buf_ptr.1780>
+      else{TWCR = TWCR_STOP;}           //last byte sent, send STOP 
+      break;
+    case TW_MR_DATA_ACK:                //Data byte has been rcvd, ACK xmitted, fall through
+      twi_buf[twi_buf_ptr++] = TWDR;    //fill buffer with rcvd data
+    case TW_MR_SLA_ACK:                 //SLA+R xmitted and ACK rcvd
+      if (twi_buf_ptr < (twi_msg_size-1)){TWCR = TWCR_RACK;}  //ACK each byte
+ b88:	80 91 3b 01 	lds	r24, 0x013B	; 0x80013b <twi_msg_size>
+ b8c:	30 e0       	ldi	r19, 0x00	; 0
+ b8e:	90 e0       	ldi	r25, 0x00	; 0
+ b90:	01 97       	sbiw	r24, 0x01	; 1
+ b92:	28 17       	cp	r18, r24
+ b94:	39 07       	cpc	r19, r25
+ b96:	dc f4       	brge	.+54     	; 0xbce <__vector_33+0x116>
+ b98:	85 ec       	ldi	r24, 0xC5	; 197
+ b9a:	80 93 74 00 	sts	0x0074, r24	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+ b9e:	ab cf       	rjmp	.-170    	; 0xaf6 <__vector_33+0x3e>
+        TWCR = TWCR_SEND;               //send next byte 
+      }
+      else{TWCR = TWCR_STOP;}           //last byte sent, send STOP 
+      break;
+    case TW_MR_DATA_ACK:                //Data byte has been rcvd, ACK xmitted, fall through
+      twi_buf[twi_buf_ptr++] = TWDR;    //fill buffer with rcvd data
+ ba0:	e0 91 38 01 	lds	r30, 0x0138	; 0x800138 <twi_buf>
+ ba4:	f0 91 39 01 	lds	r31, 0x0139	; 0x800139 <twi_buf+0x1>
+ ba8:	80 91 01 01 	lds	r24, 0x0101	; 0x800101 <twi_buf_ptr.1780>
+ bac:	21 e0       	ldi	r18, 0x01	; 1
+ bae:	28 0f       	add	r18, r24
+ bb0:	20 93 01 01 	sts	0x0101, r18	; 0x800101 <twi_buf_ptr.1780>
+ bb4:	e8 0f       	add	r30, r24
+ bb6:	f1 1d       	adc	r31, r1
+ bb8:	80 91 73 00 	lds	r24, 0x0073	; 0x800073 <__TEXT_REGION_LENGTH__+0x7e0073>
+ bbc:	80 83       	st	Z, r24
+    case TW_MR_SLA_ACK:                 //SLA+R xmitted and ACK rcvd
+      if (twi_buf_ptr < (twi_msg_size-1)){TWCR = TWCR_RACK;}  //ACK each byte
+ bbe:	80 91 3b 01 	lds	r24, 0x013B	; 0x80013b <twi_msg_size>
+ bc2:	30 e0       	ldi	r19, 0x00	; 0
+ bc4:	90 e0       	ldi	r25, 0x00	; 0
+ bc6:	01 97       	sbiw	r24, 0x01	; 1
+ bc8:	28 17       	cp	r18, r24
+ bca:	39 07       	cpc	r19, r25
+ bcc:	2c f3       	brlt	.-54     	; 0xb98 <__vector_33+0xe0>
+      else                               {TWCR = TWCR_RNACK;} //NACK last byte 
+ bce:	85 e8       	ldi	r24, 0x85	; 133
+ bd0:	80 93 74 00 	sts	0x0074, r24	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+ bd4:	90 cf       	rjmp	.-224    	; 0xaf6 <__vector_33+0x3e>
+
+00000bd6 <twi_busy>:
+//Call this function to test if the TWI unit is busy transferring data. The TWI
+//code uses the the interrupt enable bit (TWIE) to indicate if the TWI unit
+//is busy or not.  This protocol must be maintained for correct operation.
+//*****************************************************************************
+uint8_t twi_busy(void){
+  return (bit_is_set(TWCR,TWIE)); //if interrupt is enabled, twi is busy
+ bd6:	80 91 74 00 	lds	r24, 0x0074	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+}
+ bda:	81 70       	andi	r24, 0x01	; 1
+ bdc:	08 95       	ret
+
+00000bde <twi_start_wr>:
+//Call this function to test if the TWI unit is busy transferring data. The TWI
+//code uses the the interrupt enable bit (TWIE) to indicate if the TWI unit
+//is busy or not.  This protocol must be maintained for correct operation.
+//*****************************************************************************
+uint8_t twi_busy(void){
+  return (bit_is_set(TWCR,TWIE)); //if interrupt is enabled, twi is busy
+ bde:	90 91 74 00 	lds	r25, 0x0074	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+//Initiates a write transfer. Loads global variables. Sends START. ISR handles
+//the rest.
+//****************************************************************************
+void twi_start_wr(uint8_t twi_addr, uint8_t *twi_data, uint8_t byte_cnt){
+
+  while(twi_busy());                    //wait till TWI rdy for next xfer
+ be2:	90 fd       	sbrc	r25, 0
+ be4:	fc cf       	rjmp	.-8      	; 0xbde <twi_start_wr>
+  twi_bus_addr = (twi_addr & ~TW_READ); //set twi bus address, mark as write 
+ be6:	8e 7f       	andi	r24, 0xFE	; 254
+ be8:	80 93 3a 01 	sts	0x013A, r24	; 0x80013a <twi_bus_addr>
+  twi_buf = twi_data;                   //load pointer to write buffer
+ bec:	70 93 39 01 	sts	0x0139, r23	; 0x800139 <twi_buf+0x1>
+ bf0:	60 93 38 01 	sts	0x0138, r22	; 0x800138 <twi_buf>
+  twi_msg_size = byte_cnt;              //load size of xfer 
+ bf4:	40 93 3b 01 	sts	0x013B, r20	; 0x80013b <twi_msg_size>
+  TWCR = TWCR_START;                    //initiate START
+ bf8:	85 ea       	ldi	r24, 0xA5	; 165
+ bfa:	80 93 74 00 	sts	0x0074, r24	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+ bfe:	08 95       	ret
+
+00000c00 <twi_start_rd>:
+//Call this function to test if the TWI unit is busy transferring data. The TWI
+//code uses the the interrupt enable bit (TWIE) to indicate if the TWI unit
+//is busy or not.  This protocol must be maintained for correct operation.
+//*****************************************************************************
+uint8_t twi_busy(void){
+  return (bit_is_set(TWCR,TWIE)); //if interrupt is enabled, twi is busy
+ c00:	90 91 74 00 	lds	r25, 0x0074	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+//Initiates a read transfer. Loads global variables. Sends START. ISR handles
+//the rest.
+//****************************************************************************
+void twi_start_rd(uint8_t twi_addr, uint8_t *twi_data, uint8_t byte_cnt){
+
+  while(twi_busy());                   //wait till TWI rdy for next xfer
+ c04:	90 fd       	sbrc	r25, 0
+ c06:	fc cf       	rjmp	.-8      	; 0xc00 <twi_start_rd>
+  twi_bus_addr = (twi_addr | TW_READ); //set twi bus address, mark as read  
+ c08:	81 60       	ori	r24, 0x01	; 1
+ c0a:	80 93 3a 01 	sts	0x013A, r24	; 0x80013a <twi_bus_addr>
+  twi_buf = twi_data;                  //load pointer to write buffer
+ c0e:	70 93 39 01 	sts	0x0139, r23	; 0x800139 <twi_buf+0x1>
+ c12:	60 93 38 01 	sts	0x0138, r22	; 0x800138 <twi_buf>
+  twi_msg_size = byte_cnt;             //load size of xfer 
+ c16:	40 93 3b 01 	sts	0x013B, r20	; 0x80013b <twi_msg_size>
+  TWCR = TWCR_START;                   //initiate START
+ c1a:	85 ea       	ldi	r24, 0xA5	; 165
+ c1c:	80 93 74 00 	sts	0x0074, r24	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+ c20:	08 95       	ret
+
+00000c22 <init_twi>:
+//10K pullups are present on the board
+//For the alarm clock an additional 4.7K resistor is also there for pullup
+//******************************************************************************
+
+void init_twi(){
+  TWDR = 0xFF;     //release SDA, default contents
+ c22:	8f ef       	ldi	r24, 0xFF	; 255
+ c24:	80 93 73 00 	sts	0x0073, r24	; 0x800073 <__TEXT_REGION_LENGTH__+0x7e0073>
+  TWSR = 0x00;     //prescaler value = 1
+ c28:	10 92 71 00 	sts	0x0071, r1	; 0x800071 <__TEXT_REGION_LENGTH__+0x7e0071>
+  TWBR = TWI_TWBR; //defined in twi_master.h 
+ c2c:	8c e0       	ldi	r24, 0x0C	; 12
+ c2e:	80 93 70 00 	sts	0x0070, r24	; 0x800070 <__TEXT_REGION_LENGTH__+0x7e0070>
+ c32:	08 95       	ret
+
+00000c34 <main>:
+// external device specific initalizations.
+//********************************************************************
+void
+spi_init(void)
+{
+  DDRB |= 0x07; //Turn on SS, MOSI, SCLK
+ c34:	87 b3       	in	r24, 0x17	; 23
+ c36:	87 60       	ori	r24, 0x07	; 7
+ c38:	87 bb       	out	0x17, r24	; 23
+  //mstr mode, sck=clk/2, cycle 1/2 phase, low polarity, MSB 1st,
+  //no interrupts, enable SPI, clk low initially, rising edge sample
+  SPCR = (1 << SPE) | (1 << MSTR);
+ c3a:	80 e5       	ldi	r24, 0x50	; 80
+ c3c:	8d b9       	out	0x0d, r24	; 13
+  SPSR = (1 << SPI2X); //SPI at 2x speed (8 MHz)
+ c3e:	81 e0       	ldi	r24, 0x01	; 1
+ c40:	8e b9       	out	0x0e, r24	; 14
+int main()
+{
+  uint16_t lm73_temp; //a place to assemble the temperature from the lm73
+
+  spi_init(); //initalize SPI
+  lcd_init(); //initalize LCD (lcd_functions.h)
+ c42:	0e 94 e9 02 	call	0x5d2	; 0x5d2 <lcd_init>
+  init_twi(); //initalize TWI (twi_master.h)
+ c46:	0e 94 11 06 	call	0xc22	; 0xc22 <init_twi>
+
+  sei(); //enable interrupts before entering loop
+ c4a:	78 94       	sei
+
+  //set LM73 mode for reading temperature by loading pointer register
+  lm73_wr_buf[0] = LM73_PTR_TEMP;    //load lm73_wr_buf[0] with temperature pointer address
+ c4c:	10 92 33 01 	sts	0x0133, r1	; 0x800133 <lm73_wr_buf>
+  twi_start_wr(LM73_ADDRESS, lm73_wr_buf, 2);                    //start the TWI write process
+ c50:	42 e0       	ldi	r20, 0x02	; 2
+ c52:	63 e3       	ldi	r22, 0x33	; 51
+ c54:	71 e0       	ldi	r23, 0x01	; 1
+ c56:	80 e9       	ldi	r24, 0x90	; 144
+ c58:	0e 94 ef 05 	call	0xbde	; 0xbde <twi_start_wr>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ c5c:	8f e3       	ldi	r24, 0x3F	; 63
+ c5e:	9f e1       	ldi	r25, 0x1F	; 31
+ c60:	01 97       	sbiw	r24, 0x01	; 1
+ c62:	f1 f7       	brne	.-4      	; 0xc60 <main+0x2c>
+ c64:	00 c0       	rjmp	.+0      	; 0xc66 <main+0x32>
+ c66:	00 00       	nop
+  _delay_ms(2);    //wait for the xfer to finish
+
+  clear_display(); //clean up the display
+ c68:	0e 94 3c 02 	call	0x478	; 0x478 <clear_display>
+ c6c:	9f ef       	ldi	r25, 0xFF	; 255
+ c6e:	21 ee       	ldi	r18, 0xE1	; 225
+ c70:	84 e0       	ldi	r24, 0x04	; 4
+ c72:	91 50       	subi	r25, 0x01	; 1
+ c74:	20 40       	sbci	r18, 0x00	; 0
+ c76:	80 40       	sbci	r24, 0x00	; 0
+ c78:	e1 f7       	brne	.-8      	; 0xc72 <main+0x3e>
+ c7a:	00 c0       	rjmp	.+0      	; 0xc7c <main+0x48>
+ c7c:	00 00       	nop
+
+  while (1)
+  {                                 //main while loop
+    _delay_ms(100);                 //tenth second wait
+    clear_display();                //wipe the display
+ c7e:	0e 94 3c 02 	call	0x478	; 0x478 <clear_display>
+    twi_start_rd(LM73_ADDRESS, lm73_rd_buf, 2);      //read temperature data from LM73 (2 bytes)
+ c82:	42 e0       	ldi	r20, 0x02	; 2
+ c84:	65 e3       	ldi	r22, 0x35	; 53
+ c86:	71 e0       	ldi	r23, 0x01	; 1
+ c88:	80 e9       	ldi	r24, 0x90	; 144
+ c8a:	0e 94 00 06 	call	0xc00	; 0xc00 <twi_start_rd>
+ c8e:	8f e3       	ldi	r24, 0x3F	; 63
+ c90:	9f e1       	ldi	r25, 0x1F	; 31
+ c92:	01 97       	sbiw	r24, 0x01	; 1
+ c94:	f1 f7       	brne	.-4      	; 0xc92 <main+0x5e>
+ c96:	00 c0       	rjmp	.+0      	; 0xc98 <main+0x64>
+ c98:	00 00       	nop
+    _delay_ms(2);                   //wait for it to finish
+    lm73_temp = lm73_rd_buf[1];     //save high temperature byte into lm73_temp
+ c9a:	80 91 36 01 	lds	r24, 0x0136	; 0x800136 <lm73_rd_buf+0x1>
+    lm73_temp = lm73_temp << 4;     //shift it into upper byte
+ c9e:	20 e1       	ldi	r18, 0x10	; 16
+ ca0:	82 9f       	mul	r24, r18
+ ca2:	c0 01       	movw	r24, r0
+ ca4:	11 24       	eor	r1, r1
+    } else if (__radix < 2 || __radix > 36) {
+	*__s = 0;
+	return __s;
+    } else {
+	extern char *__itoa_ncheck (int, char *, unsigned char);
+	return __itoa_ncheck (__val, __s, __radix);
+ ca6:	20 91 35 01 	lds	r18, 0x0135	; 0x800135 <lm73_rd_buf>
+ caa:	4a e0       	ldi	r20, 0x0A	; 10
+ cac:	63 e0       	ldi	r22, 0x03	; 3
+ cae:	71 e0       	ldi	r23, 0x01	; 1
+ cb0:	82 2b       	or	r24, r18
+ cb2:	0e 94 d2 06 	call	0xda4	; 0xda4 <__itoa_ncheck>
+    lm73_temp |= lm73_rd_buf[0];    //"OR" in the low temp byte to lm73_temp
+    itoa(lm73_temp, lcd_string_array, 10);                //convert to string in array with itoa() from avr-libc
+    string2lcd(lcd_string_array);   //send the string to LCD (lcd_functions)
+ cb6:	83 e0       	ldi	r24, 0x03	; 3
+ cb8:	91 e0       	ldi	r25, 0x01	; 1
+ cba:	0e 94 bc 02 	call	0x578	; 0x578 <string2lcd>
+ cbe:	d6 cf       	rjmp	.-84     	; 0xc6c <main+0x38>
+
+00000cc0 <__divmodhi4>:
+ cc0:	97 fb       	bst	r25, 7
+ cc2:	07 2e       	mov	r0, r23
+ cc4:	16 f4       	brtc	.+4      	; 0xcca <__divmodhi4+0xa>
+ cc6:	00 94       	com	r0
+ cc8:	07 d0       	rcall	.+14     	; 0xcd8 <__divmodhi4_neg1>
+ cca:	77 fd       	sbrc	r23, 7
+ ccc:	09 d0       	rcall	.+18     	; 0xce0 <__divmodhi4_neg2>
+ cce:	0e 94 9c 06 	call	0xd38	; 0xd38 <__udivmodhi4>
+ cd2:	07 fc       	sbrc	r0, 7
+ cd4:	05 d0       	rcall	.+10     	; 0xce0 <__divmodhi4_neg2>
+ cd6:	3e f4       	brtc	.+14     	; 0xce6 <__divmodhi4_exit>
+
+00000cd8 <__divmodhi4_neg1>:
+ cd8:	90 95       	com	r25
+ cda:	81 95       	neg	r24
+ cdc:	9f 4f       	sbci	r25, 0xFF	; 255
+ cde:	08 95       	ret
+
+00000ce0 <__divmodhi4_neg2>:
+ ce0:	70 95       	com	r23
+ ce2:	61 95       	neg	r22
+ ce4:	7f 4f       	sbci	r23, 0xFF	; 255
+
+00000ce6 <__divmodhi4_exit>:
+ ce6:	08 95       	ret
+
+00000ce8 <__divmodsi4>:
+ ce8:	05 2e       	mov	r0, r21
+ cea:	97 fb       	bst	r25, 7
+ cec:	1e f4       	brtc	.+6      	; 0xcf4 <__divmodsi4+0xc>
+ cee:	00 94       	com	r0
+ cf0:	0e 94 8b 06 	call	0xd16	; 0xd16 <__negsi2>
+ cf4:	57 fd       	sbrc	r21, 7
+ cf6:	07 d0       	rcall	.+14     	; 0xd06 <__divmodsi4_neg2>
+ cf8:	0e 94 b0 06 	call	0xd60	; 0xd60 <__udivmodsi4>
+ cfc:	07 fc       	sbrc	r0, 7
+ cfe:	03 d0       	rcall	.+6      	; 0xd06 <__divmodsi4_neg2>
+ d00:	4e f4       	brtc	.+18     	; 0xd14 <__divmodsi4_exit>
+ d02:	0c 94 8b 06 	jmp	0xd16	; 0xd16 <__negsi2>
+
+00000d06 <__divmodsi4_neg2>:
+ d06:	50 95       	com	r21
+ d08:	40 95       	com	r20
+ d0a:	30 95       	com	r19
+ d0c:	21 95       	neg	r18
+ d0e:	3f 4f       	sbci	r19, 0xFF	; 255
+ d10:	4f 4f       	sbci	r20, 0xFF	; 255
+ d12:	5f 4f       	sbci	r21, 0xFF	; 255
+
+00000d14 <__divmodsi4_exit>:
+ d14:	08 95       	ret
+
+00000d16 <__negsi2>:
+ d16:	90 95       	com	r25
+ d18:	80 95       	com	r24
+ d1a:	70 95       	com	r23
+ d1c:	61 95       	neg	r22
+ d1e:	7f 4f       	sbci	r23, 0xFF	; 255
+ d20:	8f 4f       	sbci	r24, 0xFF	; 255
+ d22:	9f 4f       	sbci	r25, 0xFF	; 255
+ d24:	08 95       	ret
+
+00000d26 <__tablejump2__>:
+ d26:	ee 0f       	add	r30, r30
+ d28:	ff 1f       	adc	r31, r31
+ d2a:	00 24       	eor	r0, r0
+ d2c:	00 1c       	adc	r0, r0
+ d2e:	0b be       	out	0x3b, r0	; 59
+ d30:	07 90       	elpm	r0, Z+
+ d32:	f6 91       	elpm	r31, Z
+ d34:	e0 2d       	mov	r30, r0
+ d36:	09 94       	ijmp
+
+00000d38 <__udivmodhi4>:
+ d38:	aa 1b       	sub	r26, r26
+ d3a:	bb 1b       	sub	r27, r27
+ d3c:	51 e1       	ldi	r21, 0x11	; 17
+ d3e:	07 c0       	rjmp	.+14     	; 0xd4e <__udivmodhi4_ep>
+
+00000d40 <__udivmodhi4_loop>:
+ d40:	aa 1f       	adc	r26, r26
+ d42:	bb 1f       	adc	r27, r27
+ d44:	a6 17       	cp	r26, r22
+ d46:	b7 07       	cpc	r27, r23
+ d48:	10 f0       	brcs	.+4      	; 0xd4e <__udivmodhi4_ep>
+ d4a:	a6 1b       	sub	r26, r22
+ d4c:	b7 0b       	sbc	r27, r23
+
+00000d4e <__udivmodhi4_ep>:
+ d4e:	88 1f       	adc	r24, r24
+ d50:	99 1f       	adc	r25, r25
+ d52:	5a 95       	dec	r21
+ d54:	a9 f7       	brne	.-22     	; 0xd40 <__udivmodhi4_loop>
+ d56:	80 95       	com	r24
+ d58:	90 95       	com	r25
+ d5a:	bc 01       	movw	r22, r24
+ d5c:	cd 01       	movw	r24, r26
+ d5e:	08 95       	ret
+
+00000d60 <__udivmodsi4>:
+ d60:	a1 e2       	ldi	r26, 0x21	; 33
+ d62:	1a 2e       	mov	r1, r26
+ d64:	aa 1b       	sub	r26, r26
+ d66:	bb 1b       	sub	r27, r27
+ d68:	fd 01       	movw	r30, r26
+ d6a:	0d c0       	rjmp	.+26     	; 0xd86 <__udivmodsi4_ep>
+
+00000d6c <__udivmodsi4_loop>:
+ d6c:	aa 1f       	adc	r26, r26
+ d6e:	bb 1f       	adc	r27, r27
+ d70:	ee 1f       	adc	r30, r30
+ d72:	ff 1f       	adc	r31, r31
+ d74:	a2 17       	cp	r26, r18
+ d76:	b3 07       	cpc	r27, r19
+ d78:	e4 07       	cpc	r30, r20
+ d7a:	f5 07       	cpc	r31, r21
+ d7c:	20 f0       	brcs	.+8      	; 0xd86 <__udivmodsi4_ep>
+ d7e:	a2 1b       	sub	r26, r18
+ d80:	b3 0b       	sbc	r27, r19
+ d82:	e4 0b       	sbc	r30, r20
+ d84:	f5 0b       	sbc	r31, r21
+
+00000d86 <__udivmodsi4_ep>:
+ d86:	66 1f       	adc	r22, r22
+ d88:	77 1f       	adc	r23, r23
+ d8a:	88 1f       	adc	r24, r24
+ d8c:	99 1f       	adc	r25, r25
+ d8e:	1a 94       	dec	r1
+ d90:	69 f7       	brne	.-38     	; 0xd6c <__udivmodsi4_loop>
+ d92:	60 95       	com	r22
+ d94:	70 95       	com	r23
+ d96:	80 95       	com	r24
+ d98:	90 95       	com	r25
+ d9a:	9b 01       	movw	r18, r22
+ d9c:	ac 01       	movw	r20, r24
+ d9e:	bd 01       	movw	r22, r26
+ da0:	cf 01       	movw	r24, r30
+ da2:	08 95       	ret
+
+00000da4 <__itoa_ncheck>:
+ da4:	bb 27       	eor	r27, r27
+ da6:	4a 30       	cpi	r20, 0x0A	; 10
+ da8:	31 f4       	brne	.+12     	; 0xdb6 <__itoa_ncheck+0x12>
+ daa:	99 23       	and	r25, r25
+ dac:	22 f4       	brpl	.+8      	; 0xdb6 <__itoa_ncheck+0x12>
+ dae:	bd e2       	ldi	r27, 0x2D	; 45
+ db0:	90 95       	com	r25
+ db2:	81 95       	neg	r24
+ db4:	9f 4f       	sbci	r25, 0xFF	; 255
+ db6:	0c 94 de 06 	jmp	0xdbc	; 0xdbc <__utoa_common>
+
+00000dba <__utoa_ncheck>:
+ dba:	bb 27       	eor	r27, r27
+
+00000dbc <__utoa_common>:
+ dbc:	fb 01       	movw	r30, r22
+ dbe:	55 27       	eor	r21, r21
+ dc0:	aa 27       	eor	r26, r26
+ dc2:	88 0f       	add	r24, r24
+ dc4:	99 1f       	adc	r25, r25
+ dc6:	aa 1f       	adc	r26, r26
+ dc8:	a4 17       	cp	r26, r20
+ dca:	10 f0       	brcs	.+4      	; 0xdd0 <__utoa_common+0x14>
+ dcc:	a4 1b       	sub	r26, r20
+ dce:	83 95       	inc	r24
+ dd0:	50 51       	subi	r21, 0x10	; 16
+ dd2:	b9 f7       	brne	.-18     	; 0xdc2 <__utoa_common+0x6>
+ dd4:	a0 5d       	subi	r26, 0xD0	; 208
+ dd6:	aa 33       	cpi	r26, 0x3A	; 58
+ dd8:	08 f0       	brcs	.+2      	; 0xddc <__utoa_common+0x20>
+ dda:	a9 5d       	subi	r26, 0xD9	; 217
+ ddc:	a1 93       	st	Z+, r26
+ dde:	00 97       	sbiw	r24, 0x00	; 0
+ de0:	79 f7       	brne	.-34     	; 0xdc0 <__utoa_common+0x4>
+ de2:	b1 11       	cpse	r27, r1
+ de4:	b1 93       	st	Z+, r27
+ de6:	11 92       	st	Z+, r1
+ de8:	cb 01       	movw	r24, r22
+ dea:	0c 94 f7 06 	jmp	0xdee	; 0xdee <strrev>
+
+00000dee <strrev>:
+ dee:	dc 01       	movw	r26, r24
+ df0:	fc 01       	movw	r30, r24
+ df2:	67 2f       	mov	r22, r23
+ df4:	71 91       	ld	r23, Z+
+ df6:	77 23       	and	r23, r23
+ df8:	e1 f7       	brne	.-8      	; 0xdf2 <strrev+0x4>
+ dfa:	32 97       	sbiw	r30, 0x02	; 2
+ dfc:	04 c0       	rjmp	.+8      	; 0xe06 <strrev+0x18>
+ dfe:	7c 91       	ld	r23, X
+ e00:	6d 93       	st	X+, r22
+ e02:	70 83       	st	Z, r23
+ e04:	62 91       	ld	r22, -Z
+ e06:	ae 17       	cp	r26, r30
+ e08:	bf 07       	cpc	r27, r31
+ e0a:	c8 f3       	brcs	.-14     	; 0xdfe <strrev+0x10>
+ e0c:	08 95       	ret
+
+00000e0e <_exit>:
+ e0e:	f8 94       	cli
+
+00000e10 <__stop_program>:
+ e10:	ff cf       	rjmp	.-2      	; 0xe10 <__stop_program>
