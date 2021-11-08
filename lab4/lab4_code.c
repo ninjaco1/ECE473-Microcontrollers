@@ -84,12 +84,15 @@ static uint8_t timerFlag = 0; // if timer is on
 static uint8_t alarmFlag = 0;
 static uint8_t changeMinuteFlag = 0;
 static uint8_t changeHourFlag = 0;
+static uint8_t setAlarm = 0;
 
 
 // clock
 static uint8_t minutes = 0;
 static uint8_t hours = 0;
 static uint16_t timer = 0; // in seconds 
+static uint8_t alarmMinute = 0;
+static uint8_t alarmHour = 0;
 
 // lab 2 functions
 int8_t chk_buttons(int button); // check what button is being pressed
@@ -110,16 +113,24 @@ ISR(TIMER0_OVF_vect);
 void segclock();
 void alarmDisplay();
 void buttonPress(uint8_t);
+void tcnt1_init(void); // frequency of notes
+void tcnt2_init(void);
+void tcnt3_init(void);
+ISR(TIMER1_COMPA_vect); // ctc, notes
+
 
 int main()
 {
     DDRB = 0xF0; //set port B bits 4-7 B as outputs
     DDRE |= 0b01000000; // set E6 to output
     DDRD |= 0b00001100; // slave select pins
+    DDRC |= 0xFF; // set prot C to all outputs
 
     PORTB &= ~(1 << PORTB7); 
 
     tcnt0_init();  //initalize counter timer zero
+    // tcnt1_init();  //initalize counter timer one
+    // tcnt3_init();  //initalize counter timer three
     spi_init();    //initalize SPI port
     sei();         //enable interrupts before entering loop
 
@@ -279,10 +290,16 @@ void setDigit()
 {
     DDRA = 0xFF; // setting PORT A as an output
     int i;
+    uint8_t dis;
     for (i = 0; i < 5; i++)
     { // looping through the segment data and assigning the port the right values.
         PORTB = decoder[i]; // enable the right digit to turn on
-        PORTA = dec_to_7seg[segment_data[i]]; // turn on the right segments
+        dis = dec_to_7seg[segment_data[i]];
+        if ((i == 4) && (alarmFlag == 1)){
+            
+            dis &= ~(1 << 7);
+        }
+        PORTA = dis; // turn on the right segments
         _delay_ms(0.5);
     }
 }
@@ -313,6 +330,43 @@ void tcnt0_init(void){
     TCCR0  |=  (1 << CS00); //normal mode, no prescale
 }
 
+/***********************************************************************/
+//                              tcnt1_init                             
+//Initalizes timer/counter1 (TCNT1). TCNT1 is running in async mode
+//with interal 16Mhz crystal.  Runs in normal mode with no prescaling.
+//Interrupt occurs at OCR1A value.
+//
+void tcnt1_init(void){
+
+    TIMSK  |=  (1 << OCIE1A); //enable TCNT1 ctc interrupt
+    TCCR1A  |=  0; // CTC on OC1A
+    TCCR1B |= (1 << CS10) | (1 << WGM12); // no prescalar and ctc
+    TCCR1C |= 0x0;
+    OCR1A = 18181; // 440Hz, A4, change later for beaver fight song
+}
+
+/***********************************************************************/
+//                              tnct2_init
+// Initalizes timer/counter2 (TCNT2). TNCT2 is running a fast PWM mode. 
+// This will be on PORTB7. This timer to be used to set the brightness of 
+// the LED display
+/***********************************************************************/
+void tcnt2_init(void){
+
+
+    
+}
+
+/***********************************************************************/
+//                              tnct3_init
+// Initalizes timer/counter3 (TCNT3). TNCT3 is running a fast PWM mode. 
+// This sets the volume control for the speaker
+/***********************************************************************/
+void tcnt3_init(void){
+
+
+    
+}
 /******************************************************************************/
 //                                    ISR
 // Then fucntion will will called when there is an interrupt within the system
@@ -401,6 +455,7 @@ ISR(TIMER0_OVF_vect){
                 // timer goes off display alarm 
                 alarmFlag = 1; // display alarm
                 timerFlag = 0; // turn off timer
+                // show indication on LED display
             }
         }
 
@@ -526,7 +581,6 @@ void alarmDisplay(){
         string2lcd(lcd_string_array);
     }
     
-
 }
 
 /******************************************************************************/
@@ -543,6 +597,7 @@ void buttonPress(uint8_t button){
             barGraphDisplay &= ~(1 << 1); // turn off the timer modes
             barGraphDisplay &= ~(1 << 2); // turn off the timer modes
             clear_display();
+            // turn off indication on LED display 
             return;
         }
         case 1:
@@ -578,4 +633,11 @@ void buttonPress(uint8_t button){
         default:
             break;
     }
+}
+
+ISR(TIMER1_COMPA_vect){
+
+    PORTC ^= 1 << 0; // turn on right speaker
+    PORTC |= 1 << 6;// volume on max
+
 }
