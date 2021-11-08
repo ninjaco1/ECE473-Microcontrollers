@@ -20,3 +20,15 @@ lab3/lab3_code.srec
 lab3/lab3_code_eeprom.bin
 lab3/lab3_code_eeprom.hex
 lab3/lab3_code_eeprom.srec
+lab3-1/
+lab4/lab4.ps~
+lab4/lab4_code.bin
+lab4/lab4_code.elf
+lab4/lab4_code.hex
+lab4/lab4_code.lst
+lab4/lab4_code.map
+lab4/lab4_code.o
+lab4/lab4_code.srec
+lab4/lab4_code_eeprom.bin
+lab4/lab4_code_eeprom.hex
+lab4/lab4_code_eeprom.srec
