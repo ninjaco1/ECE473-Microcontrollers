@@ -5,6 +5,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+#include "hd44780.h"
 
 //  HARDWARE SETUP:
 //  PORTA is connected to the segments of the LED display. and to the pushbuttons.
@@ -73,16 +74,22 @@ uint16_t current_num = 0;
 // what value to display
 static uint8_t barGraphDisplay = 0;
 
-// flags
+
 // determine if we are increment or decrement mode
-static uint8_t incDec2 = 0;
-static uint8_t incDec4 = 0;
 static uint8_t data = 0;
+
+// flags
 static uint8_t colonDisplay = 0;
+static uint8_t timerFlag = 0; // if timer is on
+static uint8_t alarmFlag = 0;
+static uint8_t changeMinuteFlag = 0;
+static uint8_t changeHourFlag = 0;
+
 
 // clock
 static uint8_t minutes = 0;
 static uint8_t hours = 0;
+static uint16_t timer = 0; // in seconds 
 
 // lab 2 functions
 int8_t chk_buttons(int button); // check what button is being pressed
@@ -101,6 +108,8 @@ ISR(TIMER0_OVF_vect);
 
 // lab4 functions
 void segclock();
+void alarmDisplay();
+void buttonPress(uint8_t);
 
 int main()
 {
@@ -116,6 +125,8 @@ int main()
 
     set_dec_to_7seg(); // set values for dec_to_7seg array
     set_decoder(); // set values for the decoder array
+
+    lcd_init(); // initalize the lcd display
 
     
 
@@ -133,17 +144,12 @@ int main()
        
         while (bit_is_clear(SPSR,SPIF)){}
         data = SPDR; // read data
-
-        // end of another block
-
         barGraph();
+        // end of spi
 
-        // if (current_num > 1023)
-        //     current_num -= 1024;
-
-        // segsum(current_num); // set each digit
-        segclock(); // set each digit for the clock
+        segclock();         // set each digit for the clock
         setDigit();         // setting the digit on display
+        alarmDisplay();     // display "ALARM" on the LCD display
     } //while
     return 0;
 } //main
@@ -316,7 +322,7 @@ void tcnt0_init(void){
 // Afterwards checks the encoder to see where it is.
 /******************************************************************************/
 ISR(TIMER0_OVF_vect){
-    uint16_t i;
+    uint16_t i, j;
     static uint8_t count = 0, seconds;
     //insert loop demake lay for debounce
 
@@ -324,26 +330,18 @@ ISR(TIMER0_OVF_vect){
     // for loop for each phase of the digit
     PORTB |= TRI_BUFFER;
 
-    for (i = 0; i < 12; i++)
-    { // for the debounce
+    for (i = 0; i < 12; i++){ // for the debounce
         
         //make PORTA an input port with pullups
         DDRA = 0x00;  // set port A as inputs
         PORTA = 0xFF; // set port A as pull ups
         
-
         // checking what button is being pressed
-        if (chk_buttons(1)) // set the increment mode on 
-        {
-            incDec2 ^= 1; // flip the bits for the flag
-            barGraphDisplay ^= 1 << 0; // show up on the first led
-
+        for (j = 0; j < 8; j++){
+            if (chk_buttons(j))
+                buttonPress(j);
         }
-        if (chk_buttons(2)) // set the decrement mode on
-        {
-            incDec4 ^= 1; // flip the bits for the flag
-            barGraphDisplay ^= 1 << 1; // show up on the 2nd led
-        }
+            
         
     }
     PORTB &= ~(TRI_BUFFER); // turn off the tri state buffer 
@@ -353,35 +351,62 @@ ISR(TIMER0_OVF_vect){
     uint8_t enc2 = encoderRead(data, 1);
 
     // each case of what the knob or buttons will be
-    if (incDec2 == 1 && incDec4 == 1){
-        current_num = current_num;
+    if(enc1 == 0 || enc2 == 0){
+        // ccw 
+        //current_num -= 1;
+        if (changeMinuteFlag == 1 && changeHourFlag == 0){
+            // change minutes
+            minutes--;
+            if (minutes == 255) // since its unsign 255 = -1
+                minutes = 59;
+
+        }
+        if (changeHourFlag ==1 && changeMinuteFlag == 0){
+            hours--;
+            if (hours == 255)
+                hours = 23;
+        }
 
     }
-    else if (incDec2 == 0 && incDec4 == 0){
-        if(enc1 == 0 || enc2 == 0)
-            current_num -= 1;
-        if (enc1 == 1 || enc2 == 1)
-            current_num += 1;
+        
+    if (enc1 == 1 || enc2 == 1){
+        // cw 
+        // current_num += 1;
+        if (changeMinuteFlag == 1 && changeHourFlag == 0){
+            // change minutes
+            minutes++;
+            if (minutes % 60 == 0)
+                minutes = 0;
+            
+        }
+        else if (changeHourFlag ==1 && changeMinuteFlag == 0){
+            
+        }
+
     }
-    else if (incDec2 == 1){
-        if(enc1 == 0 || enc2 == 0)
-            current_num -= 2;
-        if (enc1 == 1 || enc2 == 1)
-            current_num += 2;
-    }
-    else if (incDec4 == 1){
-        if (enc1 == 0 || enc2 == 0)
-            current_num -= 4;
-        if (enc1 == 1 || enc2 == 1)
-            current_num += 4;
-    }
+
 
     // add a counter to determine one second 
     count++;
     if ((count % 128) == 0){
         // 1 second has past
+
+        // timer
+        if (timerFlag == 0x1){
+            // timer on
+            timer--;
+            if (timer == 0){
+                // timer goes off display alarm 
+                alarmFlag = 1; // display alarm
+                timerFlag = 0; // turn off timer
+            }
+        }
+
+
+        // clock
         colonDisplay ^= 0x1; // blinking
         seconds++;
+        
         if ((seconds % 60) == 0){
             minutes++;
             seconds = 0;
@@ -484,4 +509,71 @@ void barGraph(){
     PORTD |= (1 << PORTD2);          //HC595 output reg - rising edge...
     PORTD &= (0 << PORTD2);          //and falling edge
 
+}
+
+/******************************************************************************/
+//                                 alarmDisplay
+// Display "ALARM" on the display if the alarm flag is on.
+// Otherwise clear the screen. 
+/******************************************************************************/
+
+void alarmDisplay(){
+    char lcd_string_array[16] = "     ALARM      ";
+    if (alarmFlag == 0x1){
+        clear_display(); // clear the display 
+        string2lcd(lcd_string_array);
+    }
+    
+
+}
+
+/******************************************************************************/
+//                                 buttonPress
+// Different cases for each button pressed
+/******************************************************************************/
+void buttonPress(uint8_t button){
+
+    switch (button){
+        case 0:
+        {
+            // snooze, turn off LCD display
+            alarmFlag = 0;
+            barGraphDisplay &= ~(1 << 1); // turn off the timer modes
+            barGraphDisplay &= ~(1 << 2); // turn off the timer modes
+            clear_display();
+            return;
+        }
+        case 1:
+        {
+            // 10 seconds
+            timerFlag = 1;
+            timer = 10;
+            barGraphDisplay ^= 1 << 1;
+            return;
+        }
+        case 2:
+        {
+            // 10 minutes
+            timerFlag = 1;
+            timer = 10 * 60;
+            barGraphDisplay ^= 1 << 2;
+            return;
+        }
+        case 6:
+        {
+            // change minutes
+            changeMinuteFlag ^= 1;
+            barGraphDisplay ^= 1 << 6;
+            return;
+        }
+        case 7:
+        {
+            // change hours
+            changeHourFlag ^= 1;
+            barGraphDisplay ^= 1 << 7;
+            return;
+        }
+        default:
+            break;
+    }
 }
