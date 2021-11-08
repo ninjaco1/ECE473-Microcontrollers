@@ -380,7 +380,9 @@ ISR(TIMER0_OVF_vect){
             
         }
         else if (changeHourFlag ==1 && changeMinuteFlag == 0){
-            
+            hours++;
+            if (hours % 24 == 0)
+                hours = 0;
         }
 
     }
