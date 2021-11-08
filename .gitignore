@@ -1,3 +1,13 @@
+lab1/lab1_code.bin
+lab1/lab1_code.elf
+lab1/lab1_code.hex
+lab1/lab1_code.lst
+lab1/lab1_code.map
+lab1/lab1_code.o
+lab1/lab1_code.srec
+lab1/lab1_code_eeprom.bin
+lab1/lab1_code_eeprom.hex
+lab1/lab1_code_eeprom.srec
 lab2/lab2_code.bin
 lab2/lab2_code.elf
 lab2/lab2_code.hex
