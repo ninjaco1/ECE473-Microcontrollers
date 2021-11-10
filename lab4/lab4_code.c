@@ -129,6 +129,7 @@ ISR(TIMER1_COMPA_vect); // ctc, notes
 void setVolumeController();
 void adc_init(void);
 void adc_read(void);
+void snooze(void);
 
 int main()
 {
@@ -432,7 +433,7 @@ void setDigit()
     {                       // looping through the segment data and assigning the port the right values.
         PORTB = decoder[i]; // enable the right digit to turn on
         dis = dec_to_7seg[segment_data[i]];
-        if ((i == 4) && (alarmFlag == 1))
+        if ((i == 4) && (setAlarm == 1))
         {
 
             dis &= ~(1 << 7);
@@ -561,6 +562,7 @@ ISR(TIMER0_OVF_vect)
                 // timer goes off display alarm
                 timerFlag = 0; // turn off timer
                 alarmFlag = 0;
+                snooze();
             }
         }
 
@@ -721,20 +723,7 @@ void buttonPress(uint8_t button)
     case 0:
     {
         // snooze, turn off LCD display
-        timer = SNOOZE_TIMER; // reset the timer to 10 seconds
-        OCR3A = 0xFFFF; // turn off volume
-        timerFlag = 0; // turn off the timer
-        alarmFlag = 0; // turn off the alarm
-        barGraphDisplay &= ~(1 << 1); // turn off the timer modes
-        barGraphDisplay &= ~(1 << 2); // turn off the timer modes
-        PORTC &= ~(1 << PORTC0);
-        PORTC &= ~(1 << PORTC1);
-        alarmMinute = 0;
-        alarmHour = 0;
-        clear_display();
-        clear_display();
-
-        // turn off indication on LED display
+        snooze();
         return;
     }
     case 1:
@@ -773,6 +762,22 @@ ISR(TIMER1_COMPA_vect)
 
 
 /******************************************************************************/
-//                              setVolumeController
+//                              snooze
 /******************************************************************************/
-void setVolumeController(){}
+void snooze(void){
+    timer = SNOOZE_TIMER; // reset the timer to 10 seconds
+    OCR3A = 0xFFFF; // turn off volume
+    timerFlag = 0; // turn off the timer
+    alarmFlag = 0; // turn off the alarm
+    barGraphDisplay &= ~(1 << 1); // turn off the timer modes
+    barGraphDisplay &= ~(1 << 2); // turn off the timer modes
+    PORTC &= ~(1 << PORTC0);
+    PORTC &= ~(1 << PORTC1);
+    alarmMinute = 0;
+    alarmHour = 0;
+    clear_display();
+    clear_display();
+
+    // turn off indication on LED display
+
+}
