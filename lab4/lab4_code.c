@@ -84,6 +84,9 @@ static uint8_t barGraphDisplay = 0;
 // determine if we are increment or decrement mode
 static uint8_t data = 0;
 
+// holding the ADC value
+uint16_t adc_result;     //holds adc result 
+
 // flags
 static uint8_t colonDisplay = 0; // blinking for colons
 static uint8_t timerFlag = 0; // if timer is on, 10 seconds
@@ -124,6 +127,8 @@ void tcnt2_init(void);
 void tcnt3_init(void);
 ISR(TIMER1_COMPA_vect); // ctc, notes
 void setVolumeController();
+void adc_init(void);
+void adc_read(void);
 
 int main()
 {
@@ -139,6 +144,7 @@ int main()
     tcnt1_init();  //initalize counter timer one
     tcnt2_init();  //initalize counter timer two
     tcnt3_init();  //initalize counter timer three
+    adc_init();    // initalize the ADC
     spi_init(); //initalize SPI port
     sei();      //enable interrupts before entering loop
 
@@ -152,7 +158,7 @@ int main()
 
         // spi
         PORTD |= 1 << PORTD3; // clock_inh = 1
-        PORTE &= 0 << PORTE6; // load sh/ld
+        PORTE &= ~(1 << PORTE6); // load sh/ld
 
         PORTE |= 1 << PORTE6;    // sh/ld
         PORTD &= ~(1 << PORTD3); // clock_inh
@@ -166,7 +172,10 @@ int main()
 
         segclock();     // set each digit for the clock
         setDigit();     // setting the digit on display
-
+        adc_read();     // read the ADC value
+        if (adc_result < 100){OCR2 = 222;}
+        else {OCR2 = adc_result * 0.4 + 80;}
+        // OCR2 = adc_result >> 2; 
         // check if the alarm matches the actually clock
         if ((alarmInit > 1) && (alarmMinute == minutes) && (alarmHour == hours)){
             timerFlag = 1; // make the timer go off
@@ -228,25 +237,60 @@ void tcnt1_init(void)
 /***********************************************************************/
 void tcnt2_init(void)
 {
+  //fast PWM, set on match, 64 prescaler
+  TCCR2 |= (1 << WGM21) | (1 << WGM20) | (1 << COM21) | (1 << COM20) | (1 << CS22);
+  OCR2 = 0xF0; //clear at 0xF0 CLEAR AT BRIGHTNESS
 }
 
 /***********************************************************************/
 //                              tnct3_init
 // Initalizes timer/counter3 (TCNT3). TNCT3 is running a fast PWM mode,
-// and clear on compare match. Uses OC3A which is on PE3.
-// This sets the volume control for the speaker.
+// Uses OC3A which is on PE3. Clear at the bottom, inverting mode
+// This sets the volume control for the speaker. 
 /***********************************************************************/
 void tcnt3_init(void)
 {
-    TCCR3A |= (1 << WGM31) | (1 << COM3A1) | (1 << COM3A0); // fast pwn
-    TCCR3B |= (1 << WGM33) | (1 << WGM32) | (1 << CS30); // No prescaler
-    TCCR3C |= 0;
-    OCR3A = 0; // how loud you want it to be, initally no volume
-    ICR3 = 0xf000; // top value
-    // DDRE |= (1 << PORTE3); // where the output of OCR3A will be 
+    //Fast PWM, set on compare match
+    TCCR3A |= (1 << WGM31) | (0 << WGM30) | (1 << COM3A1) | (1 << COM3A0); // inverting mode
+    TCCR3B |= (1 << ICES3) | (1 << WGM33) | (1 << WGM32) | (1 << CS30); //No prescale
+    TCCR3C  = 0x00; //no force compare
+    // OCR3A   = 0x7BFF; //loudness
+    OCR3A = 0xFFFF;
+    ICR3    = 0xFFFF; // top value
+
+
 }
 
+/***********************************************************************/
+//                            adc_init
+/***********************************************************************/
+void adc_init(void){
 
+    //Initalize ADC and its ports
+    DDRF  &= ~(_BV(DDF7)); //make port F bit 7 the ADC input  
+    PORTF &= ~(_BV(PF7));  //port F bit 7 pullups must be off 
+
+    ADMUX |= (0 << REFS1) | (1 << REFS0) | (0 << MUX4) | (0 << MUX3) | (1 << MUX2) | (1 << MUX1) | (1 << MUX0);    //single-ended input, PORTF bit 7, right adjusted, 10 bits
+                                            //reference is AVCC
+
+    ADCSRA |=  (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0) | (1 << ADPS0); //ADC enabled, don't start yet, single shot mode 
+                                            //division factor is 128 (125khz)
+}
+
+/***********************************************************************/
+//                            adc_read()
+/***********************************************************************/
+void adc_read(){
+    ADCSRA |= (1 << ADSC);                          //poke the ADSC bit and start conversion
+
+    while(bit_is_clear(ADCSRA, ADIF)){}                     //spin while interrupt flag not set
+
+    ADCSRA |= 1 << ADIF;                              //its done, clear flag by writing a one 
+
+    adc_result = ADC;                      //read the ADC output as 16 bits
+
+
+}
 
 /******************************************************************************/
 //                              set_dec_to_7seg
@@ -655,6 +699,7 @@ void alarmDisplay()
     char lcd_string_array[16] = "     ALARM      ";
     if (alarmFlag == 0x1)
     {
+        DDRE |= 1 << PORTE3; // turn off the port of the speaker 
         OCR3A = 0xc000; // turn on the volume
         clear_display(); // clear the display
         string2lcd(lcd_string_array);
@@ -677,8 +722,11 @@ void buttonPress(uint8_t button)
         OCR3A = 0; // turn off volume
         timerFlag = 0; // turn off the timer
         alarmFlag = 0; // turn off the alarm
+        DDRE &= ~(1 << PORTE3); // turn off the port of the speaker 
         barGraphDisplay &= ~(1 << 1); // turn off the timer modes
         barGraphDisplay &= ~(1 << 2); // turn off the timer modes
+        PORTC &= ~(1 << PORTC0);
+        PORTC &= ~(1 << PORTC1);
         clear_display();
         // turn off indication on LED display
         return;
@@ -718,7 +766,14 @@ void buttonPress(uint8_t button)
 
 ISR(TIMER1_COMPA_vect)
 {
-    PORTC ^= 1 << PORTC0; // turn on right speaker
+    // if (timerFlag){
+        PORTC ^= 1 << PORTC0; // turn on right speaker
+        PORTC ^= 1 << PORTC1; // turn on left speaker
+    // }
 }
 
+
+/******************************************************************************/
+//                              setVolumeController
+/******************************************************************************/
 void setVolumeController(){}
