@@ -152,6 +152,7 @@ int main()
     set_decoder();     // set values for the decoder array
 
     lcd_init(); // initalize the lcd display
+    timer = SNOOZE_TIMER;
 
     while (1)
     {
@@ -172,13 +173,12 @@ int main()
 
         segclock();     // set each digit for the clock
         setDigit();     // setting the digit on display
-        adc_read();     // read the ADC value
-        if (adc_result < 100){OCR2 = 222;}
-        else {OCR2 = adc_result * 0.4 + 80;}
-        // OCR2 = adc_result >> 2; 
+        
+       
         // check if the alarm matches the actually clock
         if ((alarmInit > 1) && (alarmMinute == minutes) && (alarmHour == hours)){
             timerFlag = 1; // make the timer go off
+            
         
         }
         alarmDisplay(); // display "ALARM" on the LCD display
@@ -254,9 +254,8 @@ void tcnt3_init(void)
     TCCR3A |= (1 << WGM31) | (0 << WGM30) | (1 << COM3A1) | (1 << COM3A0); // inverting mode
     TCCR3B |= (1 << ICES3) | (1 << WGM33) | (1 << WGM32) | (1 << CS30); //No prescale
     TCCR3C  = 0x00; //no force compare
-    // OCR3A   = 0x7BFF; //loudness
-    OCR3A = 0xFFFF;
-    ICR3    = 0xFFFF; // top value
+    OCR3A = 0xFFFF; // volume
+    ICR3  = 0xFFFF; // top value
 
 
 }
@@ -582,6 +581,10 @@ ISR(TIMER0_OVF_vect)
             }
         }
     }
+    adc_read();     // read the ADC value
+    if (adc_result < 100){OCR2 = 222;}
+        else {OCR2 = adc_result * 0.4 + 80;}
+       
 }
 
 /******************************************************************************/
@@ -700,7 +703,7 @@ void alarmDisplay()
     if (alarmFlag == 0x1)
     {
         DDRE |= 1 << PORTE3; // turn off the port of the speaker 
-        OCR3A = 0xc000; // turn on the volume
+        OCR3A = 0xA000; // turn on the volume
         clear_display(); // clear the display
         string2lcd(lcd_string_array);
     }
@@ -719,30 +722,27 @@ void buttonPress(uint8_t button)
     {
         // snooze, turn off LCD display
         timer = SNOOZE_TIMER; // reset the timer to 10 seconds
-        OCR3A = 0; // turn off volume
+        OCR3A = 0xFFFF; // turn off volume
         timerFlag = 0; // turn off the timer
         alarmFlag = 0; // turn off the alarm
-        DDRE &= ~(1 << PORTE3); // turn off the port of the speaker 
         barGraphDisplay &= ~(1 << 1); // turn off the timer modes
         barGraphDisplay &= ~(1 << 2); // turn off the timer modes
         PORTC &= ~(1 << PORTC0);
         PORTC &= ~(1 << PORTC1);
+        alarmMinute = 0;
+        alarmHour = 0;
         clear_display();
+        clear_display();
+
         // turn off indication on LED display
         return;
     }
     case 1:
     {
-        alarmFlag ^= 0x1; // show on the LED Display that you want to change the alarm time
+        // alarmFlag ^= 0x1; // show on the LED Display that you want to change the alarm time
         setAlarm ^= 0x1; // toggle the alarm flag
         barGraphDisplay ^= 1 << 1;
         alarmInit++; // many times this button has been pressed
-        return;
-    }
-    case 2:
-    {
-        
-        barGraphDisplay ^= 1 << 2;
         return;
     }
     case 6:
@@ -763,13 +763,12 @@ void buttonPress(uint8_t button)
         break;
     }
 }
-
+/******************************************************************************/
+/******************************************************************************/
 ISR(TIMER1_COMPA_vect)
 {
-    // if (timerFlag){
         PORTC ^= 1 << PORTC0; // turn on right speaker
         PORTC ^= 1 << PORTC1; // turn on left speaker
-    // }
 }
 
 
