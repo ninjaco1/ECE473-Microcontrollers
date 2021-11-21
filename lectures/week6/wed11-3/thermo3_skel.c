@@ -43,7 +43,7 @@ spi_init(void)
 /***********************************************************************/
 int main()
 {
-  uint16_t lm73_temp; //a place to assemble the temperature from the lm73
+  uint16_t lm73_temp; //a place to assemble the temperature from the lm74
 
   spi_init(); //initalize SPI
   lcd_init(); //initalize LCD (lcd_functions.h)

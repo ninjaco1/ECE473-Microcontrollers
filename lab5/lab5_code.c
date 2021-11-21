@@ -1,6 +1,6 @@
-// lab3_code.c
+// lab5_code.c
 // Anthony Nguyen
-// 10.4.2021
+// 11.20.2021
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -119,7 +119,7 @@ void spi_init(void);
 void tcnt0_init(void);
 ISR(TIMER0_OVF_vect);
 
-// lab4 functions
+// lab 4 functions
 void segclock();
 void alarmDisplay();
 void buttonPress(uint8_t);
@@ -131,6 +131,8 @@ void setVolumeController();
 void adc_init(void);
 void adc_read(void);
 void snoozekiller(void);
+
+// lab 5 functions
 
 int main()
 {
