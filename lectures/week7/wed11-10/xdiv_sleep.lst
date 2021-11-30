@@ -1,0 +1,463 @@
+
+xdiv_sleep.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000000  00800100  000002f6  0000036a  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         000002f6  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .comment      00000030  00000000  00000000  0000036a  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000039c  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000028  00000000  00000000  000003d8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000a01  00000000  00000000  00000400  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000080a  00000000  00000000  00000e01  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000238  00000000  00000000  0000160b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000044  00000000  00000000  00001844  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000003a8  00000000  00000000  00001888  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    0000041c  00000000  00000000  00001c30  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000018  00000000  00000000  0000204c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 46 00 	jmp	0x8c	; 0x8c <__ctors_end>
+   4:	0c 94 52 00 	jmp	0xa4	; 0xa4 <__vector_1>
+   8:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+   c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  10:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  14:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  18:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  1c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  20:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  24:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  28:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  2c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  30:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  34:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  38:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  3c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  40:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  44:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  48:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  4c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  50:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  54:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  58:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  5c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  60:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  64:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  68:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  6c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  70:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  74:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  78:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  7c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  80:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  84:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  88:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+
+0000008c <__ctors_end>:
+  8c:	11 24       	eor	r1, r1
+  8e:	1f be       	out	0x3f, r1	; 63
+  90:	cf ef       	ldi	r28, 0xFF	; 255
+  92:	d0 e1       	ldi	r29, 0x10	; 16
+  94:	de bf       	out	0x3e, r29	; 62
+  96:	cd bf       	out	0x3d, r28	; 61
+  98:	0e 94 64 00 	call	0xc8	; 0xc8 <main>
+  9c:	0c 94 79 01 	jmp	0x2f2	; 0x2f2 <_exit>
+
+000000a0 <__bad_interrupt>:
+  a0:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+000000a4 <__vector_1>:
+#include <util/delay.h>
+#include <avr/sleep.h>
+#include <avr/interrupt.h>
+
+//****************************  INT0_vect ISR  ********************************
+ISR(INT0_vect){
+  a4:	1f 92       	push	r1
+  a6:	0f 92       	push	r0
+  a8:	0f b6       	in	r0, 0x3f	; 63
+  aa:	0f 92       	push	r0
+  ac:	11 24       	eor	r1, r1
+  ae:	8f 93       	push	r24
+  XDIV  &= ~(1<<XDIVEN); //reset XDIVEN bit to run at 16Mhz again
+  b0:	8c b7       	in	r24, 0x3c	; 60
+  b2:	8f 77       	andi	r24, 0x7F	; 127
+  b4:	8c bf       	out	0x3c, r24	; 60
+  MCUCR &= ~(1<<SE);     //disable sleep so it can't happen utill sleep_cpu() 
+  b6:	85 b7       	in	r24, 0x35	; 53
+  b8:	8f 7d       	andi	r24, 0xDF	; 223
+  ba:	85 bf       	out	0x35, r24	; 53
+                         //is executed.
+}//ISR
+  bc:	8f 91       	pop	r24
+  be:	0f 90       	pop	r0
+  c0:	0f be       	out	0x3f, r0	; 63
+  c2:	0f 90       	pop	r0
+  c4:	1f 90       	pop	r1
+  c6:	18 95       	reti
+
+000000c8 <main>:
+
+int main(){
+uint8_t i;
+
+//initalize for external falling edge interrupt on pushbutton zero (PORTD.0)
+  EICRA = (1<<ISC01);          //falling edge detection 
+  c8:	82 e0       	ldi	r24, 0x02	; 2
+  ca:	80 93 6a 00 	sts	0x006A, r24	; 0x80006a <__TEXT_REGION_LENGTH__+0x7e006a>
+  EIMSK = (1<<INT0);           //enable interrupts on INT0 
+  ce:	91 e0       	ldi	r25, 0x01	; 1
+  d0:	99 bf       	out	0x39, r25	; 57
+  MCUCR |= (1<<SM1) | (1<<SE); //power down mode and sleep enabled 
+  d2:	85 b7       	in	r24, 0x35	; 53
+  d4:	80 63       	ori	r24, 0x30	; 48
+  d6:	85 bf       	out	0x35, r24	; 53
+/*
+*this block sets all ports to inputs with pullups on except PORTB
+*which is used as an indicator of what is going on. Comment and
+*uncomment to see the difference in power consumption.
+*/
+  DDRA = 0x00;  PORTA = 0xFF; //all inputs with pullups
+  d8:	1a ba       	out	0x1a, r1	; 26
+  da:	8f ef       	ldi	r24, 0xFF	; 255
+  dc:	8b bb       	out	0x1b, r24	; 27
+  DDRB = 0xFF;  PORTB = 0x00; //blink lights with PORTB 
+  de:	87 bb       	out	0x17, r24	; 23
+  e0:	18 ba       	out	0x18, r1	; 24
+  DDRC = 0x00;  PORTC = 0xFF; //all inputs with pullups
+  e2:	14 ba       	out	0x14, r1	; 20
+  e4:	85 bb       	out	0x15, r24	; 21
+  DDRD = 0x00;  PORTD = 0xFF; //all inputs with pullups
+  e6:	11 ba       	out	0x11, r1	; 17
+  e8:	82 bb       	out	0x12, r24	; 18
+  DDRE = 0x00;  PORTE = 0xFF; //all inputs with pullups
+  ea:	12 b8       	out	0x02, r1	; 2
+  ec:	83 b9       	out	0x03, r24	; 3
+  DDRF = 0x00;  PORTF = 0xFF; //all inputs with pullups
+  ee:	10 92 61 00 	sts	0x0061, r1	; 0x800061 <__TEXT_REGION_LENGTH__+0x7e0061>
+  f2:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+  DDRG = 0x00;  PORTG = 0xFF; //all inputs with pullups
+  f6:	10 92 64 00 	sts	0x0064, r1	; 0x800064 <__TEXT_REGION_LENGTH__+0x7e0064>
+  fa:	80 93 65 00 	sts	0x0065, r24	; 0x800065 <__TEXT_REGION_LENGTH__+0x7e0065>
+
+  sei();  //enable interrupts
+  fe:	78 94       	sei
+
+  //16mhz clock
+  PORTB = 0x01;
+ 100:	98 bb       	out	0x18, r25	; 24
+ 102:	85 e1       	ldi	r24, 0x15	; 21
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 104:	2f ef       	ldi	r18, 0xFF	; 255
+ 106:	31 ee       	ldi	r19, 0xE1	; 225
+ 108:	94 e0       	ldi	r25, 0x04	; 4
+ 10a:	21 50       	subi	r18, 0x01	; 1
+ 10c:	30 40       	sbci	r19, 0x00	; 0
+ 10e:	90 40       	sbci	r25, 0x00	; 0
+ 110:	e1 f7       	brne	.-8      	; 0x10a <main+0x42>
+ 112:	00 c0       	rjmp	.+0      	; 0x114 <main+0x4c>
+ 114:	00 00       	nop
+ 116:	81 50       	subi	r24, 0x01	; 1
+  for(i=0; i<=20; i++) _delay_ms(100); //delay 2 sec
+ 118:	a9 f7       	brne	.-22     	; 0x104 <main+0x3c>
+
+  XDIV = 127; //setting for 8 Mhz clock 
+ 11a:	8f e7       	ldi	r24, 0x7F	; 127
+ 11c:	8c bf       	out	0x3c, r24	; 60
+  XDIV |= (1<<XDIVEN); //change clock freq
+ 11e:	8c b7       	in	r24, 0x3c	; 60
+ 120:	80 68       	ori	r24, 0x80	; 128
+ 122:	8c bf       	out	0x3c, r24	; 60
+  PORTB = 0x02;
+ 124:	82 e0       	ldi	r24, 0x02	; 2
+ 126:	88 bb       	out	0x18, r24	; 24
+ 128:	8b e0       	ldi	r24, 0x0B	; 11
+ 12a:	2f ef       	ldi	r18, 0xFF	; 255
+ 12c:	31 ee       	ldi	r19, 0xE1	; 225
+ 12e:	94 e0       	ldi	r25, 0x04	; 4
+ 130:	21 50       	subi	r18, 0x01	; 1
+ 132:	30 40       	sbci	r19, 0x00	; 0
+ 134:	90 40       	sbci	r25, 0x00	; 0
+ 136:	e1 f7       	brne	.-8      	; 0x130 <main+0x68>
+ 138:	00 c0       	rjmp	.+0      	; 0x13a <main+0x72>
+ 13a:	00 00       	nop
+ 13c:	81 50       	subi	r24, 0x01	; 1
+  for(i=0; i<=10; i++) _delay_ms(100); //delay 2 sec
+ 13e:	a9 f7       	brne	.-22     	; 0x12a <main+0x62>
+  
+  XDIV &= ~(1<<XDIVEN); //reset bit to change setting
+ 140:	8c b7       	in	r24, 0x3c	; 60
+ 142:	8f 77       	andi	r24, 0x7F	; 127
+ 144:	8c bf       	out	0x3c, r24	; 60
+  XDIV = 125; //setting for 4 Mhz clock 
+ 146:	8d e7       	ldi	r24, 0x7D	; 125
+ 148:	8c bf       	out	0x3c, r24	; 60
+  XDIV |= (1<<XDIVEN); //change clock freq
+ 14a:	8c b7       	in	r24, 0x3c	; 60
+ 14c:	80 68       	ori	r24, 0x80	; 128
+ 14e:	8c bf       	out	0x3c, r24	; 60
+  PORTB = 0x04;
+ 150:	84 e0       	ldi	r24, 0x04	; 4
+ 152:	88 bb       	out	0x18, r24	; 24
+ 154:	8b e0       	ldi	r24, 0x0B	; 11
+ 156:	2f ef       	ldi	r18, 0xFF	; 255
+ 158:	30 e7       	ldi	r19, 0x70	; 112
+ 15a:	92 e0       	ldi	r25, 0x02	; 2
+ 15c:	21 50       	subi	r18, 0x01	; 1
+ 15e:	30 40       	sbci	r19, 0x00	; 0
+ 160:	90 40       	sbci	r25, 0x00	; 0
+ 162:	e1 f7       	brne	.-8      	; 0x15c <main+0x94>
+ 164:	00 c0       	rjmp	.+0      	; 0x166 <main+0x9e>
+ 166:	00 00       	nop
+ 168:	81 50       	subi	r24, 0x01	; 1
+  for(i=0; i<=10; i++) _delay_ms(50); //delay 2 sec
+ 16a:	a9 f7       	brne	.-22     	; 0x156 <main+0x8e>
+  
+  XDIV &= ~(1<<XDIVEN); //reset bit to change setting
+ 16c:	8c b7       	in	r24, 0x3c	; 60
+ 16e:	8f 77       	andi	r24, 0x7F	; 127
+ 170:	8c bf       	out	0x3c, r24	; 60
+  XDIV = 121; //setting for 2 Mhz clock 
+ 172:	89 e7       	ldi	r24, 0x79	; 121
+ 174:	8c bf       	out	0x3c, r24	; 60
+  XDIV |= (1<<XDIVEN); //change clock freq
+ 176:	8c b7       	in	r24, 0x3c	; 60
+ 178:	80 68       	ori	r24, 0x80	; 128
+ 17a:	8c bf       	out	0x3c, r24	; 60
+  PORTB = 0x08;
+ 17c:	88 e0       	ldi	r24, 0x08	; 8
+ 17e:	88 bb       	out	0x18, r24	; 24
+ 180:	8b e0       	ldi	r24, 0x0B	; 11
+ 182:	2f e7       	ldi	r18, 0x7F	; 127
+ 184:	38 e3       	ldi	r19, 0x38	; 56
+ 186:	91 e0       	ldi	r25, 0x01	; 1
+ 188:	21 50       	subi	r18, 0x01	; 1
+ 18a:	30 40       	sbci	r19, 0x00	; 0
+ 18c:	90 40       	sbci	r25, 0x00	; 0
+ 18e:	e1 f7       	brne	.-8      	; 0x188 <main+0xc0>
+ 190:	00 c0       	rjmp	.+0      	; 0x192 <main+0xca>
+ 192:	00 00       	nop
+ 194:	81 50       	subi	r24, 0x01	; 1
+  for(i=0; i<=10; i++) _delay_ms(25); //delay 2 sec
+ 196:	a9 f7       	brne	.-22     	; 0x182 <main+0xba>
+
+  XDIV &= ~(1<<XDIVEN); //reset bit to change setting
+ 198:	8c b7       	in	r24, 0x3c	; 60
+ 19a:	8f 77       	andi	r24, 0x7F	; 127
+ 19c:	8c bf       	out	0x3c, r24	; 60
+  XDIV = 113; //setting for 1 Mhz clock 
+ 19e:	81 e7       	ldi	r24, 0x71	; 113
+ 1a0:	8c bf       	out	0x3c, r24	; 60
+  XDIV |= (1<<XDIVEN); //change clock freq
+ 1a2:	8c b7       	in	r24, 0x3c	; 60
+ 1a4:	80 68       	ori	r24, 0x80	; 128
+ 1a6:	8c bf       	out	0x3c, r24	; 60
+  PORTB = 0x10;
+ 1a8:	80 e1       	ldi	r24, 0x10	; 16
+ 1aa:	88 bb       	out	0x18, r24	; 24
+ 1ac:	2f e7       	ldi	r18, 0x7F	; 127
+ 1ae:	38 e3       	ldi	r19, 0x38	; 56
+ 1b0:	81 e0       	ldi	r24, 0x01	; 1
+ 1b2:	21 50       	subi	r18, 0x01	; 1
+ 1b4:	30 40       	sbci	r19, 0x00	; 0
+ 1b6:	80 40       	sbci	r24, 0x00	; 0
+ 1b8:	e1 f7       	brne	.-8      	; 0x1b2 <main+0xea>
+ 1ba:	00 c0       	rjmp	.+0      	; 0x1bc <main+0xf4>
+ 1bc:	00 00       	nop
+ 1be:	9f e7       	ldi	r25, 0x7F	; 127
+ 1c0:	28 e3       	ldi	r18, 0x38	; 56
+ 1c2:	31 e0       	ldi	r19, 0x01	; 1
+ 1c4:	91 50       	subi	r25, 0x01	; 1
+ 1c6:	20 40       	sbci	r18, 0x00	; 0
+ 1c8:	30 40       	sbci	r19, 0x00	; 0
+ 1ca:	e1 f7       	brne	.-8      	; 0x1c4 <main+0xfc>
+ 1cc:	00 c0       	rjmp	.+0      	; 0x1ce <main+0x106>
+ 1ce:	00 00       	nop
+ 1d0:	8f e7       	ldi	r24, 0x7F	; 127
+ 1d2:	98 e3       	ldi	r25, 0x38	; 56
+ 1d4:	21 e0       	ldi	r18, 0x01	; 1
+ 1d6:	81 50       	subi	r24, 0x01	; 1
+ 1d8:	90 40       	sbci	r25, 0x00	; 0
+ 1da:	20 40       	sbci	r18, 0x00	; 0
+ 1dc:	e1 f7       	brne	.-8      	; 0x1d6 <main+0x10e>
+ 1de:	00 c0       	rjmp	.+0      	; 0x1e0 <main+0x118>
+ 1e0:	00 00       	nop
+ 1e2:	3f e7       	ldi	r19, 0x7F	; 127
+ 1e4:	88 e3       	ldi	r24, 0x38	; 56
+ 1e6:	91 e0       	ldi	r25, 0x01	; 1
+ 1e8:	31 50       	subi	r19, 0x01	; 1
+ 1ea:	80 40       	sbci	r24, 0x00	; 0
+ 1ec:	90 40       	sbci	r25, 0x00	; 0
+ 1ee:	e1 f7       	brne	.-8      	; 0x1e8 <main+0x120>
+ 1f0:	00 c0       	rjmp	.+0      	; 0x1f2 <main+0x12a>
+ 1f2:	00 00       	nop
+ 1f4:	2f e7       	ldi	r18, 0x7F	; 127
+ 1f6:	38 e3       	ldi	r19, 0x38	; 56
+ 1f8:	81 e0       	ldi	r24, 0x01	; 1
+ 1fa:	21 50       	subi	r18, 0x01	; 1
+ 1fc:	30 40       	sbci	r19, 0x00	; 0
+ 1fe:	80 40       	sbci	r24, 0x00	; 0
+ 200:	e1 f7       	brne	.-8      	; 0x1fa <main+0x132>
+ 202:	00 c0       	rjmp	.+0      	; 0x204 <main+0x13c>
+ 204:	00 00       	nop
+ 206:	9f e7       	ldi	r25, 0x7F	; 127
+ 208:	28 e3       	ldi	r18, 0x38	; 56
+ 20a:	31 e0       	ldi	r19, 0x01	; 1
+ 20c:	91 50       	subi	r25, 0x01	; 1
+ 20e:	20 40       	sbci	r18, 0x00	; 0
+ 210:	30 40       	sbci	r19, 0x00	; 0
+ 212:	e1 f7       	brne	.-8      	; 0x20c <main+0x144>
+ 214:	00 c0       	rjmp	.+0      	; 0x216 <main+0x14e>
+ 216:	00 00       	nop
+  for(i=0; i<=5; i++) _delay_ms(25); //delay 2 sec
+  
+  XDIV &= ~(1<<XDIVEN); //reset bit to change setting
+ 218:	8c b7       	in	r24, 0x3c	; 60
+ 21a:	8f 77       	andi	r24, 0x7F	; 127
+ 21c:	8c bf       	out	0x3c, r24	; 60
+  XDIV = 97; //setting for 0.5 Mhz clock 
+ 21e:	81 e6       	ldi	r24, 0x61	; 97
+ 220:	8c bf       	out	0x3c, r24	; 60
+  XDIV |= (1<<XDIVEN); //change clock freq
+ 222:	8c b7       	in	r24, 0x3c	; 60
+ 224:	80 68       	ori	r24, 0x80	; 128
+ 226:	8c bf       	out	0x3c, r24	; 60
+  PORTB = 0x20;
+ 228:	80 e2       	ldi	r24, 0x20	; 32
+ 22a:	88 bb       	out	0x18, r24	; 24
+ 22c:	8f e1       	ldi	r24, 0x1F	; 31
+ 22e:	9b ec       	ldi	r25, 0xCB	; 203
+ 230:	01 97       	sbiw	r24, 0x01	; 1
+ 232:	f1 f7       	brne	.-4      	; 0x230 <main+0x168>
+ 234:	00 c0       	rjmp	.+0      	; 0x236 <main+0x16e>
+ 236:	00 00       	nop
+ 238:	8f e1       	ldi	r24, 0x1F	; 31
+ 23a:	9b ec       	ldi	r25, 0xCB	; 203
+ 23c:	01 97       	sbiw	r24, 0x01	; 1
+ 23e:	f1 f7       	brne	.-4      	; 0x23c <main+0x174>
+ 240:	00 c0       	rjmp	.+0      	; 0x242 <main+0x17a>
+ 242:	00 00       	nop
+ 244:	8f e1       	ldi	r24, 0x1F	; 31
+ 246:	9b ec       	ldi	r25, 0xCB	; 203
+ 248:	01 97       	sbiw	r24, 0x01	; 1
+ 24a:	f1 f7       	brne	.-4      	; 0x248 <main+0x180>
+ 24c:	00 c0       	rjmp	.+0      	; 0x24e <main+0x186>
+ 24e:	00 00       	nop
+ 250:	8f e1       	ldi	r24, 0x1F	; 31
+ 252:	9b ec       	ldi	r25, 0xCB	; 203
+ 254:	01 97       	sbiw	r24, 0x01	; 1
+ 256:	f1 f7       	brne	.-4      	; 0x254 <main+0x18c>
+ 258:	00 c0       	rjmp	.+0      	; 0x25a <main+0x192>
+ 25a:	00 00       	nop
+ 25c:	8f e1       	ldi	r24, 0x1F	; 31
+ 25e:	9b ec       	ldi	r25, 0xCB	; 203
+ 260:	01 97       	sbiw	r24, 0x01	; 1
+ 262:	f1 f7       	brne	.-4      	; 0x260 <main+0x198>
+ 264:	00 c0       	rjmp	.+0      	; 0x266 <main+0x19e>
+ 266:	00 00       	nop
+ 268:	8f e1       	ldi	r24, 0x1F	; 31
+ 26a:	9b ec       	ldi	r25, 0xCB	; 203
+ 26c:	01 97       	sbiw	r24, 0x01	; 1
+ 26e:	f1 f7       	brne	.-4      	; 0x26c <main+0x1a4>
+ 270:	00 c0       	rjmp	.+0      	; 0x272 <main+0x1aa>
+ 272:	00 00       	nop
+  for(i=0; i<=5; i++) _delay_ms(13); //delay 2 sec
+
+  PORTB = 0x80;  //indicate we are entering sleep mode
+ 274:	80 e8       	ldi	r24, 0x80	; 128
+ 276:	88 bb       	out	0x18, r24	; 24
+  sleep_cpu();   //enter sleep mode, wait for interrupt.....
+ 278:	88 95       	sleep
+
+  //after being awakened by the interrupt, blink PORTB.0 LED
+
+  PORTB =0x00; //reset PORTB LEDs
+ 27a:	18 ba       	out	0x18, r1	; 24
+
+  while(1){
+    for(i=0; i<=5; i++){_delay_ms(100);} //delay 0.5 sec
+    PORTB ^= 0x01;                        //blink PORTB bit 2 forever
+ 27c:	91 e0       	ldi	r25, 0x01	; 1
+ 27e:	2f ef       	ldi	r18, 0xFF	; 255
+ 280:	31 ee       	ldi	r19, 0xE1	; 225
+ 282:	84 e0       	ldi	r24, 0x04	; 4
+ 284:	21 50       	subi	r18, 0x01	; 1
+ 286:	30 40       	sbci	r19, 0x00	; 0
+ 288:	80 40       	sbci	r24, 0x00	; 0
+ 28a:	e1 f7       	brne	.-8      	; 0x284 <main+0x1bc>
+ 28c:	00 c0       	rjmp	.+0      	; 0x28e <main+0x1c6>
+ 28e:	00 00       	nop
+ 290:	2f ef       	ldi	r18, 0xFF	; 255
+ 292:	31 ee       	ldi	r19, 0xE1	; 225
+ 294:	84 e0       	ldi	r24, 0x04	; 4
+ 296:	21 50       	subi	r18, 0x01	; 1
+ 298:	30 40       	sbci	r19, 0x00	; 0
+ 29a:	80 40       	sbci	r24, 0x00	; 0
+ 29c:	e1 f7       	brne	.-8      	; 0x296 <main+0x1ce>
+ 29e:	00 c0       	rjmp	.+0      	; 0x2a0 <main+0x1d8>
+ 2a0:	00 00       	nop
+ 2a2:	2f ef       	ldi	r18, 0xFF	; 255
+ 2a4:	31 ee       	ldi	r19, 0xE1	; 225
+ 2a6:	84 e0       	ldi	r24, 0x04	; 4
+ 2a8:	21 50       	subi	r18, 0x01	; 1
+ 2aa:	30 40       	sbci	r19, 0x00	; 0
+ 2ac:	80 40       	sbci	r24, 0x00	; 0
+ 2ae:	e1 f7       	brne	.-8      	; 0x2a8 <main+0x1e0>
+ 2b0:	00 c0       	rjmp	.+0      	; 0x2b2 <main+0x1ea>
+ 2b2:	00 00       	nop
+ 2b4:	2f ef       	ldi	r18, 0xFF	; 255
+ 2b6:	31 ee       	ldi	r19, 0xE1	; 225
+ 2b8:	84 e0       	ldi	r24, 0x04	; 4
+ 2ba:	21 50       	subi	r18, 0x01	; 1
+ 2bc:	30 40       	sbci	r19, 0x00	; 0
+ 2be:	80 40       	sbci	r24, 0x00	; 0
+ 2c0:	e1 f7       	brne	.-8      	; 0x2ba <main+0x1f2>
+ 2c2:	00 c0       	rjmp	.+0      	; 0x2c4 <main+0x1fc>
+ 2c4:	00 00       	nop
+ 2c6:	2f ef       	ldi	r18, 0xFF	; 255
+ 2c8:	31 ee       	ldi	r19, 0xE1	; 225
+ 2ca:	84 e0       	ldi	r24, 0x04	; 4
+ 2cc:	21 50       	subi	r18, 0x01	; 1
+ 2ce:	30 40       	sbci	r19, 0x00	; 0
+ 2d0:	80 40       	sbci	r24, 0x00	; 0
+ 2d2:	e1 f7       	brne	.-8      	; 0x2cc <main+0x204>
+ 2d4:	00 c0       	rjmp	.+0      	; 0x2d6 <main+0x20e>
+ 2d6:	00 00       	nop
+ 2d8:	2f ef       	ldi	r18, 0xFF	; 255
+ 2da:	31 ee       	ldi	r19, 0xE1	; 225
+ 2dc:	84 e0       	ldi	r24, 0x04	; 4
+ 2de:	21 50       	subi	r18, 0x01	; 1
+ 2e0:	30 40       	sbci	r19, 0x00	; 0
+ 2e2:	80 40       	sbci	r24, 0x00	; 0
+ 2e4:	e1 f7       	brne	.-8      	; 0x2de <main+0x216>
+ 2e6:	00 c0       	rjmp	.+0      	; 0x2e8 <main+0x220>
+ 2e8:	00 00       	nop
+ 2ea:	88 b3       	in	r24, 0x18	; 24
+ 2ec:	89 27       	eor	r24, r25
+ 2ee:	88 bb       	out	0x18, r24	; 24
+ 2f0:	c6 cf       	rjmp	.-116    	; 0x27e <main+0x1b6>
+
+000002f2 <_exit>:
+ 2f2:	f8 94       	cli
+
+000002f4 <__stop_program>:
+ 2f4:	ff cf       	rjmp	.-2      	; 0x2f4 <__stop_program>
