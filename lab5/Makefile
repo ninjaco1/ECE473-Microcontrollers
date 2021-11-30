@@ -1,6 +1,6 @@
 PRG             =lab5_code
-OBJS            =lab5_code.o hd44780.o lm73_functions_skel.o twi_master.o uart_functions.o 
-SRCS            =lab5_code.c hd44780.c lm73_functions_skel.c twi_master.c uart_functions.c
+OBJS            =lab5_code.o hd44780.o lm73_functions.o twi_master.o uart_functions.o 
+SRCS            =lab5_code.c hd44780.c lm73_functions.c twi_master.c uart_functions.c
 
 MCU_TARGET     = atmega128
 #MCU_TARGET     = atmega48

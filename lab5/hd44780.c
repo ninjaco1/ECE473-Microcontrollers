@@ -24,7 +24,7 @@
 char lcd_string_array[32];  //holds two strings to refresh the LCD
 
 char  lcd_str[16];  //holds string to send to lcd  
-
+// 
 //-----------------------------------------------------------------------------
 //                               send_lcd
 //

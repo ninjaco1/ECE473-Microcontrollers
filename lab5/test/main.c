@@ -18,7 +18,7 @@
 #include "twi_master.h"
 #include "uart_functions.h"
 
-#define TEMP_MASTER
+// #define TEMP_MASTER
 
 // uart functions 
 volatile uint8_t rcv_rdy;
@@ -140,7 +140,7 @@ int main()
         strcpy(lcd_string_array, lcd_string_array_C); // add C degrees
         strcat(lcd_string_array, "C ");
         strcat(lcd_string_array, lcd_string_array_F);
-        strcat(lcd_string_array, "F ");
+        strcat(lcd_string_array, "F");
         string2lcd(lcd_string_array);               //send the string to LCD (lcd_functions)
 
         // *************** start tx portion **********************

@@ -5,7 +5,13 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+// #include <utils/twi.h>
+#include <string.h>
+#include <stdlib.h>
 #include "hd44780.h"
+#include "lm73_functions.h"
+#include "twi_master.h"
+#include "uart_functions.h"
 
 //  HARDWARE SETUP:
 //  PORTA is connected to the segments of the LED display. and to the pushbuttons.
@@ -85,17 +91,17 @@ static uint8_t barGraphDisplay = 0;
 static uint8_t data = 0;
 
 // holding the ADC value
-uint16_t adc_result;     //holds adc result 
+uint16_t adc_result; //holds adc result
 
 // flags
-static uint8_t flag24 = 1; // 24 hour flag
-static uint8_t colonDisplay = 0; // blinking for colons
-static uint8_t timerFlag = 0; // if timer is on, 10 seconds
-static uint8_t alarmFlag = 0; // indication on LED display
+static uint8_t flag24 = 1;           // 24 hour flag
+static uint8_t colonDisplay = 0;     // blinking for colons
+static uint8_t timerFlag = 0;        // if timer is on, 10 seconds
+static uint8_t alarmFlag = 0;        // indication on LED display
 static uint8_t changeMinuteFlag = 0; // change the clock minutes
-static uint8_t changeHourFlag = 0; // change the clock hours
-static uint8_t setAlarm = 0; // setting the alarm to desire time
-static uint8_t alarmInit = 0; // alarm desire declared, know many times the button has been pressed
+static uint8_t changeHourFlag = 0;   // change the clock hours
+static uint8_t setAlarm = 0;         // setting the alarm to desire time
+static uint8_t alarmInit = 0;        // alarm desire declared, know many times the button has been pressed
 
 // clock
 static uint8_t minutes = 0;
@@ -132,7 +138,25 @@ void adc_init(void);
 void adc_read(void);
 void snoozekiller(void);
 
-// lab 5 functions
+// ********** lab 5 functions and variables *******************
+// #define TEMP_MASTER
+ISR(USART0_RX_vect);
+char lcd_whole_string_array[32];
+// uart functions 
+volatile uint8_t rcv_rdy;
+char rx_char;
+uint8_t send_seq = 0; // transmit sequence number
+char lcd_string[3]; // hold value of sequence number
+
+// lm73 fucntions
+char lcd_string_array[16]; //holds a string to refresh the LCD
+char lcd_string_array_F[16]; //holds a string for F
+char lcd_string_array_C[16]; //holds a string for C
+uint8_t i;                 //general purpose index
+
+extern uint8_t lm73_wr_buf[2];
+extern uint8_t lm73_rd_buf[2];
+
 
 int main()
 {
@@ -145,25 +169,43 @@ int main()
     PORTC |= (1 << PORTC6) | (1 << PORTC7); // turn it on
 
     tcnt0_init(); //initalize counter timer zero
-    tcnt1_init();  //initalize counter timer one
-    tcnt2_init();  //initalize counter timer two
-    tcnt3_init();  //initalize counter timer three
+    tcnt1_init(); //initalize counter timer one
+    tcnt2_init(); //initalize counter timer two
+    tcnt3_init(); //initalize counter timer three
     // PORTE |= 1 << PORTE3;
-    adc_init();    // initalize the ADC
+    adc_init(); // initalize the ADC
     spi_init(); //initalize SPI port
     sei();      //enable interrupts before entering loop
+
+    //********************************************* lab 5 init ************
+    // DDRF |= 0x08; // lcd strobe bit
+    init_twi();         // initalize TWI
+    uart_init();        // initalize UART
+    uint16_t lm73_temp; // a place to assemble the temperature from the lm73
+#ifdef TEMP_MASTER
+    DDRF |= 0x08; // lcd strobe bit
+#else
+    float lm73_temp_C, lm73_temp_F;
+    //set LM73 mode for reading temperature by loading pointer register
+    lm73_wr_buf[0] = LM73_PTR_TEMP;                     //load lm73_wr_buf[0] with temperature pointer address
+    twi_start_wr(LM73_ADDRESS, lm73_wr_buf, 2);         //start the TWI write process
+    _delay_ms(2);                                       //wait for the xfer to finish
+#endif
+    //*********************************************************************
 
     set_dec_to_7seg(); // set values for dec_to_7seg array
     set_decoder();     // set values for the decoder array
 
     lcd_init(); // initalize the lcd display
     timer = SNOOZE_TIMER;
+    clear_display(); //  clean up the display
+    memset(lcd_whole_string_array, '\0', 32); // set the whole string to null
 
     while (1)
     {
 
         // spi
-        PORTD |= 1 << PORTD3; // clock_inh = 1
+        PORTD |= 1 << PORTD3;    // clock_inh = 1
         PORTE &= ~(1 << PORTE6); // load sh/ld
 
         PORTE |= 1 << PORTE6;    // sh/ld
@@ -171,38 +213,94 @@ int main()
 
         SPDR = 0; // writing a random value
 
-        while (bit_is_clear(SPSR, SPIF)){}
+        while (bit_is_clear(SPSR, SPIF))
+        {
+        }
         data = SPDR; // read data
         barGraph();
         // end of spi
 
-        segclock();     // set each digit for the clock
-        setDigit();     // setting the digit on display
-        
-        adc_read();     // read the ADC value
+        segclock(); // set each digit for the clock
+        setDigit(); // setting the digit on display
+
+        adc_read(); // read the ADC value
         // max value for adc is 1024
-        if (adc_result < 100){
-            OCR2 = 50;//255/2;
+        if (adc_result < 100)
+        {
+            OCR2 = 50; //255/2;
         }
-        else {
+        else
+        {
             // OCR2 = adc_result * -0.4 + 80;
             // 255/1024 = ocr2 / adc_result
             OCR2 = (255 * -5 / (adc_result)); // best result
             // OCR2 = (255/1023 * adc_result);
         }
+        // adc_result = adc_result - 700;
+        // if (adc_result < 10)
+        //     adc_result = 10;
+
+        // OCR2 = adc_result;
         // check if the alarm matches the actually clock
-        if ((alarmInit > 1) && (alarmMinute == minutes) && (alarmHour == hours)){
+        if ((alarmInit > 1) && (alarmMinute == minutes) && (alarmHour == hours))
+        {
             // timerFlag = 1; // make the timer go off
             // OCR3A = 0x1000;
-            
+
             alarmFlag = 1;
-        
         }
+        memset(lcd_whole_string_array, '\0', 32);
         alarmDisplay(); // display "ALARM" on the LCD display
-    }                   //while
+
+// lab 5 temp sensor
+#ifdef TEMP_MASTER
+        _delay_ms(100); //tenth second wait
+        // clear_display();                            //wipe the display
+        // ************** start rcv portion *********************
+        if (rcv_rdy == 1)
+        {
+            clear_display();
+            // string2lcd(lcd_string_array); // write out string if its ready
+            strcat(lcd_whole_string_array, lcd_string_array);
+            rcv_rdy = 0;
+            cursor_home();
+        }
+        // *************** end rcv portion ***********************
+#else
+        // _delay_ms(1000);                                //tenth second wait
+        clear_display();                                //wipe the display
+        twi_start_rd(LM73_ADDRESS, lm73_rd_buf, 2);     //read temperature data from LM73 (2 bytes)
+        _delay_ms(2);                                   //wait for it to finish
+        lm73_temp = lm73_rd_buf[0];                     //save high temperature byte into lm73_temp
+        lm73_temp = lm73_temp << 8;                     //shift it into upper byte
+        lm73_temp |= lm73_rd_buf[1];                    //"OR" in the low temp byte to lm73_temp
+        lm73_temp_C = lm73_temp / (float)256;           // how to find the temp in C
+        lm73_temp_F = (lm73_temp_C * 9 / 5) + 32;       // convert C to F
+        dtostrf(lm73_temp_C, 0, 1, lcd_string_array_C); // converting float to string
+        dtostrf(lm73_temp_F, 0, 1, lcd_string_array_F); // converting float to string
+        // itoa(lm73_temp_C, lcd_string_array, 10);      //convert to string in array with itoa() from avr-libc
+
+        strcpy(lcd_string_array, "  "); // add C degrees
+        strcat(lcd_string_array, lcd_string_array_C); // add C degrees
+        strcat(lcd_string_array, "C ");
+        strcat(lcd_string_array, lcd_string_array_F);
+        strcat(lcd_string_array, "F");
+        set_cursor(2,0);
+        string2lcd(lcd_string_array); //send the string to LCD (lcd_functions)
+        // strcat(lcd_whole_string_array, lcd_string_array);
+        // for (int i = 15; i < 32; i++)
+        //     lcd_whole_string_array[i] = lcd_string_array[i-15];
+
+        // *************** start tx portion **********************
+        uart_puts(lcd_string_array); // put what you want display, put string
+        uart_putc('\0');             // null character
+                                     // **************** end tx portion **********************
+#endif
+    clear_display();
+    string2lcd(lcd_whole_string_array);
+    } //while
     return 0;
 } //main
-
 
 /***********************************************************************/
 //                            spi_init
@@ -254,55 +352,57 @@ void tcnt1_init(void)
 /***********************************************************************/
 void tcnt2_init(void)
 {
-  //fast PWM, set on match, 64 prescaler
-  TCCR2 |= (1 << WGM21) | (1 << WGM20) | (1 << COM21) | (1 << COM20) | (1 << CS22);
-  OCR2 = 0xF0; //clear at 0xF0 CLEAR AT BRIGHTNESS
+    //fast PWM, set on match, 64 prescaler
+    TCCR2 |= (1 << WGM21) | (1 << WGM20) | (1 << COM21) | (1 << COM20) | (1 << CS22);
+    OCR2 = 0xF0; //clear at 0xF0 CLEAR AT BRIGHTNESS
 }
 
 /***********************************************************************/
 //                              tnct3_init
 // Initalizes timer/counter3 (TCNT3). TNCT3 is running a fast PWM mode,
 // Uses OC3A which is on PE3. Clear at the bottom, inverting mode
-// This sets the volume control for the speaker. 
+// This sets the volume control for the speaker.
 /***********************************************************************/
 void tcnt3_init(void)
 {
     //Fast PWM, set on compare match
-    TCCR3A |= (1 << WGM31) | (1 << COM3A1) | (1 << COM3A0); // inverting mode
+    TCCR3A |= (1 << WGM31) | (1 << COM3A1) | (1 << COM3A0);                               // inverting mode
     TCCR3B |= /*(1 << ICES3) |*/ (1 << WGM33) | (1 << WGM32) | (1 << CS30) | (1 << CS31); //No prescale
-    TCCR3C  = 0x00; //no force compare
+    TCCR3C = 0x00;                                                                        //no force compare
 
     OCR3A = 0xFFFF; // initally no volume
     // OCR3A = 0x1000;
-    ICR3  = 0xF000; // top value
-
-
+    ICR3 = 0xF000; // top value
 }
 
 /***********************************************************************/
 //                            adc_init
 /***********************************************************************/
-void adc_init(void){
+void adc_init(void)
+{
 
     //Initalize ADC and its ports
-    DDRF  &= ~(_BV(DDF7)); //make port F bit 7 the ADC input  
-    PORTF &= ~(_BV(PF7));  //port F bit 7 pullups must be off 
+    DDRF &= ~(_BV(DDF7)); //make port F bit 7 the ADC input
+    PORTF &= ~(_BV(PF7)); //port F bit 7 pullups must be off
 
-    ADMUX |= (0 << REFS1) | (1 << REFS0) | (0 << MUX4) | (0 << MUX3) | (1 << MUX2) | (1 << MUX1) | (1 << MUX0);    //single-ended input, PORTF bit 7, right adjusted, 10 bits
-                                            //reference is AVCC
+    ADMUX |= (0 << REFS1) | (1 << REFS0) | (0 << MUX4) | (0 << MUX3) | (1 << MUX2) | (1 << MUX1) | (1 << MUX0); //single-ended input, PORTF bit 7, right adjusted, 10 bits
+                                                                                                                //reference is AVCC
 
-    ADCSRA |=  (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0) | (1 << ADPS0); //ADC enabled, don't start yet, single shot mode 
-                                            //division factor is 128 (125khz)
+    ADCSRA |= (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0) | (1 << ADPS0); //ADC enabled, don't start yet, single shot mode
+                                                                                       //division factor is 128 (125khz)
 }
 
 /***********************************************************************/
 //                            adc_read()
 /***********************************************************************/
-void adc_read(){
-    ADCSRA |= (1 << ADSC);                          //poke the ADSC bit and start conversion
-    while(bit_is_clear(ADCSRA, ADIF)){}                     //spin while interrupt flag not set
-    ADCSRA |= 1 << ADIF;                              //its done, clear flag by writing a one 
-    adc_result = ADC;                      //read the ADC output as 16 bits
+void adc_read()
+{
+    ADCSRA |= (1 << ADSC); //poke the ADSC bit and start conversion
+    while (bit_is_clear(ADCSRA, ADIF))
+    {
+    }                    //spin while interrupt flag not set
+    ADCSRA |= 1 << ADIF; //its done, clear flag by writing a one
+    adc_result = ADC;    //read the ADC output as 16 bits
 }
 
 /******************************************************************************/
@@ -412,22 +512,22 @@ void segsum(uint16_t sum)
 //array is loaded at exit as:  |digit3|digit2|colon|digit1|digit0|
 void segclock()
 {
-    if(setAlarm == 0){
+    if (setAlarm == 0)
+    {
         segment_data[0] = minutes % 10;
         segment_data[1] = minutes / 10;
         segment_data[2] = (colonDisplay == 1) ? 10 : 11;
         segment_data[3] = hours % 10;
         segment_data[4] = hours / 10;
-
     }
-    if (setAlarm == 0x1){
+    if (setAlarm == 0x1)
+    {
         segment_data[0] = alarmMinute % 10;
         segment_data[1] = alarmMinute / 10;
         segment_data[2] = (colonDisplay == 1) ? 10 : 11;
         segment_data[3] = alarmHour % 10;
         segment_data[4] = alarmHour / 10;
     }
-    
 }
 
 /***************************************************************/
@@ -455,7 +555,6 @@ void setDigit()
         _delay_ms(0.5);
     }
 }
-
 
 /******************************************************************************/
 //                                    ISR
@@ -538,20 +637,23 @@ ISR(TIMER0_OVF_vect)
     }
 
     // when the alarm flag is on set the the alarm desire time
-    if (setAlarm == 0x1){
+    if (setAlarm == 0x1)
+    {
         // have encoder 2 change the hours
-        if (enc2 == 0){
+        if (enc2 == 0)
+        {
             alarmHour--;
             if (alarmHour == 255)
                 alarmHour = 23;
         }
 
         // have encoder 1 change the minutes
-        if (enc1 == 0){
+        if (enc1 == 0)
+        {
             // change minutes
-                alarmMinute--;
-                if (alarmMinute == 255) // since its unsign 255 = -1
-                    alarmMinute = 59;
+            alarmMinute--;
+            if (alarmMinute == 255) // since its unsign 255 = -1
+                alarmMinute = 59;
         }
     }
 
@@ -566,7 +668,7 @@ ISR(TIMER0_OVF_vect)
         {
             // count down from snooze
             // display alarm
-            // 
+            //
             // alarmFlag = 1; // display alarm
             // timer on
 
@@ -606,8 +708,6 @@ ISR(TIMER0_OVF_vect)
             }
         }
     }
-    
-       
 }
 
 /******************************************************************************/
@@ -722,13 +822,23 @@ void barGraph()
 
 void alarmDisplay()
 {
-    char lcd_string_array[16] = "     ALARM      ";
+    char lcd_string_array_alarm[16] = "     ALARM      ";
     if (alarmFlag == 0x1)
     {
-        // DDRE |= 1 << PORTE3; // turn off the port of the speaker 
-        OCR3A = 0x1000; // turn on the volume
-        clear_display(); // clear the display
-        string2lcd(lcd_string_array);
+        // DDRE |= 1 << PORTE3; // turn off the port of the speaker
+        OCR3A = 0x1000;  // turn on the volume
+        // clear_display(); // clear the display
+        set_cursor(1,0);
+        string2lcd(lcd_string_array_alarm);
+        // strcpy(lcd_whole_string_array, lcd_string_array_alarm);
+        // for (int i = 0; i < 16; i++)
+        //     lcd_whole_string_array[i] = lcd_string_array_alarm[i];
+    }
+    else{
+        // memset(lcd_whole_string_array, ' ',16); // make the first row blanks 
+       memset(lcd_string_array_alarm, ' ', 16);
+       set_cursor(2,0);
+       string2lcd(lcd_string_array_alarm); 
     }
 }
 
@@ -762,7 +872,6 @@ void buttonPress(uint8_t button)
         // sleep for 10 seconds then alarm again
         timerFlag = 1;
         barGraphDisplay ^= 1 << 2;
-
     }
     case 6:
     {
@@ -787,20 +896,20 @@ void buttonPress(uint8_t button)
 /******************************************************************************/
 ISR(TIMER1_COMPA_vect)
 {
-        PORTC ^= 1 << PORTC0; // turn on right speaker
-        PORTC ^= 1 << PORTC1; // turn on left speaker
+    PORTC ^= 1 << PORTC0; // turn on right speaker
+    PORTC ^= 1 << PORTC1; // turn on left speaker
 }
-
 
 /******************************************************************************/
 //                              snooze
 // what happens when the snooze goes off, reset everything
 /******************************************************************************/
-void snoozekiller(void){
-    timer = SNOOZE_TIMER; // reset the timer to 10 seconds
-    OCR3A = 0xFFFF; // turn off volume
-    timerFlag = 0; // turn off the timer
-    alarmFlag = 0; // turn off the alarm
+void snoozekiller(void)
+{
+    timer = SNOOZE_TIMER;         // reset the timer to 10 seconds
+    OCR3A = 0xFFFF;               // turn off volume
+    timerFlag = 0;                // turn off the timer
+    alarmFlag = 0;                // turn off the alarm
     barGraphDisplay &= ~(1 << 1); // turn off the timer modes
     barGraphDisplay &= ~(1 << 2); // turn off the timer modes
     PORTC &= ~(1 << PORTC0);
@@ -812,5 +921,25 @@ void snoozekiller(void){
     // clear_display();
 
     // turn off indication on LED display
-
 }
+
+//********************************************************
+//                      ISR(USART0_RX_vect)
+//********************************************************
+#ifdef TEMP_MASTER
+ISR(USART0_RX_vect)
+{
+    static uint8_t i;
+    rx_char = UDR0;                  //get character
+    lcd_string_array[i++] = rx_char; //store in array
+                                     //if entire string has arrived, set flag, reset index
+    if (rx_char == '\0')
+    {
+        rcv_rdy = 1;
+        // lcd_string_array[--i] = (' '); //clear the count field
+        // lcd_string_array[i + 1] = (' ');
+        // lcd_string_array[i + 2] = (' ');
+        i = 0;
+    }
+}
+#endif
