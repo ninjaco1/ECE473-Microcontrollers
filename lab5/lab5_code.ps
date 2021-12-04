@@ -1,0 +1,2483 @@
+%!PS-Adobe-3.0
+%%Title: lab5_code.c
+%%For: Anthony Nguyen
+%%Creator: a2ps version 4.14
+%%CreationDate: Wed Dec  1 15:05:41 2021
+%%BoundingBox: 24 24 588 768
+%%DocumentData: Clean7Bit
+%%Orientation: Portrait
+%%Pages: 5
+%%PageOrder: Ascend
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: font Courier
+%%+ font Courier-Bold
+%%+ font Courier-BoldOblique
+%%+ font Courier-Oblique
+%%+ font Helvetica
+%%+ font Helvetica-Bold
+%%+ font Symbol
+%%+ font Times-Bold
+%%+ font Times-Roman
+%%DocumentProcessColors: Black 
+%%DocumentSuppliedResources: procset a2ps-a2ps-hdr
+%%+ procset a2ps-black+white-Prolog
+%%+ encoding ISO-8859-1Encoding
+%%EndComments
+/a2psdict 200 dict def
+a2psdict begin
+%%BeginProlog
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+
+% EPSF import as in the Red Book
+/BeginInclude {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack 
+  userdict begin
+    0 setgray 0 setlinecap
+    1 setlinewidth 0 setlinejoin
+    10 setmiterlimit [ ] 0 setdash newpath
+    gs_languagelevel 1 ne {
+      false setstrokeadjust false setoverprint 
+    } if
+} bind def
+
+/EndInclude {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+/BeginEPSF {
+  BeginInclude
+  /showpage { } def
+} bind def
+
+/EndEPSF {
+  EndInclude
+} bind def
+
+% Page prefeed
+/page_prefeed {         % bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} bind def
+
+/deffont {
+  findfont exch scalefont def
+} bind def
+
+/reencode_font {
+  findfont reencode 2 copy definefont pop def
+} bind def
+
+% Function c-show (str => -)
+% centers text only according to x axis.
+/c-show { 
+  dup stringwidth pop
+  2 div neg 0 rmoveto
+  show
+} bind def
+
+% Function l-show (str => -)
+% prints texts so that it ends at currentpoint
+/l-show {
+  dup stringwidth pop neg 
+  0 
+  rmoveto show
+} bind def
+
+% center-fit show (str w => -)
+% show centered, and scale currentfont so that the width is less than w
+/cfshow {
+  exch dup stringwidth pop
+  % If the title is too big, try to make it smaller
+  3 2 roll 2 copy
+  gt
+  { % if, i.e. too big
+    exch div
+    currentfont exch scalefont setfont
+  } { % ifelse
+    pop pop 
+  }
+  ifelse
+  c-show			% center title
+} bind def
+
+% Return the y size of the current font
+% - => fontsize
+/currentfontsize {
+  currentfont /FontType get 0 eq {
+    currentfont /FontMatrix get 3 get
+  }{
+    currentfont /FontMatrix get 3 get 1000 mul
+  } ifelse
+} bind def
+
+% reencode the font
+% <encoding-vector> <fontdict> -> <newfontdict>
+/reencode { %def
+  dup length 5 add dict begin
+    { %forall
+      % <vector> <key> <val>
+      1 index /FID ne 
+      { def }{ pop pop } ifelse
+    } forall
+    /Encoding exch def % -
+
+    % Use the font's bounding box to determine the ascent, descent,
+    % and overall height; don't forget that these values have to be
+    % transformed using the font's matrix.
+    % We use `load' because sometimes BBox is executable, sometimes not.
+    % Since we need 4 numbers an not an array avoid BBox from being executed
+    /FontBBox load aload pop
+    FontMatrix transform /Ascent exch def pop
+    FontMatrix transform /Descent exch def pop
+    /FontHeight Ascent Descent sub def
+
+    % Get the underline position and thickness if they're defined.
+    % Use 1 if they are not defined.
+    currentdict /FontInfo 2 copy known
+    { get
+      /UnderlinePosition 2 copy % <FontInfo> /UP <FontInfo> /UP
+      2 copy known
+      { get }{ pop pop 1 } ifelse
+      0 exch FontMatrix transform exch pop
+      def % <FontInfo>
+
+      /UnderlineThickness 2 copy % <FontInfo> /UT <FontInfo> /UT
+      2 copy known
+      { get }{ pop pop 1 } ifelse
+      0 exch FontMatrix transform exch pop
+      def % <FontInfo>
+      pop % -
+    }{ pop pop
+    } ifelse
+
+    currentdict
+  end 
+} bind def
+
+% composite fonts for ASCII-EUC mixed strings
+% Version 1.2 1/31/1990
+% Original Ken'ichi HANDA (handa@etl.go.jp)
+% Modified Norio Katayama (katayama@rd.nacsis.ac.jp),1998
+% Extend & Fix Koji Nakamaru (maru@on.cs.keio.ac.jp), 1999
+% Anyone can freely copy, modify, distribute this program.
+
+/copyfont {	% font-dic extra-entry-count  copyfont  font-dic
+	1 index maxlength add dict begin
+	{	1 index /FID ne 2 index /UniqueID ne and
+		{def} {pop pop} ifelse
+	} forall
+	currentdict
+	end
+} bind def
+
+/compositefont { % ASCIIFontName EUCFontName RomanScale RomanOffset Rot(T/F) compositefont font
+    /RomanRotation exch def
+    /RomanOffset exch def
+    /RomanScale exch def
+    userdict /fixeucfont_dict known not {
+	userdict begin
+	    /fixeucfont_dict 2 dict begin
+		/UpperByteEncoding [
+		    16#00 1 16#20 { pop 0 } for
+		    16#21 1 16#28 { 16#20 sub } for
+		    16#29 1 16#2F { pop 0 } for
+		    16#30 1 16#74 { 16#27 sub } for
+		    16#75 1 16#FF { pop 0 } for
+		] def
+	        /LowerByteEncoding [
+		    16#00 1 16#A0 { pop /.notdef } for
+		    16#A1 1 16#FE { 16#80 sub 16 2 string cvrs
+				    (cXX) dup 1 4 -1 roll
+				    putinterval cvn } for
+		    /.notdef
+		] def
+		currentdict
+	    end def
+	end
+    } if
+    findfont dup /FontType get 0 eq {
+	14 dict begin
+	    %
+	    % 7+8 bit EUC font
+	    %
+	    12 dict begin
+		/EUCFont exch def
+		/FontInfo (7+8 bit EUC font) readonly def
+		/PaintType 0 def
+		/FontType 0 def
+		/FontMatrix matrix def
+		% /FontName
+		/Encoding fixeucfont_dict /UpperByteEncoding get def
+		/FMapType 2 def
+		EUCFont /WMode known
+		{ EUCFont /WMode get /WMode exch def }
+		{ /WMode 0 def } ifelse
+		/FDepVector [
+		    EUCFont /FDepVector get 0 get
+		    [ 16#21 1 16#28 {} for 16#30 1 16#74 {} for ]
+		    {
+			13 dict begin
+			    /EUCFont EUCFont def
+			    /UpperByte exch 16#80 add def	
+			    % /FontName
+			    /FontInfo (EUC lower byte font) readonly def
+			    /PaintType 0 def
+			    /FontType 3 def
+			    /FontMatrix matrix def
+			    /FontBBox {0 0 0 0} def
+			    /Encoding
+				fixeucfont_dict /LowerByteEncoding get def
+			    % /UniqueID
+			    % /WMode
+			    /BuildChar {
+				gsave
+				exch dup /EUCFont get setfont
+				/UpperByte get
+				2 string
+				dup 0 4 -1 roll put
+				dup 1 4 -1 roll put
+				dup stringwidth setcharwidth
+				0 0 moveto show
+				grestore
+			    } bind def
+			    currentdict
+			end
+			/lowerbytefont exch definefont
+		    } forall
+		] def
+		currentdict
+	    end
+	    /eucfont exch definefont
+	    exch
+	    findfont 1 copyfont dup begin
+		RomanRotation {
+			/FontMatrix FontMatrix
+			[ 0 RomanScale neg RomanScale 0 RomanOffset neg 0 ]
+			matrix concatmatrix def
+		}{
+			/FontMatrix FontMatrix
+			[ RomanScale 0 0 RomanScale 0 RomanOffset ] matrix concatmatrix
+			def
+			/CDevProc
+			    {pop pop pop pop 0 exch -1000 exch 2 div 880} def
+		} ifelse
+	    end
+	    /asciifont exch definefont
+	    exch
+	    /FDepVector [ 4 2 roll ] def
+	    /FontType 0 def
+	    /WMode 0 def
+	    /FMapType 4 def
+	    /FontMatrix matrix def
+	    /Encoding [0 1] def
+	    /FontBBox {0 0 0 0} def
+%	    /FontHeight 1.0 def % XXXX
+	    /FontHeight RomanScale 1.0 ge { RomanScale }{ 1.0 } ifelse def
+	    /Descent -0.3 def   % XXXX
+	    currentdict
+	end
+	/tmpfont exch definefont
+	pop
+	/tmpfont findfont
+    }{
+	pop findfont 0 copyfont
+    } ifelse
+} def	
+
+/slantfont {	% FontName slant-degree  slantfont  font'
+    exch findfont 1 copyfont begin
+    [ 1 0 4 -1 roll 1 0 0 ] FontMatrix exch matrix concatmatrix
+    /FontMatrix exch def
+    currentdict
+    end
+} def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul neg 2 div 0 rmoveto
+    f# setfont
+    c-show
+  grestore
+} bind def
+
+% -------- Some routines to enlight plain b/w printings ---------
+
+% Underline
+% width --
+/dounderline {
+  currentpoint
+  gsave
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    0 rlineto
+    stroke
+  grestore
+} bind def
+
+% Underline a string
+% string --
+/dounderlinestring {
+  stringwidth pop
+  dounderline
+} bind def
+
+/UL {
+  /ul exch store
+} bind def
+
+% Draw a box of WIDTH wrt current font
+% width --
+/dobox {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    stroke
+  grestore
+} bind def
+
+/BX {
+  /bx exch store
+} bind def
+
+% Box a string
+% string --
+/doboxstring {
+  stringwidth pop
+  dobox
+} bind def
+
+%
+% ------------- Color routines ---------------
+%
+/FG /setrgbcolor load def
+
+% Draw the background
+% width --
+/dobackground {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    bgcolor aload pop setrgbcolor
+    fill
+  grestore
+} bind def
+
+% Draw bg for a string
+% string --
+/dobackgroundstring {
+  stringwidth pop
+  dobackground
+} bind def
+
+
+/BG {
+  dup /bg exch store
+  { mark 4 1 roll ] /bgcolor exch store } if
+} bind def
+
+
+/Show {
+  bg { dup dobackgroundstring } if
+  ul { dup dounderlinestring } if
+  bx { dup doboxstring } if
+  show
+} bind def
+
+% Function T(ab), jumps to the n-th tabulation in the current line
+/T {
+  cw mul x0 add
+  bg { dup currentpoint pop sub dobackground } if
+  ul { dup currentpoint pop sub dounderline } if
+  bx { dup currentpoint pop sub dobox } if
+  y0 moveto
+} bind def
+
+% Function n: move to the next line
+/n {
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+% Function N: show and move to the next line
+/N {
+  Show
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+/S {
+  Show
+} bind def
+
+%%BeginResource: procset a2ps-a2ps-hdr 2.0 2
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Function title: prints page header.
+% <ct> <rt> <lt> are passed as argument
+/title { 
+  % 1. Draw the background
+  x v get y v get moveto
+  gsave
+    0 th 2 div neg rmoveto 
+    th setlinewidth
+    0.95 setgray
+    pw 0 rlineto stroke
+  grestore
+  % 2. Border it
+  gsave
+    0.7 setlinewidth
+    pw 0 rlineto
+    0 th neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+  % stk: ct rt lt
+  x v get y v get th sub 1 add moveto
+%%IncludeResource: font Helvetica
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  % 3. The left title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    fnfs 0.8 mul hm rmoveto
+    show			% left title
+  grestore
+  exch
+  % stk: ct ltw rt
+  % 4. the right title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    dup
+    pw exch stringwidth pop fnfs 0.8 mul add sub
+    hm
+    rmoveto
+    show			% right title
+  grestore
+  % stk: ct ltw rtw
+  % 5. the center title
+  gsave
+    pw 3 1 roll
+    % stk: ct pw ltw rtw
+    3 copy 
+    % Move to the center of the left room
+    sub add 2 div hm rmoveto
+    % What is the available space in here?
+    add sub fnfs 0.8 mul sub fnfs 0.8 mul sub
+    % stk: ct space_left
+%%IncludeResource: font Helvetica-Bold
+  fHelvetica-Bold fnfs scalefont setfont
+    cfshow
+  grestore
+} bind def
+
+% Function border: prints virtual page border
+/border { %def
+  gsave				% print four sides
+    0 setgray
+    x v get y v get moveto
+    0.7 setlinewidth		% of the square
+    pw 0 rlineto
+    0 ph neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+} bind def
+
+% Function water: prints a water mark in background
+/water { %def
+  gsave
+    scx scy moveto rotate
+%%IncludeResource: font Times-Bold
+  fTimes-Bold 100 scalefont setfont
+    .97 setgray
+    dup stringwidth pop 2 div neg -50 rmoveto
+    show
+  grestore
+} bind def
+
+% Function rhead: prints the right header
+/rhead {  %def
+  lx ly moveto
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  l-show
+} bind def
+
+% Function footer (cf rf lf -> -)
+/footer {
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  dx dy moveto
+  show
+
+  snx sny moveto
+  l-show
+  
+  fnx fny moveto
+  c-show
+} bind def
+%%EndResource
+%%BeginResource: procset a2ps-black+white-Prolog 2.0 1
+
+% Function T(ab), jumps to the n-th tabulation in the current line
+/T { 
+  cw mul x0 add y0 moveto
+} bind def
+
+% Function n: move to the next line
+/n { %def
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+% Function N: show and move to the next line
+/N {
+  Show
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+}  bind def
+
+/S {
+  Show
+} bind def
+
+/p {
+  false UL
+  false BX
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/sy {
+  false UL
+  false BX
+  fSymbol bfs scalefont setfont
+  Show
+} bind def
+
+/k {
+  false UL
+  false BX
+  fCourier-Oblique bfs scalefont setfont
+  Show
+} bind def
+
+/K {
+  false UL
+  false BX
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/c {
+  false UL
+  false BX
+  fCourier-Oblique bfs scalefont setfont
+  Show
+} bind def
+
+/C {
+  false UL
+  false BX
+  fCourier-BoldOblique bfs scalefont setfont
+  Show 
+} bind def
+
+/l {
+  false UL
+  false BX
+  fHelvetica bfs scalefont setfont
+  Show
+} bind def
+
+/L {
+  false UL
+  false BX
+  fHelvetica-Bold bfs scalefont setfont
+  Show 
+} bind def
+
+/str{
+  false UL
+  false BX
+  fTimes-Roman bfs scalefont setfont
+  Show
+} bind def
+
+/e{
+  false UL
+  true BX
+  fHelvetica-Bold bfs scalefont setfont
+  Show
+} bind def
+
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier
+%%IncludeResource: font Courier-Oblique
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Times-Roman
+%%IncludeResource: font Symbol
+%%IncludeResource: font Courier-BoldOblique
+%%BeginResource: encoding ISO-8859-1Encoding
+/ISO-8859-1Encoding [
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclam /quotedbl /numbersign /dollar /percent /ampersand /quoteright 
+/parenleft /parenright /asterisk /plus /comma /minus /period /slash 
+/zero /one /two /three /four /five /six /seven 
+/eight /nine /colon /semicolon /less /equal /greater /question 
+/at /A /B /C /D /E /F /G 
+/H /I /J /K /L /M /N /O 
+/P /Q /R /S /T /U /V /W 
+/X /Y /Z /bracketleft /backslash /bracketright /asciicircum /underscore 
+/quoteleft /a /b /c /d /e /f /g 
+/h /i /j /k /l /m /n /o 
+/p /q /r /s /t /u /v /w 
+/x /y /z /braceleft /bar /braceright /asciitilde /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclamdown /cent /sterling /currency /yen /brokenbar /section 
+/dieresis /copyright /ordfeminine /guillemotleft /logicalnot /hyphen /registered /macron 
+/degree /plusminus /twosuperior /threesuperior /acute /mu /paragraph /bullet 
+/cedilla /onesuperior /ordmasculine /guillemotright /onequarter /onehalf /threequarters /questiondown 
+/Agrave /Aacute /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla 
+/Egrave /Eacute /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis 
+/Eth /Ntilde /Ograve /Oacute /Ocircumflex /Otilde /Odieresis /multiply 
+/Oslash /Ugrave /Uacute /Ucircumflex /Udieresis /Yacute /Thorn /germandbls 
+/agrave /aacute /acircumflex /atilde /adieresis /aring /ae /ccedilla 
+/egrave /eacute /ecircumflex /edieresis /igrave /iacute /icircumflex /idieresis 
+/eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /divide 
+/oslash /ugrave /uacute /ucircumflex /udieresis /yacute /thorn /ydieresis 
+] def
+%%EndResource
+% Initialize page description variables.
+/sh 792 def
+/sw 612 def
+/llx 24 def
+/urx 588 def
+/ury 768 def
+/lly 24 def
+/#copies 1 def
+/th 15.000000 def
+/fnfs 11 def
+/bfs 5.651106 def
+/cw 3.390664 def
+
+% Dictionary for ISO-8859-1 support
+/iso1dict 8 dict begin
+  /fCourier ISO-8859-1Encoding /Courier reencode_font
+  /fCourier-Bold ISO-8859-1Encoding /Courier-Bold reencode_font
+  /fCourier-BoldOblique ISO-8859-1Encoding /Courier-BoldOblique reencode_font
+  /fCourier-Oblique ISO-8859-1Encoding /Courier-Oblique reencode_font
+  /fHelvetica ISO-8859-1Encoding /Helvetica reencode_font
+  /fHelvetica-Bold ISO-8859-1Encoding /Helvetica-Bold reencode_font
+  /fTimes-Bold ISO-8859-1Encoding /Times-Bold reencode_font
+  /fTimes-Roman ISO-8859-1Encoding /Times-Roman reencode_font
+currentdict end def
+/bgcolor [ 0 0 0 ] def
+/bg false def
+/ul false def
+/bx false def
+% The font for line numbering
+/f# /Helvetica findfont bfs .6 mul scalefont def
+/fSymbol /Symbol findfont def
+/hm fnfs 0.25 mul def
+/pw
+   cw 81.400000 mul
+def
+/ph
+   337.371021 th add
+def
+/pmw urx llx sub pw 2 mul sub 1 div def
+/pmh ury lly sub ph 2 mul sub 24 sub 1 div def
+/v 0 def
+/x [
+  0
+  dup pmw add pw add
+  0
+  dup pmw add pw add
+] def
+/y [
+  pmh ph add 1 mul ph add
+  dup
+  pmh ph add 0 mul ph add
+  dup
+] def
+/scx sw 2 div def
+/scy sh 2 div def
+/snx urx def
+/sny lly 2 add def
+/dx llx def
+/dy sny def
+/fnx scx def
+/fny dy def
+/lx snx def
+/ly ury fnfs 0.8 mul sub def
+/sx 0 def
+/tab 8 def
+/x0 0 def
+/y0 0 def
+%%EndSetup
+
+%%Page: (1-4) 1
+%%BeginPageSetup
+/pagesave save def
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(// lab5_code.c) c n
+(// Anthony Nguyen) N
+(// 11.20.2021) N
+() p n
+(#include) K
+( <avr/io.h>) p n
+(#include) K
+( <util/delay.h>) p n
+(#include) K
+( <avr/interrupt.h>) p n
+(// #include <utils/twi.h>) c n
+(#include) K
+( <string.h>) p n
+(#include) K
+( <stdlib.h>) p n
+(#include) K
+( ") p
+(hd44780.h) str
+(") p n
+(#include) K
+( ") p
+(lm73_functions.h) str
+(") p n
+(#include) K
+( ") p
+(twi_master.h) str
+(") p n
+(#include) K
+( ") p
+(uart_functions.h) str
+(") p n
+() N
+(//  HARDWARE SETUP:) c n
+(//  PORTA is connected to the segments of the LED display. and to the pushbutton) N
+(s.) N
+(//  PORTA.0 corresponds to segment a, PORTA.1 corresponds to segement b, etc.) N
+(//  PORTB bits 4-6 go to a,b,c inputs of the 74HC138.) N
+(//  PORTB bit 7 goes to the PWM transistor base.) N
+() p n
+(// Bargraph board           Mega128 board) c n
+(// --------------      ----------------------) N
+(//     reglck            PORTD bit 2 \(ss_n\)) N
+(//     srclk             PORTB bit 1 \(sclk\)) N
+(//     sdin              PORTB bit 2 \(mosi\)) N
+(//     oe_n              PORTB bit 7) N
+(//     gnd2                   ground) N
+(//     vdd2                     vcc) N
+(//     sd_out               no connect) N
+() p n
+(// Encoder board            Mega128 board) c n
+(// --------------      ----------------------) N
+(//   shift_ld_n             PORTE bit 6) N
+(//   clk_inh                PORTD bit 3 \(ss\)) N
+(//   sck                    PORTB bit 1 \(sclk\)) N
+(//   ser_in                 no connect) N
+(//   ser_out                PORTB bit 3 \(miso\)) N
+(//   vdd1                   vcc) N
+(//   gnd1                   ground) N
+() p n
+(// Audio Amp                Mega128 board) c n
+(// --------------      ----------------------) N
+(//  vol                     PORTE bit 3) N
+() p n
+(// #define F_CPU 16000000 // cpu speed in hertz) c n
+(#define) K
+( TRUE 1) p n
+(#define) K
+( FALSE 0) p n
+(#define) K
+( MAX_BIT_DEBOUNCE 8 ) p
+(// numbers of bytes for the debounce) c n
+() p n
+(// segs to turn on for LED, negate everything) c n
+(#define) K
+( ZERO 0b00111111  ) p
+(// A, B, C, D, E, F) c n
+(#define) K
+( ONE 0b00000110   ) p
+(// B, C) c n
+(#define) K
+( TWO 0b01011011   ) p
+(// A, B, D, E, G) c n
+(#define) K
+( THREE 0b01001111 ) p
+(// A, B, C, D, G) c n
+(#define) K
+( FOUR 0b01100110  ) p
+(// B, C, F, G) c n
+(#define) K
+( FIVE 0b01101101  ) p
+(// A, C, D, F, G) c n
+(#define) K
+( SIX 0b01111101   ) p
+(// A, C, D, E, F, G) c n
+(lab5_code.c) (Page 1/17) (Dec 01, 21 15:00) title
+border
+/v 1 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(#define) K
+( SEVEN 0b00000111 ) p
+(// A, B, C) c n
+(#define) K
+( EIGHT 0b01111111 ) p
+(// A, B, C, D, E, F, G) c n
+(#define) K
+( NINE 0b01100111  ) p
+(// A, B, C, F, G) c n
+(#define) K
+( BLANK 0x00) p n
+(#define) K
+( COLON 0b00000011 ) p
+(// A, B) c n
+(// Port B decoder, remember to not all the digits) N
+(#define) K
+( DIGIT1 0x40     ) p
+(//\(\(1 << PB6\) | \(0 << PB5\) | \(0 << PB4\)\)) c n
+(#define) K
+( DIGIT2 0x30     ) p
+(//\(\(0 << PB6\) | \(1 << PB5\) | \(0 << PB4\)\)) c n
+(#define) K
+( DIGIT3 0x10     ) p
+(//\(\(0 << PB6\) | \(0 << PB5\) | \(1 << PB4\)\)) c n
+(#define) K
+( DIGIT4 0x00     ) p
+(//\(\(0 << PB6\) | \(0 << PB5\) | \(0 << PB4\)\)) c n
+(#define) K
+( DIS_COLON 0x20  ) p
+(//\(\(0 << PB6\) | \(1 << PB5\) | \(0 << PB4\)\)) c n
+(#define) K
+( TRI_BUFFER 0x70 ) p
+(//\(\(1 << PB6\) | \(1 << PB5\) | \(1 << PB4\)\)) c n
+() p n
+(// lab 4 define) c n
+(#define) K
+( SNOOZE_TIMER 10) p n
+() N
+(//holds data to be sent to the segments. logic zero turns segment on) c n
+(uint8_t segment_data[5];) p n
+() N
+(//decimal to 7-segment LED display encodings, logic "0" turns on segment) c n
+(uint8_t dec_to_7seg[12];) p n
+() N
+(// Decoder 3 to 8) c n
+(uint8_t decoder[8];) p n
+() N
+(// current number on the display) c n
+(uint16_t current_num = 0;) p n
+() N
+(// what value to display) c n
+(static) K
+( uint8_t barGraphDisplay = 0;) p n
+() N
+(// determine if we are increment or decrement mode) c n
+(static) K
+( uint8_t data = 0;) p n
+() N
+(// holding the ADC value) c n
+(uint16_t adc_result; ) p
+(//holds adc result) c n
+() p n
+(// flags) c n
+(static) K
+( uint8_t flag24 = 1;           ) p
+(// 24 hour flag) c n
+(static) K
+( uint8_t colonDisplay = 0;     ) p
+(// blinking for colons) c n
+(static) K
+( uint8_t timerFlag = 0;        ) p
+(// if timer is on, 10 seconds) c n
+(static) K
+( uint8_t alarmFlag = 0;        ) p
+(// indication on LED display) c n
+(static) K
+( uint8_t changeMinuteFlag = 0; ) p
+(// change the clock minutes) c n
+(static) K
+( uint8_t changeHourFlag = 0;   ) p
+(// change the clock hours) c n
+(static) K
+( uint8_t setAlarm = 0;         ) p
+(// setting the alarm to desire time) c n
+(static) K
+( uint8_t alarmInit = 0;        ) p
+(// alarm desire declared, know many times t) c n
+(he button has been pressed) N
+() p n
+(// clock) c n
+(static) K
+( uint8_t minutes = 0;) p n
+(static) K
+( uint8_t hours = 0;) p n
+(static) K
+( uint16_t timer = 0; ) p
+(// in seconds) c n
+(static) K
+( uint8_t alarmMinute = 0;) p n
+(static) K
+( uint8_t alarmHour = 0;) p n
+() N
+(// lab 2 functions) c n
+(int) k
+(8_t chk_buttons\() p
+(int) k
+( button\); ) p
+(// check what button is being pressed) c n
+(void) k
+( segsum\(uint16_t sum\);) p n
+(void) k
+( setDigit\(\);) p n
+(lab5_code.c) (Page 2/17) (Dec 01, 21 15:00) title
+border
+/v 2 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(void) k
+( clearDecoder\(\);) p n
+(void) k
+( set_dec_to_7seg\(\);) p n
+(void) k
+( set_decoder\(\);) p n
+() N
+(// lab 3 functions) c n
+(void) k
+( barGraph\(\);) p n
+(uint8_t encoderRead\(uint8_t data, uint8_t knob\);) N
+(void) k
+( spi_init\() p
+(void) k
+(\);) p n
+(void) k
+( tcnt0_init\() p
+(void) k
+(\);) p n
+(ISR\(TIMER0_OVF_vect\);) N
+() N
+(// lab 4 functions) c n
+(void) k
+( segclock\(\);) p n
+(void) k
+( alarmDisplay\(\);) p n
+(void) k
+( buttonPress\(uint8_t\);) p n
+(void) k
+( tcnt1_init\() p
+(void) k
+(\); ) p
+(// frequency of notes) c n
+(void) k
+( tcnt2_init\() p
+(void) k
+(\);) p n
+(void) k
+( tcnt3_init\() p
+(void) k
+(\);) p n
+(ISR\(TIMER1_COMPA_vect\); ) S
+(// ctc, notes) c n
+(void) k
+( setVolumeController\(\);) p n
+(void) k
+( adc_init\() p
+(void) k
+(\);) p n
+(void) k
+( adc_read\() p
+(void) k
+(\);) p n
+(void) k
+( snoozekiller\() p
+(void) k
+(\);) p n
+() N
+(// ********** lab 5 functions and variables *******************) c n
+(#define) K
+( TEMP_MASTER) p n
+(ISR\(USART0_RX_vect\);) N
+(char) k
+( lcd_whole_string_array[32];) p n
+(// uart functions ) c n
+(volatile) K
+( uint8_t rcv_rdy;) p n
+(char) k
+( rx_char;) p n
+(uint8_t send_seq = 0; ) S
+(// transmit sequence number) c n
+(char) k
+( lcd_string[3]; ) p
+(// hold value of sequence number) c n
+() p n
+(// lm73 fucntions) c n
+(char) k
+( lcd_string_array[16]; ) p
+(//holds a string to refresh the LCD) c n
+(char) k
+( lcd_string_array_F[16]; ) p
+(//holds a string for F) c n
+(char) k
+( lcd_string_array_C[16]; ) p
+(//holds a string for C) c n
+(uint8_t i;                 ) p
+(//general purpose index) c n
+() p n
+(extern) K
+( uint8_t lm73_wr_buf[2];) p n
+(extern) K
+( uint8_t lm73_rd_buf[2];) p n
+() N
+() N
+(int) k
+( main\(\)) p n
+({) N
+(    DDRB = 0xF0;        ) S
+(//set port B bits 4-7 B as outputs) c n
+(    DDRE |= 0b01001000; ) p
+(// set E6, E3 to output) c n
+(    DDRD |= 0b00001100; ) p
+(// slave select pins) c n
+(    DDRC |= 0xFF;       ) p
+(// set prot C to all outputs) c n
+() p n
+(    PORTB &= ~\(1 << PORTB7\);) N
+(    PORTC |= \(1 << PORTC6\) | \(1 << PORTC7\); ) S
+(// turn it on) c n
+() p n
+(    tcnt0_init\(\); ) S
+(//initalize counter timer zero) c n
+(    tcnt1_init\(\); ) p
+(//initalize counter timer one) c n
+(    tcnt2_init\(\); ) p
+(//initalize counter timer two) c n
+(    tcnt3_init\(\); ) p
+(//initalize counter timer three) c n
+(    ) p
+(// PORTE |= 1 << PORTE3;) c n
+(lab5_code.c) (Page 3/17) (Dec 01, 21 15:00) title
+border
+/v 3 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    adc_init\(\); ) p
+(// initalize the ADC) c n
+(    spi_init\(\); ) p
+(//initalize SPI port) c n
+(    lcd_init\(\); ) p
+(// initalize the lcd display) c n
+(    sei\(\);      ) p
+(//enable interrupts before entering loop) c n
+() p n
+(    ) S
+(//********************************************* lab 5 init ************) c n
+(    ) p
+(// DDRF |= 0x08; // lcd strobe bit) c n
+(    init_twi\(\);         ) p
+(// initalize TWI) c n
+(    uart_init\(\);        ) p
+(// initalize UART) c n
+(    ) p
+(int) k
+(16_t lm73_temp; ) p
+(// a place to assemble the temperature from the lm73) c n
+(#ifdef) K
+( TEMP_MASTER) p n
+(    DDRF |= 0x08; ) S
+(// lcd strobe bit) c n
+(#else) K n
+(    ) p
+(float) k
+( lm73_temp_C, lm73_temp_F;) p n
+(    ) S
+(//set LM73 mode for reading temperature by loading pointer register) c n
+(    lm73_wr_buf[0] = LM73_PTR_TEMP;                     ) p
+(//load lm73_wr_buf[0] wi) c n
+(th temperature pointer address) N
+(    twi_start_wr\(LM73_ADDRESS, lm73_wr_buf, 2\);         ) p
+(//start the TWI write pr) c n
+(ocess) N
+(    _delay_ms\(2\);                                       ) p
+(//wait for the xfer to f) c n
+(inish) N
+(#endif) K n
+(    ) p
+(//*********************************************************************) c n
+() p n
+(    set_dec_to_7seg\(\); ) S
+(// set values for dec_to_7seg array) c n
+(    set_decoder\(\);     ) p
+(// set values for the decoder array) c n
+() p n
+(    timer = SNOOZE_TIMER;) N
+(    clear_display\(\); ) S
+(//  clean up the display) c n
+(    ) p
+(// memset\(lcd_whole_string_array, '\\0', 32\); // set the whole string to null) c n
+(    cursor_home\(\);) p n
+() N
+(    ) S
+(while) K
+( \(1\)) p n
+(    {) N
+() N
+(        ) S
+(// spi) c n
+(        PORTD |= 1 << PORTD3;    ) p
+(// clock_inh = 1) c n
+(        PORTE &= ~\(1 << PORTE6\); ) p
+(// load sh/ld) c n
+() p n
+(        PORTE |= 1 << PORTE6;    ) S
+(// sh/ld) c n
+(        PORTD &= ~\(1 << PORTD3\); ) p
+(// clock_inh) c n
+() p n
+(        SPDR = 0; ) S
+(// writing a random value) c n
+() p n
+(        ) S
+(while) K
+( \(bit_is_clear\(SPSR, SPIF\)\)) p n
+(        {) N
+(        }) N
+(        data = SPDR; ) S
+(// read data) c n
+(        barGraph\(\);) p n
+(        ) S
+(// end of spi) c n
+() p n
+(        segclock\(\); ) S
+(// set each digit for the clock) c n
+(        setDigit\(\); ) p
+(// setting the digit on display) c n
+() p n
+(        adc_read\(\); ) S
+(// read the ADC value) c n
+(        ) p
+(// max value for adc is 1024) c n
+(        ) p
+(if) K
+( \(adc_result < 100\)) p n
+(        {) N
+(            OCR2 = 50; ) S
+(//255/2;) c n
+(lab5_code.c) (Page 4/17) (Dec 01, 21 15:00) title
+border
+grestore
+(Printed by Anthony Nguyen) rhead
+() (1/5) (Wednesday December 01, 2021) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (5-8) 2
+%%BeginPageSetup
+/pagesave save def
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(        }) p n
+(        ) S
+(else) K n
+(        {) p n
+(            OCR2 = \(255 * -5 / \(adc_result\)\) + 80; ) S
+(// best result) c n
+(        }) p n
+() N
+(        ) S
+(// check if the alarm matches the actually clock) c n
+(        ) p
+(if) K
+( \(\(alarmInit > 1\) && \(alarmMinute == minutes\) && \(alarmHour == hours\)\)) p n
+(        {) N
+(            ) S
+(// OCR3A = 0x1000;) c n
+(            ) p
+(// setAlarm = 0;) c n
+(            alarmFlag = 1;) p n
+(        }) N
+(        ) S
+(// memset\(lcd_whole_string_array, '\\0', 32\);) c n
+(        clear_display\(\);) p n
+(        ) S
+(// cursor_home\(\);) c n
+(        alarmDisplay\(\); ) p
+(// display "ALARM" on the LCD display) c n
+() p n
+(// lab 5 temp sensor) c n
+(#ifdef) K
+( TEMP_MASTER) p n
+(        ) S
+(// _delay_ms\(100\); //tenth second wait) c n
+(        ) p
+(// clear_display\(\);                            //wipe the display) c n
+(        ) p
+(// ************** start rcv portion *********************) c n
+(        ) p
+(if) K
+( \(rcv_rdy == 1\)) p n
+(        {) N
+(            clear_display\(\);) N
+(            ) S
+(// string2lcd\(lcd_string_array\); // write out string if its ready) c n
+(            strcat\(lcd_whole_string_array, lcd_string_array\);) p n
+(            rcv_rdy = 0;) N
+(            cursor_home\(\);) N
+(        }) N
+(        ) S
+(// *************** end rcv portion ***********************) c n
+(#else) K n
+(        ) p
+(// _delay_ms\(1000\);                                //tenth second wait) c n
+(        ) p
+(// clear_display\(\);                                //wipe the display) c n
+(        twi_start_rd\(LM73_ADDRESS, lm73_rd_buf, 2\);     ) p
+(//read temperature data ) c n
+(from LM73 \(2 bytes\)) N
+(        _delay_ms\(2\);                                   ) p
+(//wait for it to finish) c n
+(        lm73_temp = lm73_rd_buf[0];                     ) p
+(//save high temperature ) c n
+(byte into lm73_temp) N
+(        lm73_temp = lm73_temp << 8;                     ) p
+(//shift it into upper by) c n
+(te) N
+(        lm73_temp |= lm73_rd_buf[1];                    ) p
+(//"OR" in the low temp b) c n
+(yte to lm73_temp) N
+(        lm73_temp_C = lm73_temp / \() p
+(float) k
+(\)256;           ) p
+(// how to find the temp ) c n
+(in C) N
+(        lm73_temp_F = \(lm73_temp_C * 9 / 5\) + 32;       ) p
+(// convert C to F) c n
+(        dtostrf\(lm73_temp_C, 0, 1, lcd_string_array_C\); ) p
+(// converting float to s) c n
+(tring) N
+(        dtostrf\(lm73_temp_F, 0, 1, lcd_string_array_F\); ) p
+(// converting float to s) c n
+(tring) N
+(        ) p
+(// itoa\(lm73_temp_C, lcd_string_array, 10\);      //convert to string in ) c n
+(array with itoa\(\) from avr-libc) N
+(        ) p
+(// memset\(lcd_string_array, '\\0',16\); ) c n
+(        strcpy\(lcd_string_array, ") p
+(  ) str
+("\); ) p
+(// add C degrees) c n
+(        strcat\(lcd_string_array, lcd_string_array_C\); ) p
+(// add C degrees) c n
+(        strcat\(lcd_string_array, ") p
+(C ) str
+("\);) p n
+(        strcat\(lcd_string_array, lcd_string_array_F\);) N
+(        strcat\(lcd_string_array, ") S
+(F) str
+("\);) p n
+(lab5_code.c) (Page 5/17) (Dec 01, 21 15:00) title
+border
+/v 1 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(        set_cursor\(2,0\);) p n
+(        string2lcd\(lcd_string_array\); ) S
+(//send the string to LCD \(lcd_functions\)) c n
+(        ) p
+(// strcat\(lcd_whole_string_array, lcd_string_array\);) c n
+(        ) p
+(// for \(int i = 15; i < 32; i++\)) c n
+(        ) p
+(//     lcd_whole_string_array[i] = lcd_string_array[i-15];) c n
+() p n
+(        ) S
+(// *************** start tx portion **********************) c n
+(        uart_puts\(lcd_string_array\); ) p
+(// put what you want display, put string) c n
+(        uart_putc\(') p
+(\\0) str
+('\);             ) p
+(// null character) c n
+(                                     ) p
+(// **************** end tx portion ********) c n
+(**************) N
+(#endif) K n
+(    ) p
+(// clear_display\(\);) c n
+(    ) p
+(// string2lcd\(lcd_whole_string_array\);) c n
+(    } ) p
+(//while) c n
+(    ) p
+(return) K
+( 0;) p n
+(} ) S
+(//main) c n
+() p n
+(/***********************************************************************/) c n
+(//                            spi_init) N
+(//Initalizes the SPI port on the mega128. Does not do any further) N
+(//external device specific initalizations.  Sets up SPI to be:) N
+(//master mode, clock=clk/2, cycle half phase, low polarity, MSB first) N
+(//interrupts disabled, poll SPIF bit in SPSR to check xmit completion) N
+(/***********************************************************************/) N
+(void) k
+( spi_init\() p
+(void) k
+(\)) p n
+({) N
+(    DDRB |= 0x07;                     ) S
+(//Turn on SS, MOSI, SCLK) c n
+(    SPCR |= \(1 << SPE\) | \(1 << MSTR\); ) p
+(//enable SPI, master mode) c n
+(    SPSR |= \(1 << SPI2X\);             ) p
+(// double speed operation) c n
+(} ) p
+(//spi_init) c n
+() p n
+(/***********************************************************************/) c n
+(//                              tcnt0_init) N
+(//Initalizes timer/counter0 \(TCNT0\). TCNT0 is running in async mode) N
+(//with external 32khz crystal.  Runs in normal mode with no prescaling.) N
+(//Interrupt occurs at overflow 0xFF.) N
+(//) N
+(void) k
+( tcnt0_init\() p
+(void) k
+(\)) p n
+({) N
+(    ASSR |= \(1 << AS0\);    ) S
+(//ext osc TOSC) c n
+(    TIMSK |= \(1 << TOIE0\); ) p
+(//enable TCNT0 overflow interrupt) c n
+(    TCCR0 |= \(1 << CS00\);  ) p
+(//normal mode, no prescale) c n
+(}) p n
+() N
+(/***********************************************************************/) c n
+(//                              tcnt1_init) N
+(//Initalizes timer/counter1 \(TCNT1\). TCNT1 is running in async mode) N
+(//with interal 16Mhz crystal.  Runs in normal mode with no prescaling.) N
+(//Interrupt occurs at OCR1A value.) N
+(//) N
+(void) k
+( tcnt1_init\() p
+(void) k
+(\)) p n
+({) N
+(    TIMSK |= \(1 << OCIE1A\);               ) S
+(//enable TCNT1 ctc interrupt) c n
+(    TCCR1A |= 0;                          ) p
+(// CTC on OC1A) c n
+(    TCCR1B |= \(1 << CS10\) | \(1 << WGM12\); ) p
+(// no prescalar and ctc) c n
+(    TCCR1C |= 0x0;) p n
+(    OCR1A = 32000; ) S
+(// 440Hz, A4, change later for beaver fight song) c n
+(}) p n
+(lab5_code.c) (Page 6/17) (Dec 01, 21 15:00) title
+border
+/v 2 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(/***********************************************************************/) c n
+(//                              tnct2_init) N
+(// Initalizes timer/counter2 \(TCNT2\). TNCT2 is running a fast PWM mode.) N
+(// This will be on PORTB7. This timer to be used to set the brightness of) N
+(// the LED display) N
+(/***********************************************************************/) N
+(void) k
+( tcnt2_init\() p
+(void) k
+(\)) p n
+({) N
+(    ) S
+(//fast PWM, set on match, 64 prescaler) c n
+(    ) p
+(// TCCR2 |= \(1 << WGM21\) | \(1 << WGM20\) | \(1 << COM21\) | \(1 << COM20\) | \(1 <) c n
+(< CS22\);) N
+(    TCCR2 = 0b01111001; ) p n
+(    OCR2 = 0xF0; ) S
+(//clear at 0xF0 CLEAR AT BRIGHTNESS) c n
+(}) p n
+() N
+(/***********************************************************************/) c n
+(//                              tnct3_init) N
+(// Initalizes timer/counter3 \(TCNT3\). TNCT3 is running a fast PWM mode,) N
+(// Uses OC3A which is on PE3. Clear at the bottom, inverting mode) N
+(// This sets the volume control for the speaker.) N
+(/***********************************************************************/) N
+(void) k
+( tcnt3_init\() p
+(void) k
+(\)) p n
+({) N
+(    ) S
+(//Fast PWM, set on compare match) c n
+(    TCCR3A |= \(1 << WGM31\) | \(1 << COM3A1\) | \(1 << COM3A0\);                     ) p n
+(          ) S
+(// inverting mode) c n
+(    TCCR3B |= ) p
+(/*\(1 << ICES3\) |*/) c
+( \(1 << WGM33\) | \(1 << WGM32\) | \(1 << CS30\) | \(1 ) p n
+(<< CS31\); ) S
+(//No prescale) c n
+(    TCCR3C = 0x00;                                                              ) p n
+(          ) S
+(//no force compare) c n
+() p n
+(    OCR3A = 0xFFFF; ) S
+(// initally no volume) c n
+(    ) p
+(// OCR3A = 0x1000;) c n
+(    ICR3 = 0xF000; ) p
+(// top value) c n
+(}) p n
+() N
+(/***********************************************************************/) c n
+(//                            adc_init) N
+(/***********************************************************************/) N
+(void) k
+( adc_init\() p
+(void) k
+(\)) p n
+({) N
+() N
+(    ) S
+(//Initalize ADC and its ports) c n
+(    DDRF &= ~\(_BV\(DDF7\)\); ) p
+(//make port F bit 7 the ADC input) c n
+(    PORTF &= ~\(_BV\(PF7\)\); ) p
+(//port F bit 7 pullups must be off) c n
+() p n
+(    ADMUX |= \(0 << REFS1\) | \(1 << REFS0\) | \(0 << MUX4\) | \(0 << MUX3\) | \(1 << MUX) N
+(2\) | \(1 << MUX1\) | \(1 << MUX0\); ) S
+(//single-ended input, PORTF bit 7, right adjuste) c n
+(d, 10 bits) N
+(                                                                                ) p n
+(                                ) S
+(//reference is AVCC) c n
+() p n
+(    ADCSRA |= \(1 << ADEN\) | \(1 << ADPS2\) | \(1 << ADPS1\) | \(1 << ADPS0\) | \(1 << A) N
+(DPS0\); ) S
+(//ADC enabled, don't start yet, single shot mode) c n
+(                                                                                ) p n
+(       ) S
+(//division factor is 128 \(125khz\)) c n
+(}) p n
+() N
+(lab5_code.c) (Page 7/17) (Dec 01, 21 15:00) title
+border
+/v 3 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(/***********************************************************************/) c n
+(//                            adc_read\(\)) N
+(/***********************************************************************/) N
+(void) k
+( adc_read\(\)) p n
+({) N
+(    ADCSRA |= \(1 << ADSC\); ) S
+(//poke the ADSC bit and start conversion) c n
+(    ) p
+(while) K
+( \(bit_is_clear\(ADCSRA, ADIF\)\)) p n
+(    {) N
+(    }                    ) S
+(//spin while interrupt flag not set) c n
+(    ADCSRA |= 1 << ADIF; ) p
+(//its done, clear flag by writing a one) c n
+(    adc_result = ADC;    ) p
+(//read the ADC output as 16 bits) c n
+(}) p n
+() N
+(/******************************************************************************/) c n
+(//                              set_dec_to_7seg) N
+(// setting the dec_to_7seg array for which segment to turn off in order to see) N
+(// the digit on the LED display.) N
+(/******************************************************************************/) N
+(void) k
+( set_dec_to_7seg\(\)) p n
+({) N
+(    dec_to_7seg[0] = ~\(ZERO\);) N
+(    dec_to_7seg[1] = ~\(ONE\);) N
+(    dec_to_7seg[2] = ~\(TWO\);) N
+(    dec_to_7seg[3] = ~\(THREE\);) N
+(    dec_to_7seg[4] = ~\(FOUR\);) N
+(    dec_to_7seg[5] = ~\(FIVE\);) N
+(    dec_to_7seg[6] = ~\(SIX\);) N
+(    dec_to_7seg[7] = ~\(SEVEN\);) N
+(    dec_to_7seg[8] = ~\(EIGHT\);) N
+(    dec_to_7seg[9] = ~\(NINE\);) N
+(    dec_to_7seg[10] = ~\(COLON\);) N
+(    dec_to_7seg[11] = ~\(BLANK\);) N
+(}) N
+() N
+(/******************************************************************************/) c n
+(//                              set_decoder) N
+(// This function sets the right value for decoder so that it display the right) N
+(// digit. The index value of the decoder represents the Yx output of the decoder) N
+(.) N
+(/******************************************************************************/) N
+(void) k
+( set_decoder\(\)) p n
+({) N
+(    decoder[0] = DIGIT4;) N
+(    decoder[1] = DIGIT3;) N
+(    decoder[2] = DIS_COLON;) N
+(    decoder[3] = DIGIT2;) N
+(    decoder[4] = DIGIT1;) N
+(    decoder[7] = TRI_BUFFER;) N
+(}) N
+() N
+(//******************************************************************************) c n
+(//                            chk_buttons) N
+(//Checks the state of the button number passed to it. It shifts in ones till) N
+(//the button is pushed. Function returns a 1 only once per debounced button) N
+(//push so a debounce and toggle function can be implemented at the same time.) N
+(//Adapted to check all buttons from Ganssel's "Guide to Debouncing") N
+(//Expects active low pushbuttons on PINA port.  Debounce time is determined by) N
+(//external loop delay times 12.) N
+(//) N
+(lab5_code.c) (Page 8/17) (Dec 01, 21 15:00) title
+border
+grestore
+(Printed by Anthony Nguyen) rhead
+() (Wednesday December 01, 2021) (2/5) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (9-12) 3
+%%BeginPageSetup
+/pagesave save def
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(int) k
+(8_t chk_buttons\() p
+(int) k
+( button\)) p n
+({) N
+() N
+(    ) S
+(static) K
+( uint16_t state[MAX_BIT_DEBOUNCE]; ) p
+(//holds present state) c n
+() p n
+(    ) S
+(// bit_is_clear: test whether but but in IO register sfr is clear. This will) c n
+( return non zero) N
+(    ) p
+(// if the but is clear, and 0 if the bit is set) c n
+(    ) p
+(// handling multiple inputs) c n
+(    ) p
+(// https://www.avrfreaks.net/sites/default/files/debouncing.pdf') c n
+() p n
+(    state[button] = \(state[button] << 1\) | \(!bit_is_clear\(PINA, button\)\) | 0xE00) N
+(0; ) S
+(// when the second button is pressed) c n
+() p n
+(    ) S
+(if) K
+( \(state[button] == 0xF000\)) p n
+(        ) S
+(return) K
+( 1;) p n
+() N
+(    ) S
+(return) K
+( 0;) p n
+(}) N
+() N
+(//******************************************************************************) c n
+(*****) N
+(//                                   segment_sum) N
+(//takes a 16-bit binary input value and places the appropriate equivalent 4 digi) N
+(t) N
+(//BCD segment code in the array segment_data for display.) N
+(//array is loaded at exit as:  |digit3|digit2|colon|digit1|digit0|) N
+(void) k
+( segsum\(uint16_t sum\)) p n
+({) N
+(    ) S
+(// sum is the total count, place each digit into segment_data[5]) c n
+(    ) p
+(// determine how many digits there are) c n
+(    ) p
+(//break up decimal sum into 4 digit-segments) c n
+(    ) p
+(//blank out leading zero digits) c n
+(    ) p
+(//now move data to right place for misplaced colon position) c n
+(    ) p
+(int) k
+( i; ) p
+(//, leading_zero;) c n
+() p n
+(    segment_data[0] = sum % 10;) N
+(    segment_data[1] = \(sum % 100\) / 10;) N
+(    ) S
+(// segment_data[2] = 11; // doesn't turn on the colon, blank) c n
+(    segment_data[2] = \(colonDisplay == 1\) ? 10 : 11;) p n
+(    segment_data[3] = \(sum % 1000\) / 100;) N
+(    segment_data[4] = sum / 1000;) N
+() N
+(    ) S
+(// remove the leading zeros) c n
+(    ) p
+(// leading_zero = 1;) c n
+(    ) p
+(for) K
+( \(i = 4; i > 0; i--\)) p n
+(    {) N
+(        ) S
+(if) K
+( \(i == 2\)) p n
+(            ) S
+(continue) K
+(;) p n
+(        ) S
+(if) K
+( \(segment_data[i] == 0\)) p n
+(            segment_data[i] = 11; ) S
+(// replace it with a blank) c n
+() p n
+(        ) S
+(else) K n
+(            ) p
+(break) K
+(;) p n
+(    }) N
+() N
+(} ) S
+(//segment_sum) c n
+() p n
+(//******************************************************************************) c n
+(lab5_code.c) (Page 9/17) (Dec 01, 21 15:00) title
+border
+/v 1 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(*****) c n
+(//                                segclock) N
+(//takes two 8-bit binary values\(hours and minutes\) and places the appropriate) N
+(//equivalent 4 digit.) N
+(//BCD segment code in the array segment_data for display.) N
+(//array is loaded at exit as:  |digit3|digit2|colon|digit1|digit0|) N
+(void) k
+( segclock\(\)) p n
+({) N
+(    ) S
+(if) K
+( \(setAlarm == 0\)) p n
+(    {) N
+(        segment_data[0] = minutes % 10;) N
+(        segment_data[1] = minutes / 10;) N
+(        segment_data[2] = \(colonDisplay == 1\) ? 10 : 11;) N
+(        segment_data[3] = hours % 10;) N
+(        segment_data[4] = hours / 10;) N
+(    }) N
+(    ) S
+(if) K
+( \(setAlarm == 0x1\)) p n
+(    {) N
+(        segment_data[0] = alarmMinute % 10;) N
+(        segment_data[1] = alarmMinute / 10;) N
+(        segment_data[2] = \(colonDisplay == 1\) ? 10 : 11;) N
+(        segment_data[3] = alarmHour % 10;) N
+(        segment_data[4] = alarmHour / 10;) N
+(    }) N
+(}) N
+() N
+(/***************************************************************/) c n
+(//                      setDigit function) N
+(// it will choose its given digit and set that number for it.) N
+(// The cases set the value on PORTA to the right segments and PORTB) N
+(// to decoder.) N
+(/***************************************************************/) N
+() p n
+(void) k
+( setDigit\(\)) p n
+({) N
+(    DDRA = 0xFF; ) S
+(// setting PORT A as an output) c n
+(    ) p
+(int) k
+( i;) p n
+(    uint8_t dis;) N
+(    ) S
+(for) K
+( \(i = 0; i < 5; i++\)) p n
+(    {                       ) S
+(// looping through the segment data and assigning th) c n
+(e port the right values.) N
+(        PORTB = decoder[i]; ) p
+(// enable the right digit to turn on) c n
+(        dis = dec_to_7seg[segment_data[i]];) p n
+(        ) S
+(if) K
+( \(\(i == 4\) && \(setAlarm == 1\)\)) p n
+(        {) N
+() N
+(            dis &= ~\(1 << 7\);) N
+(        }) N
+(        PORTA = dis; ) S
+(// turn on the right segments) c n
+(        _delay_ms\(0.5\);) p n
+(    }) N
+(}) N
+() N
+(/******************************************************************************/) c n
+(//                                    ISR) N
+(// Then fucntion will will called when there is an interrupt within the system) N
+(// and when the overflow flag for timer counter 0 it set.) N
+(// This fucntions checks the push buttons to see which buttons were pressed) N
+(// then set it in its correct mode.) N
+(lab5_code.c) (Page 10/17) (Dec 01, 21 15:00) title
+border
+/v 2 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(// Afterwards checks the encoder to see where it is.) c n
+(/******************************************************************************/) N
+(ISR\(TIMER0_OVF_vect\)) p n
+({) N
+(    uint16_t i, j;) N
+(    ) S
+(static) K
+( uint8_t count = 0, seconds;) p n
+(    ) S
+(//insert loop demake lay for debounce) c n
+() p n
+(    ) S
+(// checking the push buttons) c n
+(    ) p
+(// for loop for each phase of the digit) c n
+(    PORTB |= TRI_BUFFER;) p n
+() N
+(    ) S
+(for) K
+( \(i = 0; i < 12; i++\)) p n
+(    { ) S
+(// for the debounce) c n
+() p n
+(        ) S
+(//make PORTA an input port with pullups) c n
+(        DDRA = 0x00;  ) p
+(// set port A as inputs) c n
+(        PORTA = 0xFF; ) p
+(// set port A as pull ups) c n
+(        ) p
+(// PORTC &= \(0<<PORTC0\) | \(0<<PORTC1\);) c n
+(        ) p
+(// checking what button is being pressed) c n
+(        ) p
+(for) K
+( \(j = 0; j < 8; j++\)) p n
+(        {) N
+(            ) S
+(if) K
+( \(chk_buttons\(j\)\)) p n
+(                buttonPress\(j\);) N
+(        }) N
+(    }) N
+(    PORTB &= ~\(TRI_BUFFER\); ) S
+(// turn off the tri state buffer) c n
+() p n
+(    ) S
+(// reading each knob) c n
+(    uint8_t enc1 = encoderRead\(data, 0\);) p n
+(    uint8_t enc2 = encoderRead\(data, 1\);) N
+() N
+(    ) S
+(// each case of what the knob or buttons will be) c n
+(    ) p
+(if) K
+( \(setAlarm == 0\)) p n
+(    {) N
+(        ) S
+(if) K
+( \(enc1 == 0 || enc2 == 0\)) p n
+(        {) N
+(            ) S
+(// ccw) c n
+(            ) p
+(//current_num -= 1;) c n
+(            ) p
+(if) K
+( \(changeMinuteFlag == 1 && changeHourFlag == 0\)) p n
+(            {) N
+(                ) S
+(// change minutes) c n
+(                minutes--;) p n
+(                ) S
+(if) K
+( \(minutes == 255\) ) p
+(// since its unsign 255 = -1) c n
+(                    minutes = 59;) p n
+(            }) N
+(            ) S
+(if) K
+( \(changeHourFlag == 1 && changeMinuteFlag == 0\)) p n
+(            {) N
+(                hours--;) N
+(                ) S
+(if) K
+( \(hours == 255\)) p n
+(                    hours = 23;) N
+(            }) N
+(        }) N
+() N
+(        ) S
+(if) K
+( \(enc1 == 1 || enc2 == 1\)) p n
+(        {) N
+(            ) S
+(// cw) c n
+(            ) p
+(// current_num += 1;) c n
+(            ) p
+(if) K
+( \(changeMinuteFlag == 1 && changeHourFlag == 0\)) p n
+(lab5_code.c) (Page 11/17) (Dec 01, 21 15:00) title
+border
+/v 3 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(            {) p n
+(                ) S
+(// change minutes) c n
+(                minutes++;) p n
+(                ) S
+(if) K
+( \(minutes % 60 == 0\)) p n
+(                    minutes = 0;) N
+(            }) N
+(            ) S
+(else) K
+( ) p
+(if) K
+( \(changeHourFlag == 1 && changeMinuteFlag == 0\)) p n
+(            {) N
+(                hours++;) N
+(                ) S
+(if) K
+( \(hours % 24 == 0\)) p n
+(                    hours = 0;) N
+(            }) N
+(        }) N
+(    }) N
+() N
+(    ) S
+(// when the alarm flag is on set the the alarm desire time) c n
+(    ) p
+(if) K
+( \(setAlarm == 0x1\)) p n
+(    {) N
+(        ) S
+(// have encoder 2 change the hours) c n
+(        ) p
+(if) K
+( \(enc2 == 0\)) p n
+(        {) N
+(            alarmHour--;) N
+(            ) S
+(if) K
+( \(alarmHour == 255\)) p n
+(                alarmHour = 23;) N
+(        }) N
+() N
+(        ) S
+(// have encoder 1 change the minutes) c n
+(        ) p
+(if) K
+( \(enc1 == 0\)) p n
+(        {) N
+(            ) S
+(// change minutes) c n
+(            alarmMinute--;) p n
+(            ) S
+(if) K
+( \(alarmMinute == 255\) ) p
+(// since its unsign 255 = -1) c n
+(                alarmMinute = 59;) p n
+(        }) N
+(    }) N
+() N
+(    ) S
+(// add a counter to determine one second) c n
+(    count++;) p n
+(    ) S
+(if) K
+( \(\(count % 128\) == 0\)) p n
+(    {) N
+(        ) S
+(// 1 second has past) c n
+() p n
+(        ) S
+(// timer, snooze, then alarm again) c n
+(        ) p
+(if) K
+( \(timerFlag == 0x1\)) p n
+(        {) N
+(            ) S
+(// count down from snooze) c n
+(            ) p
+(// display alarm) c n
+(            ) p
+(// alarmFlag = 1; // display alarm) c n
+(            ) p
+(// timer on) c n
+(            ) p n
+(            ) S
+(// clear_display\(\);) c n
+(            ) p
+(// cursor_home\(\);) c n
+(            alarmFlag = 0; ) p
+(// disable the display alarm) c n
+(            timer--;) p n
+(            ) S
+(if) K
+( \(timer == 0\)) p n
+(            {) N
+(                ) S
+(// timer goes off display alarm) c n
+(                timerFlag = 0; ) p
+(// turn off timer) c n
+(                alarmFlag = 1;) p n
+(lab5_code.c) (Page 12/17) (Dec 01, 21 15:00) title
+border
+grestore
+(Printed by Anthony Nguyen) rhead
+() (3/5) (Wednesday December 01, 2021) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (13-16) 4
+%%BeginPageSetup
+/pagesave save def
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(                ) p
+(// OCR3A = 0x1000; // turn off volume) c n
+(                PORTC |= \(1 << PORTC0\);) p n
+(                PORTC |= \(1 << PORTC1\);) N
+(                ) S
+(// clear_display\(\);) c n
+(                ) p
+(// snoozekiller\(\);) c n
+(            }) p n
+(            ) S
+(if) K
+(\(OCR3A != 0xffff\){) p n
+(                OCR3A = 0xFFFF; ) S
+(// turn off volume) c n
+(                PORTC &= ~\(1 << PORTC0\);) p n
+(                PORTC &= ~\(1 << PORTC1\);) N
+(            }) N
+(        }) N
+() N
+(        ) S
+(// clock) c n
+(        colonDisplay ^= 0x1; ) p
+(// blinking) c n
+(        seconds++;) p n
+() N
+(        ) S
+(if) K
+( \(\(seconds % 60\) == 0\)) p n
+(        {) N
+(            minutes++;) N
+(            seconds = 0;) N
+(            ) S
+(if) K
+( \(\(minutes % 60\) == 0\)) p n
+(            {) N
+(                hours++;) N
+(                minutes = 0;) N
+(                ) S
+(if) K
+( \(hours % 24 == 0\)) p n
+(                    hours = 0;) N
+(            }) N
+(        }) N
+(    }) N
+(}) N
+() N
+(/******************************************************************************/) c n
+(//                                 encoderRead) N
+(// This function checks the state of the encoder so see what its behavior is.) N
+(// It will return -1 if there is no change within. It will return 1 if the syste) N
+(m is) N
+(// CW. It will return 0 if the system is CCW.) N
+(/******************************************************************************/) N
+(uint8_t encoderRead\(uint8_t data, uint8_t knob\)) p n
+({) N
+() N
+(    ) S
+(// check for encoder) c n
+(    ) p
+(static) K
+( uint8_t old_state[4] = {0xff, 0xff, 0xff, 0xff};) p n
+(    uint8_t new_A = -1;) N
+(    uint8_t new_B = -1;) N
+(    ) S
+(static) K
+( uint8_t count = 0;) p n
+(    uint8_t return_val, a, b, a_index, b_index;) N
+() N
+(    a = \(knob == 0\) ? 1 : 4; ) S
+(// where the position of a is) c n
+(    b = \(knob == 0\) ? 2 : 8; ) p
+(// where the position of b is) c n
+() p n
+(    a_index = \(knob == 0\) ? 0 : 2;) N
+(    b_index = \(knob == 0\) ? 1 : 3;) N
+() N
+(    new_A = \(data & a\) ? 1 : 0; ) S
+(// most LSB) c n
+(    new_B = \(data & b\) ? 1 : 0; ) p
+(// 2nd LSB) c n
+() p n
+(    return_val = -1; ) S
+(// default return value, no change) c n
+(lab5_code.c) (Page 13/17) (Dec 01, 21 15:00) title
+border
+/v 1 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(    ) S
+(if) K
+( \(\(new_A != old_state[a_index]\) || \(new_B != old_state[b_index]\)\)) p n
+(    { ) S
+(// if change occured) c n
+(        ) p
+(if) K
+( \(\(new_A == 0\) && \(new_B == 0\)\)) p n
+(        {) N
+(            ) S
+(if) K
+( \(old_state[a_index] == 1\)) p n
+(            {) N
+(                count++;) N
+(            }) N
+(            ) S
+(else) K n
+(            {) p n
+(                count--;) N
+(            }) N
+(        }) N
+(        ) S
+(else) K
+( ) p
+(if) K
+( \(\(new_A == 0\) && \(new_B == 1\)\)) p n
+(        {) N
+(            ) S
+(if) K
+( \(old_state[a_index] == 0\)) p n
+(            {) N
+(                count++;) N
+(            }) N
+(            ) S
+(else) K n
+(            {) p n
+(                count--;) N
+(            }) N
+(        }) N
+(        ) S
+(else) K
+( ) p
+(if) K
+( \(\(new_A == 1\) && \(new_B == 1\)\)) p n
+(        { ) S
+(// detent position) c n
+(            ) p
+(if) K
+( \(old_state[a_index] == 0\)) p n
+(            { ) S
+(// one direction) c n
+(                ) p
+(if) K
+( \(count == 3\)) p n
+(                {) N
+(                    return_val = 0;) N
+(                }) N
+(            }) N
+(            ) S
+(else) K n
+(            { ) p
+(// or the other direction) c n
+(                ) p
+(if) K
+( \(count == -3\)) p n
+(                {) N
+(                    return_val = 1;) N
+(                }) N
+(            }) N
+(            count = 0; ) S
+(// count is always reset in detent position) c n
+(        }) p n
+(        ) S
+(else) K
+( ) p
+(if) K
+( \(\(new_A == 1\) && \(new_B == 0\)\)) p n
+(        {) N
+(            ) S
+(if) K
+( \(old_state[a_index] == 1\)) p n
+(            {) N
+(                count++;) N
+(            }) N
+(            ) S
+(else) K n
+(            {) p n
+(                count--;) N
+(            }) N
+(        }) N
+() N
+(        old_state[a_index] = new_A; ) S
+(// save what are now old values) c n
+(        old_state[b_index] = new_B;) p n
+() N
+(    } ) S
+(// if changed occured) c n
+(lab5_code.c) (Page 14/17) (Dec 01, 21 15:00) title
+border
+/v 2 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    ) p
+(// if return value is still -1 then nothing happen) c n
+(    ) p
+(return) K
+( \(return_val\); ) p
+(// return coder state) c n
+(}) p n
+() N
+(/******************************************************************************/) c n
+(//                                  barGraph) N
+(// Set the mode on the bar graph.) N
+(/******************************************************************************/) N
+(void) k
+( barGraph\(\)) p n
+({) N
+() N
+(    SPDR = barGraphDisplay;) N
+(    ) S
+(while) K
+( \(bit_is_clear\(SPSR, SPIF\)\)) p n
+(    {) N
+(    }                       ) S
+(//wait till data sent out \(while loop\)) c n
+(    PORTD |= \(1 << PORTD2\); ) p
+(//HC595 output reg - rising edge...) c n
+(    PORTD &= \(0 << PORTD2\); ) p
+(//and falling edge) c n
+(}) p n
+() N
+(/******************************************************************************/) c n
+(//                                 alarmDisplay) N
+(// Display "ALARM" on the display if the alarm flag is on.) N
+(// Otherwise clear the screen.) N
+(/******************************************************************************/) N
+() p n
+(void) k
+( alarmDisplay\(\)) p n
+({) N
+(    ) S
+(char) k
+( lcd_string_array_alarm[16] = ") p
+(     ALARM      ) str
+(";) p n
+(    cursor_home\(\);) N
+(    ) S
+(if) K
+( \(alarmFlag == 0x1\)) p n
+(    {) N
+(        ) S
+(// DDRE |= 1 << PORTE3; // turn off the port of the speaker) c n
+(        OCR3A = 0x1000;  ) p
+(// turn on the volume) c n
+(        ) p
+(// clear_display\(\); // clear the display) c n
+(        string2lcd\(lcd_string_array_alarm\);) p n
+(        ) S
+(// strcpy\(lcd_whole_string_array, lcd_string_array_alarm\);) c n
+(    }) p n
+(    ) S
+(else) K
+({) p n
+(    ) S
+(//    string2lcd\(lcd_string_array_alarm\); ) c n
+(        string2lcd\(") p
+(                ) str
+("\);) p n
+(    }) N
+(}) N
+() N
+(/******************************************************************************/) c n
+(//                                 buttonPress) N
+(// Different cases for each button pressed) N
+(/******************************************************************************/) N
+(void) k
+( buttonPress\(uint8_t button\)) p n
+({) N
+() N
+(    ) S
+(switch) K
+( \(button\)) p n
+(    {) N
+(    ) S
+(case) K
+( 0:) p n
+(    {) N
+(        ) S
+(// snooze, turn off LCD display) c n
+(        snoozekiller\(\);) p n
+(        ) S
+(return) K
+(;) p n
+(    }) N
+(    ) S
+(case) K
+( 1:) p n
+(lab5_code.c) (Page 15/17) (Dec 01, 21 15:00) title
+border
+/v 3 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    {) p n
+(        setAlarm ^= 0x1; ) S
+(// toggle the alarm flag) c n
+(        barGraphDisplay ^= 1 << 1;) p n
+(        alarmInit++; ) S
+(// many times this button has been pressed) c n
+(        ) p
+(return) K
+(;) p n
+(    }) N
+(    ) S
+(case) K
+( 2:) p n
+(    {) N
+(        ) S
+(// snooze button) c n
+(        timer = SNOOZE_TIMER; ) p
+(// 10 seconds) c n
+(        ) p
+(// sleep for 10 seconds then alarm again) c n
+(        timerFlag = 1;) p n
+(        barGraphDisplay ^= 1 << 2;) N
+(    }) N
+(    ) S
+(case) K
+( 6:) p n
+(    {) N
+(        ) S
+(// change minutes) c n
+(        changeMinuteFlag ^= 1;) p n
+(        barGraphDisplay ^= 1 << 6;) N
+(        ) S
+(return) K
+(;) p n
+(    }) N
+(    ) S
+(case) K
+( 7:) p n
+(    {) N
+(        ) S
+(// change hours) c n
+(        changeHourFlag ^= 1;) p n
+(        barGraphDisplay ^= 1 << 7;) N
+(        ) S
+(return) K
+(;) p n
+(    }) N
+(    ) S
+(default) K
+(:) p n
+(        ) S
+(break) K
+(;) p n
+(    }) N
+(}) N
+() N
+(/******************************************************************************/) c n
+(/******************************************************************************/) N
+(ISR\(TIMER1_COMPA_vect\)) p n
+({) N
+(    PORTC ^= 1 << PORTC0; ) S
+(// turn on right speaker) c n
+(    PORTC ^= 1 << PORTC1; ) p
+(// turn on left speaker) c n
+(}) p n
+() N
+(/******************************************************************************/) c n
+(//                              snooze) N
+(// what happens when the snooze goes off, reset everything) N
+(/******************************************************************************/) N
+(void) k
+( snoozekiller\() p
+(void) k
+(\)) p n
+({) N
+(    timer = SNOOZE_TIMER;         ) S
+(// reset the timer to 10 seconds) c n
+(    OCR3A = 0xFFFF;               ) p
+(// turn off volume) c n
+(    timerFlag = 0;                ) p
+(// turn off the timer) c n
+(    alarmFlag = 0;                ) p
+(// turn off the alarm) c n
+(    barGraphDisplay &= ~\(1 << 1\); ) p
+(// turn off the timer modes) c n
+(    barGraphDisplay &= ~\(1 << 2\); ) p
+(// turn off the timer modes) c n
+(    PORTC &= ~\(1 << PORTC0\);) p n
+(    PORTC &= ~\(1 << PORTC1\);) N
+(    alarmMinute = 60;) N
+(    alarmHour = 60;) N
+(    alarmInit = 0; ) S
+(// set it so that it so that there is not alarm set) c n
+(    setAlarm = 0;) p n
+(lab5_code.c) (Page 16/17) (Dec 01, 21 15:00) title
+border
+grestore
+(Printed by Anthony Nguyen) rhead
+() (Wednesday December 01, 2021) (4/5) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (17) 5
+%%BeginPageSetup
+/pagesave save def
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 2.373464 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    ) p
+(// clear_display\(\); // when this is common it out the temp changes numbers) c n
+() p n
+(    ) S
+(// turn off indication on LED display) c n
+(}) p n
+() N
+(//********************************************************) c n
+(//                      ISR\(USART0_RX_vect\)) N
+(//********************************************************) N
+(#ifdef) K
+( TEMP_MASTER) p n
+(ISR\(USART0_RX_vect\)) N
+({) N
+(    ) S
+(static) K
+( uint8_t i;) p n
+(    rx_char = UDR0;                  ) S
+(//get character) c n
+(    lcd_string_array[i++] = rx_char; ) p
+(//store in array) c n
+(                                     ) p
+(//if entire string has arrived, set flag, r) c n
+(eset index) N
+(    ) p
+(if) K
+( \(rx_char == ') p
+(\\0) str
+('\)) p n
+(    {) N
+(        rcv_rdy = 1;) N
+(        i = 0;) N
+(    }) N
+(}) N
+(#endif) K
+(lab5_code.c) (Page 17/17) (Dec 01, 21 15:00) title
+border
+grestore
+(Printed by Anthony Nguyen) rhead
+() (5/5) (Wednesday December 01, 2021) footer
+end % of iso1dict
+pagesave restore
+showpage
+
+%%Trailer
+end
+%%EOF
