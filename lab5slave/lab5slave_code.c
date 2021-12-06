@@ -144,11 +144,12 @@ int main()
         strcat(lcd_string_array, "F");
         string2lcd(lcd_string_array);               //send the string to LCD (lcd_functions)
 
-        // *************** start tx portion **********************
-        uart_puts(lcd_string_array); // put what you want display, put string
-        uart_putc('\0'); // null character
-        // **************** end tx portion **********************
-
+        if(rcv_rdy){
+            // *************** start tx portion **********************
+            uart_puts(lcd_string_array); // put what you want display, put string
+            uart_putc('\0'); // null character
+            // **************** end tx portion **********************
+        }
     }                                               //while
 }
 
