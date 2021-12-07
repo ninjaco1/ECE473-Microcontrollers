@@ -67,7 +67,7 @@ int main()
     TIMSK |= (1 << OCIE1A);
     //set frequency
     OCR1A = 0x3210;
-    hi = 0;
+    // hi = 0;
     EICRB |= (1 << ISC71) | (1 < ISC70);
     EIMSK |= (1 << INT7);
     //hardware reset of Si4734
