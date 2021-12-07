@@ -12,7 +12,7 @@
 #include "lm73_functions.h"
 #include "twi_master.h"
 #include "uart_functions.h"
-
+#include "si4734.h"
 //  HARDWARE SETUP:
 //  PORTA is connected to the segments of the LED display. and to the pushbuttons.
 //  PORTA.0 corresponds to segment a, PORTA.1 corresponds to segement b, etc.
@@ -156,6 +156,38 @@ uint8_t i;                   // general purpose index
 extern uint8_t lm73_wr_buf[2];
 extern uint8_t lm73_rd_buf[2];
 
+// ******************** lab 6 functions and variables ********
+uint16_t eeprom_fm_freq;
+uint16_t eeprom_am_freq;
+uint16_t eeprom_sw_freq;
+uint8_t eeprom_volume;
+
+uint16_t current_fm_freq;
+uint16_t current_am_freq;
+uint16_t current_sw_freq;
+uint8_t current_volume;
+
+enum radio_band
+{
+    FM,
+    AM,
+    SW
+};
+volatile enum radio_band current_radio_band;
+
+struct Clock
+{
+};
+struct Alarm
+{
+};
+struct Radio
+{
+};
+struct LCDdisplay
+{
+};
+
 int main()
 {
     DDRB = 0xF0;        //set port B bits 4-7 B as outputs
@@ -176,17 +208,31 @@ int main()
     lcd_init(); // initalize the lcd display
     sei();      //enable interrupts before entering loop
 
+    //********************** lab 6 init **********************************
+    eeprom_fm_freq = 0;
+    eeprom_am_freq = 0;
+    eeprom_sw_freq = 0;
+    eeprom_volume = 0;
+
+    current_fm_freq = 0;
+    current_am_freq = 0;
+    current_sw_freq = 0;
+    current_volume = 0;
+    // *******************************************************************
+
+
+
     //************************ lab 5 init MASTER ***********************
     // DDRF |= 0x08; // lcd strobe bit
-    init_twi();     // initalize twi
-    uart_init();        // initalize UART
+    init_twi();  // initalize twi
+    uart_init(); // initalize UART
     // int16_t lm73_temp; // a place to assemble the temperature from the lm73
     DDRF |= 0x08; // lcd strobe bit
     // float lm73_temp_C, lm73_temp_F;
     //set LM73 mode for reading temperature by loading pointer register
-    lm73_wr_buf[0] = LM73_PTR_TEMP;                     //load lm73_wr_buf[0] with temperature pointer address
-    twi_start_wr(LM73_ADDRESS, lm73_wr_buf, 2);         //start the TWI write process
-    _delay_ms(2);                                       //wait for the xfer to finish
+    lm73_wr_buf[0] = LM73_PTR_TEMP;             //load lm73_wr_buf[0] with temperature pointer address
+    twi_start_wr(LM73_ADDRESS, lm73_wr_buf, 2); //start the TWI write process
+    _delay_ms(2);                               //wait for the xfer to finish
     //*********************************************************************
 
     set_dec_to_7seg(); // set values for dec_to_7seg array
@@ -238,14 +284,7 @@ int main()
         clear_display();
         alarmDisplay(); // display "ALARM" on the LCD display
 
-
-
-
-
-
-
-
-    }                   //while
+    } //while
     return 0;
 } //main
 
@@ -302,7 +341,7 @@ void tcnt2_init(void)
     //fast PWM, set on match, 64 prescaler
     // TCCR2 |= (1 << WGM21) | (1 << WGM20) | (1 << COM21) | (1 << COM20) | (1 << CS22);
     TCCR2 = 0b01111001; // removes the flickering
-    OCR2 = 0xF0; //clear at 0xF0 CLEAR AT BRIGHTNESS
+    OCR2 = 0xF0;        //clear at 0xF0 CLEAR AT BRIGHTNESS
 }
 
 /***********************************************************************/
@@ -610,25 +649,25 @@ ISR(TIMER0_OVF_vect)
     if ((count % 128) == 0)
     {
         // 1 second has past
-       // lab 5 temp sensor
-            int16_t lm73_temp;
-            float lm73_temp_C, lm73_temp_F;
-            // clear_display();                                //wipe the display
-            twi_start_rd(LM73_ADDRESS, lm73_rd_buf, 2);     //read temperature data from LM73 (2 bytes)
-            _delay_ms(2);                                   //wait for it to finish
-            lm73_temp = lm73_rd_buf[0];                     //save high temperature byte into lm73_temp
-            lm73_temp = lm73_temp << 8;                     //shift it into upper byte
-            lm73_temp |= lm73_rd_buf[1];                    //"OR" in the low temp byte to lm73_temp
-            lm73_temp_C = lm73_temp / (float)256;           // how to find the temp in C
-            lm73_temp_F = (lm73_temp_C * 9 / 5) + 32;       // convert C to F
-            dtostrf(lm73_temp_C, 0, 1, lcd_string_array_C); // converting float to string
-            dtostrf(lm73_temp_F, 0, 1, lcd_string_array_F); // converting float to string
-            strcpy(lcd_string_array, "  "); // add C degrees
-            strcat(lcd_string_array, lcd_string_array_C); // add C degrees
-            strcat(lcd_string_array, "C ");
-            strcat(lcd_string_array, lcd_string_array_F);
-            strcat(lcd_string_array, "F");
- 
+        // lab 5 temp sensor
+        int16_t lm73_temp;
+        float lm73_temp_C, lm73_temp_F;
+        // clear_display();                                //wipe the display
+        twi_start_rd(LM73_ADDRESS, lm73_rd_buf, 2);     //read temperature data from LM73 (2 bytes)
+        _delay_ms(2);                                   //wait for it to finish
+        lm73_temp = lm73_rd_buf[0];                     //save high temperature byte into lm73_temp
+        lm73_temp = lm73_temp << 8;                     //shift it into upper byte
+        lm73_temp |= lm73_rd_buf[1];                    //"OR" in the low temp byte to lm73_temp
+        lm73_temp_C = lm73_temp / (float)256;           // how to find the temp in C
+        lm73_temp_F = (lm73_temp_C * 9 / 5) + 32;       // convert C to F
+        dtostrf(lm73_temp_C, 0, 1, lcd_string_array_C); // converting float to string
+        dtostrf(lm73_temp_F, 0, 1, lcd_string_array_F); // converting float to string
+        strcpy(lcd_string_array, "  ");                 // add C degrees
+        strcat(lcd_string_array, lcd_string_array_C);   // add C degrees
+        strcat(lcd_string_array, "C ");
+        strcat(lcd_string_array, lcd_string_array_F);
+        strcat(lcd_string_array, "F");
+
         // clear_display();                            //wipe the display
         uart_putc('\0');
         // ************** start rcv portion *********************
@@ -638,18 +677,17 @@ ISR(TIMER0_OVF_vect)
             line2_col1();
             string2lcd(" ");
             string2lcd(lcd_string_array_master); // write out string if its ready
-            fill_spaces(); 
+            fill_spaces();
             rcv_rdy = 0;
             // cursor_home();
         }
-        else{
+        else
+        {
             clear_display();
             line2_col1();
             string2lcd(lcd_string_array); //send the string to LCD (lcd_functions)
-
         }
         // *************** end rcv portion ***********************
-        
 
         // timer, snooze, then alarm again
         if (timerFlag == 0x1)
@@ -677,7 +715,8 @@ ISR(TIMER0_OVF_vect)
                 // clear_display();
                 // snoozekiller();
             }
-            if(OCR3A != 0xffff){
+            if (OCR3A != 0xffff)
+            {
                 OCR3A = 0xFFFF; // turn off volume
                 PORTC &= ~(1 << PORTC0);
                 PORTC &= ~(1 << PORTC1);
@@ -820,11 +859,12 @@ void alarmDisplay()
     if (alarmFlag == 0x1)
     {
         // DDRE |= 1 << PORTE3; // turn off the port of the speaker
-        OCR3A = 0x1000;  // turn on the volume
+        OCR3A = 0x1000; // turn on the volume
         // clear_display(); // clear the display
         string2lcd(lcd_string_array_alarm);
     }
-    else{
+    else
+    {
         // clear_display();
         // line1_col1();
         string2lcd("      not       ");
@@ -865,7 +905,7 @@ void buttonPress(uint8_t button)
         timerFlag = 1;
         barGraphDisplay ^= 1 << 2;
     }
-    case 3: 
+    case 3:
     {
         encoderUp ^= 1; // toggle encoder rotating the other way
     }
@@ -925,7 +965,7 @@ void snoozekiller(void)
 ISR(USART0_RX_vect)
 {
     static uint8_t j;
-    rx_char = UDR0;                  //get character
+    rx_char = UDR0;                         //get character
     lcd_string_array_master[j++] = rx_char; //store in array
 
     if (rx_char == '\0')

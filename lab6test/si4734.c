@@ -29,19 +29,19 @@ enum radio_band
     AM,
     SW
 };
-extern volatile enum radio_band current_radio_band;
+volatile enum radio_band current_radio_band;
 
 volatile uint8_t STC_interrupt; //flag bit to indicate tune or seek is done
 
-extern uint16_t eeprom_fm_freq;
-extern uint16_t eeprom_am_freq;
-extern uint16_t eeprom_sw_freq;
-extern uint8_t eeprom_volume;
+uint16_t eeprom_fm_freq;
+uint16_t eeprom_am_freq;
+uint16_t eeprom_sw_freq;
+uint8_t eeprom_volume;
 
-extern uint16_t current_fm_freq;
-extern uint16_t current_am_freq;
-extern uint16_t current_sw_freq;
-extern uint8_t current_volume;
+uint16_t current_fm_freq;
+uint16_t current_am_freq;
+uint16_t current_sw_freq;
+uint8_t current_volume;
 
 //Used in debug mode for UART1
 extern char uart1_tx_buf[40]; //holds string to send to crt
