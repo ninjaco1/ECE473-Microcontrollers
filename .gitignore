@@ -57,6 +57,15 @@ lab5-1/*.elf
 lab5-1/*.hex 
 lab5-1/*.bin   
 lab5-1/*.srec
+lab5-2/*.d  
+lab5-2/*.o  
+lab5-2/*.map 
+lab5-2/*.lst 
+lab5-2/*.eeprom* 
+lab5-2/*.elf 
+lab5-2/*.hex 
+lab5-2/*.bin   
+lab5-2/*.srec
 lab5slave/*.d  
 lab5slave/*.o  
 lab5slave/*.map 
