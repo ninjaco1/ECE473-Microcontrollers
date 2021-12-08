@@ -88,10 +88,10 @@ struct LcdDisplay
 {
     int8_t insideOutsideFlag; // 1 if outside, 0 if inside
     char *alarm;
-    char *outside_temperature;
+    char outside_temperature[16];
     char *outside_temperature_F;
     char *outside_temperature_C;
-    char *inside_temperature;
+    char inside_temperature[16];
     char *inside_temperature_C;
     char *inside_temperature_F;
 };
@@ -183,6 +183,7 @@ extern uint8_t lm73_rd_buf[2];
 static struct Clock clock;
 static struct Alarm alarm;
 static struct LcdDisplay lcdDisplay;
+// volatile struct LcdDisplay lcdDisplay;
 // *********************************
 
 int main()
@@ -664,9 +665,11 @@ ISR(TIMER0_OVF_vect)
         strcat(lcd_string_array, "C ");
         strcat(lcd_string_array, lcd_string_array_F);
         strcat(lcd_string_array, "F");
+        clear_display();
+        string2lcd(lcd_string_array);
 
         // set local temp in struct
-        lcdDisplay.inside_temperature = lcd_string_array;
+        // strcpy(lcdDisplay.inside_temperature, lcd_string_array);
         
 
         // clear_display();                            //wipe the display
@@ -674,21 +677,22 @@ ISR(TIMER0_OVF_vect)
         // ************** start rcv portion *********************
         if (rcv_rdy == 1)
         {
-            // clear_display();
+            clear_display();
             lcdDisplay.insideOutsideFlag = 1; 
             // line2_col1();
-            // string2lcd(" ");
-            // string2lcd(lcd_string_array_master); // write out string if its ready
+            string2lcd(" ");
+            string2lcd(lcd_string_array_master); // write out string if its ready
             // fill_spaces();
+            // lcdDisplay.
             rcv_rdy = 0;
             // cursor_home();
         }
         else
         {
             lcdDisplay.insideOutsideFlag = 0;
-            // clear_display();
+            clear_display();
             // line2_col1();
-            // string2lcd(lcd_string_array); //send the string to LCD (lcd_functions)
+            string2lcd(lcd_string_array); //send the string to LCD (lcd_functions)
         }
         // *************** end rcv portion ***********************
 
@@ -863,19 +867,11 @@ void alarmDisplay()
     {
         // DDRE |= 1 << PORTE3; // turn off the port of the speaker
         OCR3A = 0x1000; // turn on the volume
-        // clear_display(); // clear the display
-        // string2lcd(lcd_string_array_alarm);
-        lcdDisplay.alarm = "ALARM"; // display alarm 
+        lcdDisplay.alarm = " ALARM"; // display alarm 
     }
     else
     {
-        // clear_display();
-        // line1_col1();
-        // string2lcd("      not       ");
-        // fill_spaces();
-        // string2lcd(lcd_string_array_alarm);
-        // string2lcd("     hello    ");
-        lcdDisplay.alarm = "     "; // display blanks when the alarm isn't o
+        lcdDisplay.alarm = "      "; // display blanks when the alarm isn't o
     }
 }
 
@@ -971,8 +967,8 @@ ISR(USART0_RX_vect)
 {
     static uint8_t j;
     rx_char = UDR0;                         //get character
-    // lcd_string_array_master[j++] = rx_char; //store in array
-    lcdDisplay.outside_temperature[j++] = rx_char;
+    lcd_string_array_master[j++] = rx_char; //store in array
+    // lcdDisplay.outside_temperature[j++] = rx_char;
 
     if (rx_char == '\0')
     {
@@ -990,25 +986,23 @@ ISR(USART0_RX_vect)
 void configDisplay()
 {
     char lcdrow1[16], lcdrow2[16];
-    memset(lcdrow1, '\0', 16);
-    memset(lcdrow2, '\0', 16);
 
     // row 1
     strcpy(lcdrow1, lcdDisplay.alarm);
-    // filling up the rest of the line with nothing
-    for (int i = 0; i < 16 - sizeof(lcdrow1); i++)
-        strcat(lcdrow1, " ");
-
+    strcat(lcdrow1, '\0');
 
     // row 2 
-    strcpy(lcdrow2, (lcdDisplay.insideOutsideFlag == 0) ? lcdDisplay.inside_temperature : lcdDisplay.outside_temperature);
-    for (int i = 0; i < 16 - sizeof(lcdrow2); i++)
-        strcat(lcdrow2, " ");
+    if (lcdDisplay.insideOutsideFlag == 0)
+        strcpy(lcdrow2, lcdDisplay.inside_temperature);
+    else
+        strcpy(lcdrow2, lcdDisplay.outside_temperature);
+    strcat(lcdrow2, '\0');
 
     // display the info
-    clear_display(); // clear whatever was on the screen 
+    // clear_display(); // clear whatever was on the screen 
+    line2_col1();
     string2lcd(lcdrow1);
-    line2_col1(); // set cursor to second line
-    string2lcd(lcdrow2); // display either local or remote temp
+    // line2_col1(); // set cursor to second line
+    // string2lcd(lcdrow2); // display either local or remote temp
 
 }
