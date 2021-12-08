@@ -46,8 +46,8 @@
 //  vol                     PORTE bit 3
 
 // #define F_CPU 16000000 // cpu speed in hertz
-#define TRUE 1
-#define FALSE 0
+// #define TRUE 1
+// #define FALSE 0
 #define MAX_BIT_DEBOUNCE 8 // numbers of bytes for the debounce
 
 // segs to turn on for LED, negate everything
@@ -196,7 +196,7 @@ static struct LcdDisplay lcdDisplay;
 
 // ************ lab 6 *************
 // static struct Radio radio;
-volatile uint16_t current_fm_freq = 10110; // 0x2709, arg2, arg3; 99.9Mhz, 200khz
+volatile uint16_t current_fm_freq = 9990; // 0x2709, arg2, arg3; 99.9Mhz, 200khz
 volatile uint8_t current_volume;
 extern uint8_t si4734_wr_buf[9];
 extern uint8_t si4734_rd_buf[15];
@@ -308,7 +308,7 @@ int main()
         }
         // clear_display();
         alarmDisplay(); // display "ALARM" on the LCD display
-        configDisplay();
+        configDisplay(); // displaying 
 
     } //while
     return 0;
@@ -560,11 +560,15 @@ void segsum(uint16_t sum)
 void segclock()
 {
     if (setRadio == 1){
+        // station = 12340
         uint16_t station = current_fm_freq / 10; // removing the zero at the end
-        segment_data[0] = station % 10;
-        segment_data[1] = station / 10;
-        segment_data[3] = station / 100 % 10;// to get the 2nd digit
-        segment_data[3] = station / 1000;
+        segment_data[0] = station % 10; // 4
+        segment_data[1] = station / 10 % 10; // 3
+        segment_data[2] = (colonDisplay == 1) ? 10 : 11;
+        segment_data[3] = station / 100 % 10;// 2
+        segment_data[4] = station / 1000; // 1
+        fm_tune_freq(); // change the frequency to the correct one
+        return;
     }
     if (setAlarm == 0)
     {
@@ -727,12 +731,17 @@ ISR(TIMER0_OVF_vect)
     }
 
     // when the radio flag is on set the radio to a different station
+    // 88 - 108MHz
     if (setRadio == 1){
         if ((encoderUp == 0) && (enc2 == 0 || enc1 == 0)){
-            
+            current_fm_freq -= 20;
+            if (current_fm_freq < 8810)
+                current_fm_freq = 8810; // setting lower bound
         }
         if ((encoderUp == 1) && (enc2 == 0 || enc1 == 0)){
-
+            current_fm_freq += 20;
+            if (current_fm_freq > 10790)
+                current_fm_freq = 10790; // setting upper bound
         }
     }
 
