@@ -952,7 +952,7 @@ void snoozekiller(void)
     PORTC &= ~(1 << PORTC0);
     PORTC &= ~(1 << PORTC1);
     alarm.minutes = 60;
-    alarm.hours = 60;
+    alarm.hours = 24;
     alarmInit = 0; // set it so that it so that there is not alarm set
     setAlarm = 0;
     // clear_display(); // when this is comment it out the temp changes numbers
