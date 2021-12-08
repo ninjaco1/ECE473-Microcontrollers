@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <util/twi.h>
 #include <avr/eeprom.h>
-#include <util/delay.h>
+// #include <util/delay.h>
 #include "uart_functions.h"
 
 #include "twi_master.h" //my defines for TWCR_START, STOP, RACK, RNACK, SEND

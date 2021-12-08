@@ -1,18 +1,20 @@
-// lab5_code.c
+// lab6_code.c
 // Anthony Nguyen
 // 11.20.2021
 
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
-// #include <utils/twi.h>
+#include <util/twi.h>
+#include <avr/eeprom.h>
 #include <string.h>
 #include <stdlib.h>
 #include "hd44780.h"
 #include "lm73_functions.h"
 #include "twi_master.h"
 #include "uart_functions.h"
-#include "si4734.h"
+#include "si4734.h" // radio board
+
 //  HARDWARE SETUP:
 //  PORTA is connected to the segments of the LED display. and to the pushbuttons.
 //  PORTA.0 corresponds to segment a, PORTA.1 corresponds to segement b, etc.
@@ -69,6 +71,38 @@
 #define DIS_COLON 0x20  //((0 << PB6) | (1 << PB5) | (0 << PB4))
 #define TRI_BUFFER 0x70 //((1 << PB6) | (1 << PB5) | (1 << PB4))
 
+//*************** structs ************************************
+struct Clock
+{
+    uint8_t seconds;
+    uint8_t minutes;
+    uint8_t hours;
+};
+
+struct Alarm
+{
+    uint8_t seconds;
+    uint8_t minutes;
+    uint8_t hours;
+};
+
+struct LcdDisplay
+{
+    int8_t insideOutsideFlag; // 1 if outside, 0 if inside
+    char *alarm;
+    char outside_temperature[16];
+    char *outside_temperature_F;
+    char *outside_temperature_C;
+    char inside_temperature[16];
+    char *inside_temperature_C;
+    char *inside_temperature_F;
+};
+
+struct Radio {
+    uint16_t fm_station;
+    uint16_t volume;
+};
+// ***********************************************************
 // lab 4 define
 #define SNOOZE_TIMER 10
 
@@ -94,7 +128,6 @@ static uint8_t data = 0;
 uint16_t adc_result; //holds adc result
 
 // flags
-// static uint8_t flag24 = 1;           // 24 hour flag
 static uint8_t colonDisplay = 0;     // blinking for colons
 static uint8_t timerFlag = 0;        // if timer is on, 10 seconds
 static uint8_t alarmFlag = 0;        // indication on LED display
@@ -103,13 +136,10 @@ static uint8_t changeHourFlag = 0;   // change the clock hours
 static uint8_t setAlarm = 0;         // setting the alarm to desire time
 static uint8_t alarmInit = 0;        // alarm desire declared, know many times the button has been pressed
 static uint8_t encoderUp = 0;        // toggle ecnoder up
+static uint8_t setRadio = 0;         // changing the radio
 
 // clock
-static uint8_t minutes = 0;
-static uint8_t hours = 0;
 static uint16_t timer = 0; // in seconds
-static uint8_t alarmMinute = 0;
-static uint8_t alarmHour = 0;
 
 // lab 2 functions
 int8_t chk_buttons(int button); // check what button is being pressed
@@ -141,6 +171,7 @@ void snoozekiller(void);
 
 // ****************** lab 5 functions and variables **********
 ISR(USART0_RX_vect);
+void configDisplay();
 char lcd_whole_string_array[32];
 // uart functions
 volatile uint8_t rcv_rdy;
@@ -156,42 +187,51 @@ uint8_t i;                   // general purpose index
 extern uint8_t lm73_wr_buf[2];
 extern uint8_t lm73_rd_buf[2];
 
-// ******************** lab 6 functions and variables ********
-uint16_t eeprom_fm_freq;
-uint16_t eeprom_am_freq;
-uint16_t eeprom_sw_freq;
-uint8_t eeprom_volume;
+// ************** new **************
+static struct Clock clock;
+static struct Alarm alarm;
+static struct LcdDisplay lcdDisplay;
+// volatile struct LcdDisplay lcdDisplay;
+// *********************************
 
-uint16_t current_fm_freq;
-uint16_t current_am_freq;
-uint16_t current_sw_freq;
-uint8_t current_volume;
+// ************ lab 6 *************
+// static struct Radio radio;
+volatile uint16_t current_fm_freq = 10110; // 0x2709, arg2, arg3; 99.9Mhz, 200khz
+volatile uint8_t current_volume;
+extern uint8_t si4734_wr_buf[9];
+extern uint8_t si4734_rd_buf[15];
+extern uint8_t si4734_tune_status_buf[8];
+extern volatile uint8_t STC_interrupt; //indicates tune or seek is done
 
-enum radio_band
-{
-    FM,
-    AM,
-    SW
-};
-volatile enum radio_band current_radio_band;
+//******************************************************************************
+//                          External Interrupt 7 ISR
+// Handles the interrupts from the radio that tells us when a command is done.
+// The interrupt can come from either a "clear to send" (CTS) following most
+// commands or a "seek tune complete" interrupt (STC) when a scan or tune command
+// like fm_tune_freq is issued. The GPIO2/INT pin on the Si4734 emits a low
+// pulse to indicate the interrupt. I have measured but the datasheet does not
+// confirm a width of 3uS for CTS and 1.5uS for STC interrupts.
+//
+// I am presently using the Si4734 so that its only interrupting when the
+// scan_tune_complete is pulsing. Seems to work fine. (12.2014)
+//
+// External interrupt 7 is on Port E bit 7. The interrupt is triggered on the
+// rising edge of Port E bit 7.  The i/o clock must be running to detect the
+// edge (not asynchronouslly triggered)
+//******************************************************************************
+ISR(INT7_vect) { STC_interrupt = TRUE; }
+//******************************************************************************
+void radio_init();
 
-struct Clock
-{
-};
-struct Alarm
-{
-};
-struct Radio
-{
-};
-struct LCDdisplay
-{
-};
+// ********************************
+
+
 
 int main()
 {
     DDRB = 0xF0;        //set port B bits 4-7 B as outputs
-    DDRE |= 0b01001000; // set E6, E3 to output
+    DDRE |= 0xFF; // set E6, E3 to output
+    DDRC = 0x08;
     DDRD |= 0b00001100; // slave select pins
     DDRC |= 0xFF;       // set prot C to all outputs
 
@@ -208,20 +248,6 @@ int main()
     lcd_init(); // initalize the lcd display
     sei();      //enable interrupts before entering loop
 
-    //********************** lab 6 init **********************************
-    eeprom_fm_freq = 0;
-    eeprom_am_freq = 0;
-    eeprom_sw_freq = 0;
-    eeprom_volume = 0;
-
-    current_fm_freq = 0;
-    current_am_freq = 0;
-    current_sw_freq = 0;
-    current_volume = 0;
-    // *******************************************************************
-
-
-
     //************************ lab 5 init MASTER ***********************
     // DDRF |= 0x08; // lcd strobe bit
     init_twi();  // initalize twi
@@ -235,11 +261,12 @@ int main()
     _delay_ms(2);                               //wait for the xfer to finish
     //*********************************************************************
 
+    radio_init(); // setting the radio to a certain frequency 
     set_dec_to_7seg(); // set values for dec_to_7seg array
     set_decoder();     // set values for the decoder array
     timer = SNOOZE_TIMER;
     clear_display();
-    cursor_home();
+    // cursor_home();
 
     while (1)
     {
@@ -253,9 +280,7 @@ int main()
 
         SPDR = 0; // writing a random value
 
-        while (bit_is_clear(SPSR, SPIF))
-        {
-        }
+        while (bit_is_clear(SPSR, SPIF));
         data = SPDR; // read data
         barGraph();
         // end of spi
@@ -274,15 +299,16 @@ int main()
             OCR2 = (255 * -5 / (adc_result)) + 80; // best result
         }
         // check if the alarm matches the actually clock
-        if ((alarmInit > 1) && (alarmMinute == minutes) && (alarmHour == hours))
+        if ((alarmInit > 1) && (alarm.minutes == clock.minutes) && (alarm.hours == clock.hours))
         {
             // timerFlag = 1; // make the timer go off
             // OCR3A = 0x1000;
 
             alarmFlag = 1;
         }
-        clear_display();
+        // clear_display();
         alarmDisplay(); // display "ALARM" on the LCD display
+        configDisplay();
 
     } //while
     return 0;
@@ -357,8 +383,8 @@ void tcnt3_init(void)
     TCCR3B |= /*(1 << ICES3) |*/ (1 << WGM33) | (1 << WGM32) | (1 << CS30) | (1 << CS31); //No prescale
     TCCR3C = 0x00;                                                                        //no force compare
 
-    OCR3A = 0xFFFF; // initally no volume
-    // OCR3A = 0x1000;
+    // OCR3A = 0xFFFF; // initally no volume
+    OCR3A = 0x1000;
     ICR3 = 0xF000; // top value
 }
 
@@ -390,6 +416,40 @@ void adc_read()
     }                    //spin while interrupt flag not set
     ADCSRA |= 1 << ADIF; //its done, clear flag by writing a one
     adc_result = ADC;    //read the ADC output as 16 bits
+}
+
+
+// ************************************************************************
+//                              radio_init
+// setting the initial values of the radio
+// ************************************************************************
+void radio_init(){
+    DDRE = 0xFF;
+    DDRC = 0x08;
+    // sei();
+    PORTE |= 0x04; //radio reset is on at powerup (active high)
+    TCCR1B |= (1 << WGM12) | (1 << CS10);
+    TIMSK |= (1 << OCIE1A);
+    //set frequency
+    OCR1A = 0x3210;
+    EICRB |= (1 << ISC71) | (1 < ISC70);
+    EIMSK |= (1 << INT7);
+    //hardware reset of Si4734
+    PORTE &= ~(1 << PE7); //int2 initially low to sense TWI mode
+    DDRE |= 0x80;         //turn on Port E bit 7 to drive it low
+    PORTE |= (1 << PE2);  //hardware reset Si4734
+    _delay_us(200);       //hold for 200us, 100us by spec
+    PORTE &= ~(1 << PE2); //release reset
+    _delay_us(30);        //5us required because of my slow I2C translators I suspect
+                          //Si code in "low" has 30us delay...no explaination given
+    DDRE &= ~(0x80);      //now Port E bit 7 becomes input from the radio interrupt
+
+    fm_pwr_up(); //power up radio
+    while (twi_busy())
+    {
+    } //spin while TWI is busy
+    current_fm_freq = 9990;
+    fm_tune_freq(); //tune to frequency
 }
 
 /******************************************************************************/
@@ -499,21 +559,28 @@ void segsum(uint16_t sum)
 //array is loaded at exit as:  |digit3|digit2|colon|digit1|digit0|
 void segclock()
 {
+    if (setRadio == 1){
+        uint16_t station = current_fm_freq / 10; // removing the zero at the end
+        segment_data[0] = station % 10;
+        segment_data[1] = station / 10;
+        segment_data[3] = station / 100 % 10;// to get the 2nd digit
+        segment_data[3] = station / 1000;
+    }
     if (setAlarm == 0)
     {
-        segment_data[0] = minutes % 10;
-        segment_data[1] = minutes / 10;
+        segment_data[0] = clock.minutes % 10;
+        segment_data[1] = clock.minutes / 10;
         segment_data[2] = (colonDisplay == 1) ? 10 : 11;
-        segment_data[3] = hours % 10;
-        segment_data[4] = hours / 10;
+        segment_data[3] = clock.hours % 10;
+        segment_data[4] = clock.hours / 10;
     }
     if (setAlarm == 0x1)
     {
-        segment_data[0] = alarmMinute % 10;
-        segment_data[1] = alarmMinute / 10;
+        segment_data[0] = alarm.minutes % 10;
+        segment_data[1] = alarm.minutes / 10;
         segment_data[2] = (colonDisplay == 1) ? 10 : 11;
-        segment_data[3] = alarmHour % 10;
-        segment_data[4] = alarmHour / 10;
+        segment_data[3] = alarm.hours % 10;
+        segment_data[4] = alarm.hours / 10;
     }
 }
 
@@ -582,7 +649,7 @@ ISR(TIMER0_OVF_vect)
     uint8_t enc2 = encoderRead(data, 1);
 
     // each case of what the knob or buttons will be
-    if (setAlarm == 0)
+    if (setAlarm == 0 && setRadio == 0)
     {
         if ((encoderUp == 0) && (enc1 == 0 || enc2 == 0))
         {
@@ -591,15 +658,15 @@ ISR(TIMER0_OVF_vect)
             if (changeMinuteFlag == 1 && changeHourFlag == 0)
             {
                 // change minutes
-                minutes--;
-                if (minutes == 255) // since its unsign 255 = -1
-                    minutes = 59;
+                clock.minutes--;
+                if (clock.minutes == 255) // since its unsign 255 = -1
+                    clock.minutes = 59;
             }
             if (changeHourFlag == 1 && changeMinuteFlag == 0)
             {
-                hours--;
-                if (hours == 255)
-                    hours = 23;
+                clock.hours--;
+                if (clock.hours == 255)
+                    clock.hours = 23;
             }
         }
 
@@ -610,15 +677,15 @@ ISR(TIMER0_OVF_vect)
             if (changeMinuteFlag == 1 && changeHourFlag == 0)
             {
                 // change minutes
-                minutes++;
-                if (minutes % 60 == 0)
-                    minutes = 0;
+                clock.minutes++;
+                if (clock.minutes % 60 == 0)
+                    clock.minutes = 0;
             }
             else if (changeHourFlag == 1 && changeMinuteFlag == 0)
             {
-                hours++;
-                if (hours % 24 == 0)
-                    hours = 0;
+                clock.hours++;
+                if (clock.hours % 24 == 0)
+                    clock.hours = 0;
             }
         }
     }
@@ -627,22 +694,48 @@ ISR(TIMER0_OVF_vect)
     if (setAlarm == 0x1)
     {
         // have encoder 2 change the hours
-        if (enc2 == 0)
+        if ((encoderUp == 0) && (enc2 == 0))
         {
-            alarmHour--;
-            if (alarmHour == 255)
-                alarmHour = 23;
+            alarm.hours--;
+            if (alarm.hours == 255)
+                alarm.hours = 23;
+        }
+
+        if ((encoderUp == 1) && (enc2 == 0))
+        {
+            alarm.hours++;
+            if ((alarm.hours % 24 == 0) || (alarm.hours > 23))
+                alarm.hours = 0;
         }
 
         // have encoder 1 change the minutes
-        if (enc1 == 0)
+        if ((encoderUp == 0) && enc1 == 0)
         {
             // change minutes
-            alarmMinute--;
-            if (alarmMinute == 255) // since its unsign 255 = -1
-                alarmMinute = 59;
+            alarm.minutes--;
+            if (alarm.minutes == 255 || (alarm.minutes >= 60 && alarm.minutes <= 255)) // since its unsign 255 = -1
+                alarm.minutes = 59;
+        }
+
+        if ((encoderUp == 1) && enc1 == 0)
+        {
+            // change minutes
+            alarm.minutes++;
+            if (alarm.minutes >= 60) // since its unsign 255 = -1
+                alarm.minutes = 0;
         }
     }
+
+    // when the radio flag is on set the radio to a different station
+    if (setRadio == 1){
+        if ((encoderUp == 0) && (enc2 == 0 || enc1 == 0)){
+            
+        }
+        if ((encoderUp == 1) && (enc2 == 0 || enc1 == 0)){
+
+        }
+    }
+
 
     // add a counter to determine one second
     count++;
@@ -667,6 +760,12 @@ ISR(TIMER0_OVF_vect)
         strcat(lcd_string_array, "C ");
         strcat(lcd_string_array, lcd_string_array_F);
         strcat(lcd_string_array, "F");
+        clear_display();
+        string2lcd(lcd_string_array);
+
+        // set local temp in struct
+        // strcpy(lcdDisplay.inside_temperature, lcd_string_array);
+        
 
         // clear_display();                            //wipe the display
         uart_putc('\0');
@@ -674,17 +773,20 @@ ISR(TIMER0_OVF_vect)
         if (rcv_rdy == 1)
         {
             clear_display();
-            line2_col1();
+            lcdDisplay.insideOutsideFlag = 1; 
+            // line2_col1();
             string2lcd(" ");
             string2lcd(lcd_string_array_master); // write out string if its ready
-            fill_spaces();
+            // fill_spaces();
+            // lcdDisplay.
             rcv_rdy = 0;
             // cursor_home();
         }
         else
         {
+            lcdDisplay.insideOutsideFlag = 0;
             clear_display();
-            line2_col1();
+            // line2_col1();
             string2lcd(lcd_string_array); //send the string to LCD (lcd_functions)
         }
         // *************** end rcv portion ***********************
@@ -729,14 +831,14 @@ ISR(TIMER0_OVF_vect)
 
         if ((seconds % 60) == 0)
         {
-            minutes++;
+            clock.minutes++;
             seconds = 0;
-            if ((minutes % 60) == 0)
+            if ((clock.minutes % 60) == 0)
             {
-                hours++;
-                minutes = 0;
-                if (hours % 24 == 0)
-                    hours = 0;
+                clock.hours++;
+                clock.minutes = 0;
+                if (clock.hours % 24 == 0)
+                    clock.hours = 0;
             }
         }
     }
@@ -854,23 +956,17 @@ void barGraph()
 
 void alarmDisplay()
 {
-    char lcd_string_array_alarm[16] = "     ALARM      ";
+    // char lcd_string_array_alarm[5] = "     ALARM      ";
     cursor_home();
     if (alarmFlag == 0x1)
     {
         // DDRE |= 1 << PORTE3; // turn off the port of the speaker
         OCR3A = 0x1000; // turn on the volume
-        // clear_display(); // clear the display
-        string2lcd(lcd_string_array_alarm);
+        lcdDisplay.alarm = " ALARM"; // display alarm 
     }
     else
     {
-        // clear_display();
-        // line1_col1();
-        string2lcd("      not       ");
-        // fill_spaces();
-        // string2lcd(lcd_string_array_alarm);
-        // string2lcd("     hello    ");
+        lcdDisplay.alarm = "      "; // display blanks when the alarm isn't o
     }
 }
 
@@ -909,6 +1005,12 @@ void buttonPress(uint8_t button)
     {
         encoderUp ^= 1; // toggle encoder rotating the other way
     }
+    case 4:
+    {
+        setRadio ^= 1;
+        barGraphDisplay ^= 1 << 4;
+
+    }
     case 6:
     {
         // change minutes
@@ -932,8 +1034,11 @@ void buttonPress(uint8_t button)
 /******************************************************************************/
 ISR(TIMER1_COMPA_vect)
 {
-    PORTC ^= 1 << PORTC0; // turn on right speaker
-    PORTC ^= 1 << PORTC1; // turn on left speaker
+    if (alarmFlag == 1){
+
+        PORTC ^= 1 << PORTC0; // turn on right speaker
+        PORTC ^= 1 << PORTC1; // turn on left speaker
+    }
 }
 
 /******************************************************************************/
@@ -950,8 +1055,8 @@ void snoozekiller(void)
     barGraphDisplay &= ~(1 << 2); // turn off the timer modes
     PORTC &= ~(1 << PORTC0);
     PORTC &= ~(1 << PORTC1);
-    alarmMinute = 60;
-    alarmHour = 60;
+    alarm.minutes = 60;
+    alarm.hours = 24;
     alarmInit = 0; // set it so that it so that there is not alarm set
     setAlarm = 0;
     // clear_display(); // when this is comment it out the temp changes numbers
@@ -967,10 +1072,41 @@ ISR(USART0_RX_vect)
     static uint8_t j;
     rx_char = UDR0;                         //get character
     lcd_string_array_master[j++] = rx_char; //store in array
+    // lcdDisplay.outside_temperature[j++] = rx_char;
 
     if (rx_char == '\0')
     {
         rcv_rdy = 1;
         j = 0;
     }
+}
+
+
+// ********************************************************
+//                        configDisplay 
+// row 1: ALARM
+// row 2: local_temp outside_temp 
+// ********************************************************
+void configDisplay()
+{
+    char lcdrow1[16], lcdrow2[16];
+
+    // row 1
+    strcpy(lcdrow1, lcdDisplay.alarm);
+    strcat(lcdrow1, '\0');
+
+    // row 2 
+    if (lcdDisplay.insideOutsideFlag == 0)
+        strcpy(lcdrow2, lcdDisplay.inside_temperature);
+    else
+        strcpy(lcdrow2, lcdDisplay.outside_temperature);
+    strcat(lcdrow2, '\0');
+
+    // display the info
+    // clear_display(); // clear whatever was on the screen 
+    line2_col1();
+    string2lcd(lcdrow1);
+    // line2_col1(); // set cursor to second line
+    // string2lcd(lcdrow2); // display either local or remote temp
+
 }
